@@ -1,0 +1,95 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://objects/astroid_1.tscn" type="PackedScene" id=1]
+[ext_resource path="res://player/player_default.tscn" type="PackedScene" id=2]
+[ext_resource path="res://levels/tutorial/tutorial_1_backround.png" type="Texture" id=3]
+[ext_resource path="res://levels/tutorial/tutorial_1.gd" type="Script" id=4]
+
+[sub_resource type="SpriteFrames" id=1]
+animations = [ {
+"frames": [ ExtResource( 3 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 2869.91, 79.8385 )
+
+[sub_resource type="RectangleShape2D" id=3]
+extents = Vector2( 158.042, 2019.45 )
+
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 151.723, 141.349 )
+
+[node name="tutorial_1" type="Node2D"]
+script = ExtResource( 4 )
+
+[node name="backround" type="AnimatedSprite" parent="."]
+position = Vector2( 680.5, 558.64 )
+scale = Vector2( 4.77641, 5.32635 )
+frames = SubResource( 1 )
+
+[node name="player" parent="." instance=ExtResource( 2 )]
+position = Vector2( 1.22605, -0.0597348 )
+
+[node name="astroid_3" parent="." instance=ExtResource( 1 )]
+position = Vector2( 149.502, -122.805 )
+contacts_reported = 10
+contact_monitor = true
+
+[node name="astroid_2" parent="." instance=ExtResource( 1 )]
+position = Vector2( -277.198, 17.0453 )
+contacts_reported = 10
+contact_monitor = true
+
+[node name="astroid_1" parent="." instance=ExtResource( 1 )]
+position = Vector2( 200.885, 186.391 )
+contacts_reported = 10
+contact_monitor = true
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+position = Vector2( 484.903, -987.767 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+shape = SubResource( 2 )
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2( -2873.5, 1777.98 )
+shape = SubResource( 3 )
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2( -143.675, 3412.28 )
+shape = SubResource( 2 )
+
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2( 2640.03, 1777.98 )
+shape = SubResource( 3 )
+
+[node name="InMessagingArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InMessagingArea"]
+position = Vector2( 0, 17.6389 )
+shape = SubResource( 4 )
+
+[node name="ColorRect" type="ColorRect" parent="InMessagingArea"]
+self_modulate = Color( 0.6, 0.352941, 0.352941, 1 )
+margin_left = -153.087
+margin_top = -124.832
+margin_right = 148.913
+margin_bottom = 155.168
+color = Color( 0.843137, 0.109804, 0.109804, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Timer" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="body_shape_entered" from="astroid_3" to="." method="_on_astroid_3_body_shape_entered"]
+[connection signal="body_shape_exited" from="astroid_3" to="." method="_on_astroid_3_body_shape_exited"]
+[connection signal="body_shape_entered" from="astroid_2" to="." method="_on_astroid_2_body_shape_entered"]
+[connection signal="body_shape_exited" from="astroid_2" to="." method="_on_astroid_2_body_shape_exited"]
+[connection signal="body_shape_entered" from="astroid_1" to="." method="_on_astroid_1_body_shape_entered"]
+[connection signal="body_shape_exited" from="astroid_1" to="." method="_on_astroid_1_body_shape_exited"]
+[connection signal="body_entered" from="InMessagingArea" to="." method="_on_InMessagingArea_body_entered"]

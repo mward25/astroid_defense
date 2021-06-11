@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://my_assets/skys/build/night_sky_with_mountain.hdr" type="Texture" id=1]
+
+[sub_resource type="SpriteFrames" id=2]
+animations = [ {
+"frames": [ ExtResource( 1 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[node name="NightSkyWithMountain" type="AnimatedSprite"]
+position = Vector2( 266.466, 858.64 )
+scale = Vector2( 0.847588, 0.847588 )
+z_index = -20
+frames = SubResource( 2 )

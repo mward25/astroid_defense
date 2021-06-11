@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://objects/resourses/astroids/astroid_1.png" type="Texture" id=1]
+
+[sub_resource type="SpriteFrames" id=1]
+animations = [ {
+"frames": [ ExtResource( 1 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[node name="astroid_1" type="RigidBody2D"]
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+scale = Vector2( 0.152705, 0.152705 )
+frames = SubResource( 1 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+position = Vector2( 1.67224, -0.111489 )
+scale = Vector2( 1.05934, 1.02399 )
+polygon = PoolVector2Array( 7.33636, -64.1113, 24.3453, -67.2611, 40.4255, -62.4372, 53.3235, -45.8425, 57.7332, -23.1639, 58.3632, 1.40456, 52.0636, 24.0831, 42.6142, 45.5018, 24.3453, 59.9909, -6.52277, 64.4006, -38.6508, 53.6913, -54.3998, 33.5326, -46.2103, 5.81429, -37.3908, -16.8643, -10.3025, -48.9923, 6.70641, -64.1113 )

@@ -1,0 +1,50 @@
+[gd_scene load_steps=22 format=2]
+
+[ext_resource path="res://my_assets/monsters/build/creepy_pepper.png" type="Texture" id=1]
+[ext_resource path="res://monsters/passive/creepy_pepper.gd" type="Script" id=2]
+[ext_resource path="res://my_assets/common_animations/death/explode/0020.png" type="Texture" id=3]
+[ext_resource path="res://my_assets/common_animations/death/explode/0019.png" type="Texture" id=4]
+[ext_resource path="res://my_assets/common_animations/death/explode/0016.png" type="Texture" id=5]
+[ext_resource path="res://my_assets/common_animations/death/explode/0017.png" type="Texture" id=6]
+[ext_resource path="res://my_assets/common_animations/death/explode/0018.png" type="Texture" id=7]
+[ext_resource path="res://my_assets/common_animations/death/explode/0001.png" type="Texture" id=8]
+[ext_resource path="res://my_assets/common_animations/death/explode/0004.png" type="Texture" id=9]
+[ext_resource path="res://my_assets/common_animations/death/explode/0008.png" type="Texture" id=10]
+[ext_resource path="res://my_assets/common_animations/death/explode/0009.png" type="Texture" id=11]
+[ext_resource path="res://my_assets/common_animations/death/explode/0002.png" type="Texture" id=12]
+[ext_resource path="res://my_assets/common_animations/death/explode/0005.png" type="Texture" id=13]
+[ext_resource path="res://my_assets/common_animations/death/explode/0006.png" type="Texture" id=14]
+[ext_resource path="res://my_assets/common_animations/death/explode/0015.png" type="Texture" id=15]
+[ext_resource path="res://my_assets/common_animations/death/explode/0011.png" type="Texture" id=16]
+[ext_resource path="res://my_assets/common_animations/death/explode/0013.png" type="Texture" id=17]
+[ext_resource path="res://my_assets/common_animations/death/explode/0012.png" type="Texture" id=18]
+[ext_resource path="res://my_assets/common_animations/death/explode/0010.png" type="Texture" id=19]
+[ext_resource path="res://my_assets/common_animations/death/explode/0014.png" type="Texture" id=20]
+
+[sub_resource type="SpriteFrames" id=1]
+animations = [ {
+"frames": [ ExtResource( 1 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 8 ), ExtResource( 12 ), ExtResource( 9 ), ExtResource( 13 ), ExtResource( 14 ), ExtResource( 10 ), ExtResource( 11 ), ExtResource( 19 ), ExtResource( 16 ), ExtResource( 18 ), ExtResource( 17 ), ExtResource( 20 ), ExtResource( 15 ), ExtResource( 5 ), ExtResource( 6 ), ExtResource( 7 ), ExtResource( 4 ), ExtResource( 3 ) ],
+"loop": true,
+"name": "explode",
+"speed": 5.0
+} ]
+
+[node name="CreepyPepper" type="RigidBody2D"]
+contacts_reported = 20
+contact_monitor = true
+script = ExtResource( 2 )
+destroyOnHit = true
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+scale = Vector2( 1.92669, 1.92669 )
+frames = SubResource( 1 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PoolVector2Array( 43.1515, -38.5276, 49.25, -29.75, 28.75, 8.25, 27, 41.75, 21.5, 55.25, -19, 50.75, -40.2759, 33.22, -51.5, 16.75, -56.75, -14, -56.5, -33.5, -35, -45.75, -12.2443, -47.2041, -8.90723, -61.5536, 2.1052, -63.2221, 8.44569, -43.8669, 25, -43.25 )
+
+[connection signal="body_entered" from="." to="." method="_on_CreepyPepper_body_entered"]
