@@ -1,10 +1,16 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://my_assets/retro_tilemap/retro_tileset.tres" type="TileSet" id=1]
 [ext_resource path="res://player/player_default.tscn" type="PackedScene" id=2]
 [ext_resource path="res://my_assets/skys/build/night_sky_with_mountain.tscn" type="PackedScene" id=3]
+[ext_resource path="res://monsters/aggressive/aggressive_creepy_pepper.tscn" type="PackedScene" id=4]
+[ext_resource path="res://levels/tutorial/tutorial_3.gd" type="Script" id=5]
 
 [node name="Tutorial3" type="Node2D"]
+script = ExtResource( 5 )
+__meta__ = {
+"_edit_vertical_guides_": [  ]
+}
 
 [node name="TileMap" type="TileMap" parent="."]
 tile_set = ExtResource( 1 )
@@ -16,3 +22,33 @@ tile_data = PoolIntArray( -1114124, 0, 0, -1114123, 0, 0, -1114122, 0, 0, -11141
 [node name="NightSkyWithMountain" parent="." instance=ExtResource( 3 )]
 position = Vector2( 1104.68, 642.68 )
 scale = Vector2( 0.936247, 0.936247 )
+
+[node name="AgressiveCreepyPepper" parent="." instance=ExtResource( 4 )]
+position = Vector2( 419.14, -90.7691 )
+destroyOnHit = true
+health = 3.0
+speed = 5.0
+Target = NodePath("../player")
+
+[node name="AgressiveCreepyPepper2" parent="." instance=ExtResource( 4 )]
+position = Vector2( 1944, -504 )
+destroyOnHit = true
+Target = NodePath("../player")
+
+[node name="AgressiveCreepyPepper3" parent="." instance=ExtResource( 4 )]
+position = Vector2( 1264, 736 )
+destroyOnHit = true
+health = 100.0
+speed = 50.0
+Target = NodePath("../player")
+
+[node name="AgressiveCreepyPepper4" parent="." instance=ExtResource( 4 )]
+position = Vector2( 2226.34, 1408 )
+destroyOnHit = true
+health = 3.0
+Target = NodePath("../player")
+
+[connection signal="imDead" from="AgressiveCreepyPepper" to="." method="_on_AgressiveCreepyPepper_imDead"]
+[connection signal="imDead" from="AgressiveCreepyPepper2" to="." method="_on_AgressiveCreepyPepper2_imDead"]
+[connection signal="imDead" from="AgressiveCreepyPepper3" to="." method="_on_AgressiveCreepyPepper3_imDead"]
+[connection signal="imDead" from="AgressiveCreepyPepper4" to="." method="_on_AgressiveCreepyPepper4_imDead"]

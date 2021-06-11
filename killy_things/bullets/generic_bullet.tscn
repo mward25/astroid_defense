@@ -1,0 +1,29 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://player/bullets/generic_bullet.png" type="Texture" id=1]
+[ext_resource path="res://killy_things/bullets/generic_bullet.gd" type="Script" id=2]
+
+[sub_resource type="SpriteFrames" id=1]
+animations = [ {
+"frames": [ ExtResource( 1 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[sub_resource type="CapsuleShape2D" id=2]
+radius = 8.99747
+height = 37.3948
+
+[node name="Bullet" type="RigidBody2D"]
+linear_velocity = Vector2( 0, -1000 )
+script = ExtResource( 2 )
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+position = Vector2( 0.409887, -0.819795 )
+scale = Vector2( 0.0510322, 0.0515286 )
+frames = SubResource( 1 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( 0.749146, -0.37458 )
+shape = SubResource( 2 )
