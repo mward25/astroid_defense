@@ -52,4 +52,18 @@ margin_right = 423.0
 margin_bottom = 58.0
 text = "please put the server port here"
 
+[node name="Names" type="VSplitContainer" parent="."]
+margin_left = 3.5874
+margin_top = 185.353
+margin_right = 432.587
+margin_bottom = 313.353
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Names"]
+margin_right = 429.0
+margin_bottom = 128.0
+text = "Names:"
+
 [connection signal="pressed" from="Start/Button" to="." method="_on_Button_pressed"]
