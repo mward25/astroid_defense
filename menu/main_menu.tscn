@@ -1,0 +1,55 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://menu/main_menu.gd" type="Script" id=1]
+
+[node name="menu" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 1.0
+margin_bottom = 1.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="EnterIp" type="HSplitContainer" parent="."]
+margin_right = 425.0
+margin_bottom = 66.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Ip" type="TextEdit" parent="EnterIp"]
+margin_right = 425.0
+margin_bottom = 66.0
+text = "enter_ip_address_or_leave_blank_to_create_server"
+
+[node name="Start" type="HSplitContainer" parent="."]
+margin_left = 514.0
+margin_top = 12.0
+margin_right = 711.0
+margin_bottom = 67.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Button" type="Button" parent="Start"]
+margin_right = 197.0
+margin_bottom = 55.0
+text = "start"
+
+[node name="EnterServerPort" type="VSplitContainer" parent="."]
+margin_left = 3.0
+margin_top = 70.0
+margin_right = 426.0
+margin_bottom = 128.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Port" type="TextEdit" parent="EnterServerPort"]
+margin_right = 423.0
+margin_bottom = 58.0
+text = "please put the server port here"
+
+[connection signal="pressed" from="Start/Button" to="." method="_on_Button_pressed"]
