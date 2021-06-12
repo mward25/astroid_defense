@@ -21,16 +21,18 @@ func _on_Button_pressed():
 			var peer = NetworkedMultiplayerENet.new()
 			peer.create_server(2738, 10)
 			get_tree().network_peer = peer
+			pre_configure_game()
 		else:
 			var peer = NetworkedMultiplayerENet.new()
 			peer.create_client($EnterIp/Ip.text, $EnterServerPort/Port.text)
 			get_tree().network_peer = peer
+			pre_configure_game()
 
 
 remote func pre_configure_game():
 	var selfPeerID = get_tree().get_network_unique_id()
 	
-	var world = load("res://levels/tutorial_1.tscn").instance()
+	var world = load("res://levels/tutorial/tutorial_1.tscn").instance()
 	get_node("/root").add_child(world)
 	
 	
