@@ -28,7 +28,7 @@ func _on_Button_pressed():
 			get_tree().network_peer = peer
 		else:
 			var peer = NetworkedMultiplayerENet.new()
-			peer.create_client($EnterIp/Ip.text, $EnterServerPort/Port.text)
+			peer.create_client($EnterIp/Ip.text, int($EnterServerPort/Port.text))
 			get_tree().network_peer = peer
 
 
@@ -71,5 +71,5 @@ remote func register_player(info):
 	var id = get_tree().get_rpc_sender_id()
 	playerInfo[id] = info
 	
-	update_ui(str(playerInfo))
+	update_ui(playerInfo.name)
 
