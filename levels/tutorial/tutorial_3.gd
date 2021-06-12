@@ -15,6 +15,7 @@ func _ready():
 	Moneys.money += moneyEarned
 	yield(get_tree().create_timer(4), "timeout")
 	$player/BigMessagingSystem.text = ""
+	get_tree().change_scene("res://levels/home_steads/default.tscn")
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

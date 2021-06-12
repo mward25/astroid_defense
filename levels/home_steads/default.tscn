@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://levels/home_steads/default.gd" type="Script" id=1]
 [ext_resource path="res://my_assets/retro_tilemap/retro_tileset.tres" type="TileSet" id=2]
@@ -22,10 +22,14 @@ animations = [ {
 "speed": 5.0
 } ]
 
+[sub_resource type="RectangleShape2D" id=3]
+extents = Vector2( 8044.48, 4298.98 )
+
 [node name="BaseCamp" type="Node2D"]
 script = ExtResource( 1 )
 
 [node name="TileMap" type="TileMap" parent="."]
+position = Vector2( -27.425, -15.157 )
 tile_set = ExtResource( 2 )
 format = 1
 
@@ -46,3 +50,9 @@ frames = SubResource( 1 )
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D"]
 polygon = PoolVector2Array( 67.0355, -624.7, -137.029, -697.012, -6.11631, -744.405, 46.738, -753.326, 77.9454, -774.837, 95.1032, -781.049, 94.9939, -748.396, 91.3092, -628.807, 107.512, -291.639, 276.692, -280.059, 330.086, -5.08167, 641.025, -0.741135, 683.679, 358.447, 912.661, 341.61, 908.171, 379.773, -650.442, 454.551, -648.66, 434.951, -361.791, 411.788, -352.882, 53.6465, -48.1948, 19.7924, -60.6674, -240.35, 91.1544, -290.071, 69.8057, -605.107 )
+
+[node name="Gravity" type="Area2D" parent="."]
+space_override = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Gravity"]
+shape = SubResource( 3 )

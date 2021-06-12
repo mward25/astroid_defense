@@ -72,3 +72,5 @@ script = ExtResource( 5 )
 [node name="CollisionShape2D" type="CollisionShape2D" parent="FlameAttack"]
 position = Vector2( -2.37024, 32.5062 )
 shape = SubResource( 4 )
+
+[connection signal="body_entered" from="." to="." method="_on_player_body_entered"]

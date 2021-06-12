@@ -4,6 +4,7 @@ export var speed = 50
 export var rotation_dir = 0
 export (int) var spin_thrust
 export (int) var engine_thrust
+export (float) var health = 100
 var rotation_limit = 360
 var speed_limit = 25
 var exaustPower = -120
@@ -50,4 +51,13 @@ func _physics_process(delta):
 func _process(delta):
 #	var myRotLoc = position.rotated(rotation)
 	$ExaustFumes.gravity_vec = $ExaustFumes.position
+	if health <= 0:
+		$BigMessagingSystem.text = "you died"
+		yield(get_tree().create_timer(3), "timeout")
+		queue_free()
 #	print($ExaustFumes.gravity_vec)
+
+
+func _on_player_body_entered(body):
+	if "damage" in body:
+		health -= body.damage
