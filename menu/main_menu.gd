@@ -71,5 +71,5 @@ remote func register_player(info):
 	var id = get_tree().get_rpc_sender_id()
 	playerInfo[id] = info
 	
-	update_ui(playerInfo.name)
+	update_ui(playerInfo[id].name)
 
