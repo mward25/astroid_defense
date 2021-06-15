@@ -1,4 +1,8 @@
 extends RigidBody2D
+
+var selfPeerID
+export var isMyPlayer = false
+
 var velocity = Vector2()
 export var speed = 50
 export var rotation_dir = 0
@@ -15,7 +19,8 @@ var exaustPower = -120
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	if isMyPlayer == true:
+		$Camera2D.current = false
 
 func get_input():
 	if Input.is_action_pressed("ui_up"):
@@ -57,7 +62,7 @@ func _process(delta):
 		queue_free()
 	
 	
-	rpc_unreliable("set_pos_and_motion", position)
+	rpc("set_pos_and_motion", position, velocity, rotation)
 	
 #	rpc_id(1, "set_pos_and_motion", globalPosition)
 	
@@ -69,5 +74,8 @@ func _on_player_body_entered(body):
 		health -= body.damage
 
 
-remote func set_pos_and_motion(pos):
+master func set_pos_and_motion(pos, vel, rot):
 	global_position = pos
+	velocity = vel
+	rotation = rot
+#	$BigMessagingSystem.text = str(selfPeerID)

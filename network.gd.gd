@@ -42,6 +42,8 @@ remote func pre_configure_game():
 	
 	
 	var MyPlayer = preload("res://player/player_default.tscn").instance()
+	MyPlayer.selfPeerID = selfPeerID
+	MyPlayer.isMyPlayer = true
 	print("adding me, ", str(selfPeerID), " to the scene")
 	MyPlayer.set_name(str(selfPeerID))
 	MyPlayer.set_network_master(selfPeerID)
@@ -49,6 +51,7 @@ remote func pre_configure_game():
 	
 	for p in playerInfo:
 		var player = preload("res://player/player_default.tscn").instance()
+		player.selfPeerID = selfPeerID
 		player.set_name(str(p))
 		print("adding ", str(p), " to scene")
 		player.set_network_master(int(p))
@@ -71,13 +74,17 @@ remote func done_preconfiguring():
 	
 	var MyPlayer = preload("res://player/player_default.tscn").instance()
 	print("adding me, ", str(selfPeerID), " to the scene")
+	MyPlayer.isMyPlayer = true
+	MyPlayer.selfPeerID = selfPeerID
 	MyPlayer.set_name(str(selfPeerID))
 	MyPlayer.set_network_master(selfPeerID)
 	get_node("/root/world").add_child(MyPlayer)
 	
+	
 
 	
 	var player = preload("res://player/player_default.tscn").instance()
+	player.selfPeerID = selfPeerID
 	player.set_name(str(who))
 	print("adding ", str(who), " to scene")
 	player.set_network_master(int(who))
@@ -97,7 +104,7 @@ remote func post_configure_game():
 	print("post_configure_game")
 	if 1 == get_tree().get_rpc_sender_id():
 		get_tree().set_pause(false)
-	
+
 
 func _player_connected(id):
 	print("player ", id, " has connected")
