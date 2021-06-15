@@ -5,3 +5,8 @@
 [node name="SuperSimple" type="Node2D"]
 
 [node name="NightSkyWithMountain" parent="." instance=ExtResource( 1 )]
+
+[node name="border" type="StaticBody2D" parent="."]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="border"]
+polygon = PoolVector2Array( -1439.46, -862.889, 2152.64, -851.575, 2146.99, -919.457, -1439.46, -947.741, -1586.54, -959.055, -1694.02, 2775.89, 2216.22, 2809.32, 2153.29, -849.089, 2061.25, -849.089, 2050.66, 2610.5, -1509.34, 2594.5 )

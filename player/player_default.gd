@@ -77,5 +77,5 @@ func _on_player_body_entered(body):
 master func set_pos_and_motion(pos, vel, rot):
 	global_position = pos
 	velocity = vel
-	rotation = rot
+	global_rotation = rot
 #	$BigMessagingSystem.text = str(selfPeerID)
