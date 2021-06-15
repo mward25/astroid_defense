@@ -21,6 +21,10 @@ func testFor3AstriodsHit():
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	
+	
+	
+	
 	$player/BigMessagingSystem.text = "Hello, when you want to see the next step of the tutorial please move to the red box"
 	$InMessagingArea.show()
 	

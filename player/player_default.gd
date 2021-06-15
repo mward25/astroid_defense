@@ -55,9 +55,19 @@ func _process(delta):
 		$BigMessagingSystem.text = "you died"
 		yield(get_tree().create_timer(3), "timeout")
 		queue_free()
+	
+	
+	rpc_unreliable("set_pos_and_motion", position)
+	
+#	rpc_id(1, "set_pos_and_motion", globalPosition)
+	
 #	print($ExaustFumes.gravity_vec)
 
 
 func _on_player_body_entered(body):
 	if "damage" in body:
 		health -= body.damage
+
+
+remote func set_pos_and_motion(pos):
+	global_position = pos

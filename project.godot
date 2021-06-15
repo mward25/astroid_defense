@@ -21,6 +21,8 @@ config/icon="res://icon.png"
 [autoload]
 
 Moneys="*res://vars/moneys.gd"
+Network="*res://network.gd.gd"
+GlobalAudioPlayer="*res://global_audio_player.gd"
 
 [global]
 
