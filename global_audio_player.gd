@@ -1,6 +1,6 @@
 extends AudioStreamPlayer
 var menuMusic = null
-
+var musicVolume = 100
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
@@ -12,8 +12,14 @@ func _ready():
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
+
+func _process(delta):
+	if musicVolume == 0:
+		playing = false
+	elif playing == false:
+		playing = true
+	volume_db = musicVolume/10
+
 func _play_menu_menu_music():
 	if menuMusic == null:
 		menuMusic = load("res://my_assets/songs/menu/astroid_battle.ogg")

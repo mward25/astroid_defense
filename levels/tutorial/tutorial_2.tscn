@@ -44,6 +44,7 @@ polygon = PoolVector2Array( 5.00798, 898.775, 254.617, 901.604, 319.671, 964.536
 
 [node name="player" parent="." instance=ExtResource( 3 )]
 position = Vector2( -148.462, 480.727 )
+isMyPlayer = true
 
 [node name="NightSkyWithMountain" parent="." instance=ExtResource( 5 )]
 

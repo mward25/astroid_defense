@@ -2,6 +2,8 @@ extends Node
 var finishedOnReady = false
 signal finishedOnReadySignal
 var isServer = false
+
+const AUDIO_OFF_ON_ART ="      /\n    / )))\n---|  )))))\n--- \\ )))\n     \\ \n"
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
@@ -9,14 +11,19 @@ var isServer = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	$AudioOnOf/Vcontain/VolumeSlider.value = 50
 	$"/root/GlobalAudioPlayer"._play_menu_menu_music()
 	emit_signal("finishedOnReadySignal")
 	finishedOnReady = true
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
+func _process(delta):
+	$AudioOnOf/Vcontain/AudioVolume.text = str($"/root/GlobalAudioPlayer".musicVolume)
+
+
+
+
 var playerInfo = {}
 var myInfo = {name = "the dude"}
 
@@ -46,3 +53,17 @@ func _on_StartButton_pressed():
 	print($"/root/Network".playerInfo)
 	if isServer == false:
 		$"/root/Network".pre_configure_game()
+
+
+func _on_TutorialButton_pressed():
+	get_tree().change_scene("res://levels/tutorial/tutorial_1.tscn")
+
+
+
+
+
+
+
+func _on_VolumeSlider_value_changed(value):
+	$"/root/GlobalAudioPlayer".musicVolume = value
+	print(value)

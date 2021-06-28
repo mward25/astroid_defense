@@ -8,7 +8,6 @@ var hitAstroid3 = false
 var wantTestHitAstroids = false
 
 var CreepyPepper = preload("res://monsters/passive/creepy_pepper.tscn").instance()
-
 signal hitAllAstriods
 signal playerInMessagingArea
 

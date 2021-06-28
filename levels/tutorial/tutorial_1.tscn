@@ -32,6 +32,7 @@ frames = SubResource( 1 )
 
 [node name="player" parent="." instance=ExtResource( 2 )]
 position = Vector2( 1.22605, -0.0597348 )
+isMyPlayer = true
 
 [node name="astroid_3" parent="." instance=ExtResource( 1 )]
 position = Vector2( 149.502, -122.805 )

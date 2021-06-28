@@ -1,6 +1,7 @@
 extends Node
 var finishedOnReady = false
 signal finishedOnReadySignal
+var playing = false
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
@@ -44,17 +45,21 @@ remote func pre_configure_game():
 	var MyPlayer = preload("res://player/player_default.tscn").instance()
 	MyPlayer.selfPeerID = selfPeerID
 	MyPlayer.isMyPlayer = true
+	MyPlayer.overNet = true
 	print("adding me, ", str(selfPeerID), " to the scene")
 	MyPlayer.set_name(str(selfPeerID))
 	MyPlayer.set_network_master(selfPeerID)
+#	MyPlayer.set_network_master(1)
 	get_node("/root/world").add_child(MyPlayer)
 	
 	for p in playerInfo:
 		var player = preload("res://player/player_default.tscn").instance()
+		player.overNet = true
 		player.selfPeerID = selfPeerID
 		player.set_name(str(p))
 		print("adding ", str(p), " to scene")
 		player.set_network_master(int(p))
+#		player.set_network_master(1)
 		get_node("/root/world").add_child(player)
 	
 	rpc_id(1, "done_preconfiguring")
@@ -75,19 +80,20 @@ remote func done_preconfiguring():
 	var MyPlayer = preload("res://player/player_default.tscn").instance()
 	print("adding me, ", str(selfPeerID), " to the scene")
 	MyPlayer.isMyPlayer = true
+	MyPlayer.overNet = true
 	MyPlayer.selfPeerID = selfPeerID
 	MyPlayer.set_name(str(selfPeerID))
 	MyPlayer.set_network_master(selfPeerID)
+#	MyPlayer.set_network_master(1)
 	get_node("/root/world").add_child(MyPlayer)
 	
-	
-
-	
 	var player = preload("res://player/player_default.tscn").instance()
+	player.overNet = true
 	player.selfPeerID = selfPeerID
 	player.set_name(str(who))
 	print("adding ", str(who), " to scene")
 	player.set_network_master(int(who))
+#	player.set_network_master(1)
 	get_node("/root/world").add_child(player)
 	
 #	assert(get_tree().is_network_server())
@@ -104,6 +110,7 @@ remote func post_configure_game():
 	print("post_configure_game")
 	if 1 == get_tree().get_rpc_sender_id():
 		get_tree().set_pause(false)
+		playing = true
 
 
 func _player_connected(id):
@@ -129,5 +136,26 @@ remote func register_player(info):
 func _server_disconnected():
 	pass
 
+#func _process(delta):
+#	if playing == true:
+#		for p in playerInfo:
+##			get_node("/root/world/" + str(playerInfo.keys()[0])).applied_force = get_node("/root/world/" + str(playerInfo.keys()[0])).velocity.rotated(get_node("/root/world/" + str(playerInfo.keys()[0])).rotation)
+##			get_node("/root/world/" + str(playerInfo.keys()[0])).applied_torque = get_node("/root/world/" + str(playerInfo.keys()[0])).rotation
+##			get_node("/root/world/" + str(playerInfo.keys()[0])).rotation = deg2rad(get_node("/root/world/" + str(playerInfo.keys()[0])).rotation_dir)
 
 
+#master func set_pos_and_motion(position, velocity, rotation):
+#	var sender = get_tree().get_rpc_sender_id()
+#	print("set_pos_and_motion sent by ", sender)
+#	if sender == 1:
+#		pass
+#	elif sender == 0:
+##		for some reason the servers id here is showing up as zero, this is a work around for that
+#		get_node("/root/world/" + str(1)).applied_force = velocity.rotated(rotation)
+#		get_node("/root/world/" + str(1)).applied_torque = rotation
+#	else:
+#		get_node("/root/world/" + str(sender)).applied_force = velocity.rotated(rotation)
+#		get_node("/root/world/" + str(sender)).applied_torque = rotation
+#		#	applied_force = velocity.rotated(rotation)
+#		#	applied_torque = rotation
+#

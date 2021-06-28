@@ -26,6 +26,10 @@ extents = Vector2( 14.7468, 13.1241 )
 
 [node name="player" type="RigidBody2D"]
 position = Vector2( 3.70957, 8.19412 )
+continuous_cd = 2
+contacts_reported = 10
+contact_monitor = true
+can_sleep = false
 script = ExtResource( 2 )
 speed = 5
 spin_thrust = 6
@@ -39,7 +43,6 @@ frames = SubResource( 1 )
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2( 0.114901, 0.279602 )
-current = true
 
 [node name="ExaustFumes" type="Area2D" parent="."]
 space_override = 4
