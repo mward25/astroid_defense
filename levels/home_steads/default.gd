@@ -98,6 +98,18 @@ func _on_BaseCamp_activateLevel():
 	genericTurrets = $TileMap.get_used_cells_by_id(2)
 	for i in genericTurrets:
 		var GenericTurret = genericTurret.instance()
-		GenericTurret.target = NodePath(targets[0])
-		GenericTurret.position = i*64.0
+		GenericTurret.position = Vector2(i.x*64.0, i.y*64)
+		if $TileMap.is_cell_x_flipped(i.x, i.y) == true:
+			GenericTurret.scale.x = -GenericTurret.scale.x
+			GenericTurret.position.x += 32
+		else:
+			GenericTurret.position.x += 32
+		if $TileMap.is_cell_y_flipped(i.x, i.y) == true:
+			GenericTurret.scale.y = -GenericTurret.scale.y
+			GenericTurret.position.y += 48
+		else:
+			GenericTurret.position.y += 13
+		
+		GenericTurret.target = NodePath(targets[rand_range(0, targets.size())])
+#		GenericTurret.position = Vector2(i.x*64.0+32, i.y*64+13)
 		add_child(GenericTurret)
