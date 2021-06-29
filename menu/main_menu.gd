@@ -8,7 +8,6 @@ const AUDIO_OFF_ON_ART ="      /\n    / )))\n---|  )))))\n--- \\ )))\n     \\ \n
 # var a = 2
 # var b = "text"
 
-
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	$AudioOnOf/Vcontain/VolumeSlider.value = 50
@@ -32,11 +31,13 @@ func _on_Button_pressed():
 	if $EnterIp/Ip.text == "":
 		isServer = true
 		var host = true
+		$"/root/Network".myInfo.name = $NameEdit/TextEdit.text
 		var peer = NetworkedMultiplayerENet.new()
 		peer.create_server(9278, 10)
 		get_tree().network_peer = peer
 #		$"/root/Network".playerInfo.host = $NameEdit/TextEdit.text
 	else:
+		$"/root/Network".myInfo.name = $NameEdit/TextEdit.text
 		var peer = NetworkedMultiplayerENet.new()
 		peer.create_client($EnterIp/Ip.text, int($EnterServerPort/Port.text))
 		get_tree().network_peer = peer
@@ -45,12 +46,14 @@ func _on_Button_pressed():
 #		$"/root/Network".playerInfo.p1 = $NameEdit/TextEdit.text
 
 
-remote func update_ui(var info):
+func update_ui(var info):
+	$"/root/menu/Names/RichTextLabel".text += "\n"
 	$"/root/menu/Names/RichTextLabel".text += info
 
 
 func _on_StartButton_pressed():
 	print($"/root/Network".playerInfo)
+	queue_free()
 	if isServer == false:
 		$"/root/Network".pre_configure_game()
 

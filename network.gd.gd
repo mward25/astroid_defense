@@ -26,8 +26,8 @@ var myInfo = {name = "the dude"}
 
 
 
-remote func update_ui(var info):
-	pass
+remotesync func update_ui(var info):
+	$"/root/menu".update_ui(info)
 
 remote func pre_configure_game():
 	print("preconfiguring")
@@ -131,7 +131,7 @@ remote func register_player(info):
 	var id = get_tree().get_rpc_sender_id()
 	playerInfo[id] = info
 	
-	update_ui(playerInfo[id].name)
+	rpc("update_ui", playerInfo[id].name)
 
 func _server_disconnected():
 	pass
