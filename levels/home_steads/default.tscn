@@ -7,7 +7,7 @@
 [ext_resource path="res://icon.png" type="Texture" id=5]
 [ext_resource path="res://levels/home_steads/TileMap.gd" type="Script" id=6]
 
-[sub_resource type="SpriteFrames" id=2]
+[sub_resource type="SpriteFrames" id=1]
 animations = [ {
 "frames": [ ExtResource( 4 ) ],
 "loop": true,
@@ -15,11 +15,12 @@ animations = [ {
 "speed": 5.0
 } ]
 
-[sub_resource type="RectangleShape2D" id=3]
+[sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 8044.48, 4298.98 )
 
 [node name="BaseCamp" type="Node2D"]
 script = ExtResource( 1 )
+targets = [ "/root/BaseCamp/player" ]
 
 [node name="TileMap" type="TileMap" parent="." groups=[
 "persist",
@@ -45,7 +46,7 @@ region_rect = Rect2( 0, 0, 64, 64 )
 rotation = -1.56611
 scale = Vector2( 4.20374, 4.20374 )
 z_index = -20
-frames = SubResource( 2 )
+frames = SubResource( 1 )
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D"]
 polygon = PoolVector2Array( 67.0355, -624.7, -137.029, -697.012, -6.11631, -744.405, 46.738, -753.326, 77.9454, -774.837, 95.1032, -781.049, 94.9939, -748.396, 91.3092, -628.807, 107.512, -291.639, 276.692, -280.059, 330.086, -5.08167, 641.025, -0.741135, 683.679, 358.447, 912.661, 341.61, 908.171, 379.773, -650.442, 454.551, -648.66, 434.951, -361.791, 411.788, -352.882, 53.6465, -48.1948, 19.7924, -60.6674, -240.35, 91.1544, -290.071, 69.8057, -605.107 )
@@ -54,4 +55,6 @@ polygon = PoolVector2Array( 67.0355, -624.7, -137.029, -697.012, -6.11631, -744.
 space_override = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Gravity"]
-shape = SubResource( 3 )
+shape = SubResource( 2 )
+
+[connection signal="activateLevel" from="." to="." method="_on_BaseCamp_activateLevel"]

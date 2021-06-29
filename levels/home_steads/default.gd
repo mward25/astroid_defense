@@ -1,7 +1,15 @@
 extends Node2D
 var currentBlock = 0
+export (Array) var targets = []
+
+signal activateLevel
+
 onready var upperTileMapBounds = $TileMap.tile_set.get_tiles_ids().max()
 onready var lowerTileMapBounds = $TileMap.tile_set.get_tiles_ids().min()
+
+onready var genericTurrets = $TileMap.get_used_cells_by_id(2)
+var genericTurret = preload("res://objects/defence/turrets/generic_turret.tscn")
+
 var flipXBlock = false
 var flipYBlock = false
 # Declare member variables here. Examples:
@@ -53,6 +61,9 @@ func _process(delta):
 	$MouseCurser.flip_v = flipYBlock
 	$MouseCurser.texture = currentBlockTexture
 	
+	if Input.is_action_just_pressed("activate_level"):
+		emit_signal("activateLevel")
+	
 	if Input.is_action_just_pressed("ui_save"):
 		save()
 	elif Input.is_action_just_pressed("ui_load"):
@@ -81,3 +92,12 @@ func _process(delta):
 		elif flipYBlock == true:
 			flipYBlock = false
 
+
+
+func _on_BaseCamp_activateLevel():
+	genericTurrets = $TileMap.get_used_cells_by_id(2)
+	for i in genericTurrets:
+		var GenericTurret = genericTurret.instance()
+		GenericTurret.target = NodePath(targets[0])
+		GenericTurret.position = i*64.0
+		add_child(GenericTurret)

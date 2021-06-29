@@ -1,0 +1,124 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://my_assets/objects/turrets/standerd_turret.png" type="Texture" id=1]
+[ext_resource path="res://objects/defence/turrets/generic_turret.gd" type="Script" id=2]
+
+[sub_resource type="AtlasTexture" id=1]
+flags = 4
+atlas = ExtResource( 1 )
+region = Rect2( 0, 64, 64, 64 )
+
+[sub_resource type="SpriteFrames" id=2]
+animations = [ {
+"frames": [ SubResource( 1 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[sub_resource type="AtlasTexture" id=3]
+flags = 4
+atlas = ExtResource( 1 )
+region = Rect2( 0, 0, 64, 64 )
+
+[sub_resource type="SpriteFrames" id=4]
+animations = [ {
+"frames": [ SubResource( 3 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[sub_resource type="CapsuleShape2D" id=5]
+radius = 22.5411
+height = 0.0
+
+[sub_resource type="RectangleShape2D" id=6]
+extents = Vector2( 1628.29, 2312.65 )
+
+[node name="Turret" type="KinematicBody2D"]
+scale = Vector2( 0.294, 0.301 )
+script = ExtResource( 2 )
+
+[node name="Base" type="AnimatedSprite" parent="."]
+scale = Vector2( -3.56281, 5.35287 )
+frames = SubResource( 2 )
+
+[node name="CollisionSurface" type="CollisionPolygon2D" parent="."]
+polygon = PoolVector2Array( -114.402, 172.379, -112.904, 87.7242, -30.497, 5.31734, 15.9505, 3.06989, 92.3642, 50.2666, 113.34, 86.9751, 115.588, 170.88 )
+
+[node name="Top" type="KinematicBody2D" parent="."]
+position = Vector2( -0.178162, 92.8826 )
+rotation = 3.14159
+scale = Vector2( 3.56281, -5.35287 )
+
+[node name="Top" type="AnimatedSprite" parent="Top"]
+position = Vector2( -1.38757, -39.8651 )
+rotation = 3.14159
+scale = Vector2( 0.78534, -0.839364 )
+frames = SubResource( 4 )
+
+[node name="ShootyPlace" type="Node2D" parent="Top/Top"]
+position = Vector2( -1.67897, -92.1771 )
+
+[node name="ColorRect" type="ColorRect" parent="Top/Top/ShootyPlace"]
+margin_left = -21.4424
+margin_top = -25.3867
+margin_right = 18.5576
+margin_bottom = 14.6133
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Top"]
+position = Vector2( 1.2602, -18.6627 )
+shape = SubResource( 5 )
+
+[node name="LeftCollision" type="Area2D" parent="Top"]
+position = Vector2( -0.0500721, -17.3519 )
+rotation = 3.14159
+scale = Vector2( 0.280677, -0.186816 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Top/LeftCollision"]
+position = Vector2( -1695.04, -2345.75 )
+shape = SubResource( 6 )
+
+[node name="SeeWhereGoHitLeft" type="ColorRect" parent="Top/LeftCollision"]
+visible = false
+margin_left = -3345.0
+margin_top = -4678.0
+margin_right = -68.0
+margin_bottom = -45.0
+color = Color( 1, 1, 1, 0.623529 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RightCollision" type="Area2D" parent="Top"]
+position = Vector2( -0.0500721, -17.3519 )
+rotation = 3.14159
+scale = Vector2( 0.280677, -0.186816 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Top/RightCollision"]
+position = Vector2( 1682.85, -2288.12 )
+shape = SubResource( 6 )
+
+[node name="SeeWhereGoHitRight" type="ColorRect" parent="Top/RightCollision"]
+visible = false
+margin_left = 71.2275
+margin_top = -4649.84
+margin_right = 3348.23
+margin_bottom = -16.8418
+color = Color( 1, 1, 1, 0.580392 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ShootTimer" type="Timer" parent="."]
+autostart = true
+
+[connection signal="body_entered" from="Top/LeftCollision" to="." method="_on_LeftCollision_body_entered"]
+[connection signal="body_exited" from="Top/LeftCollision" to="." method="_on_LeftCollision_body_exited"]
+[connection signal="body_entered" from="Top/RightCollision" to="." method="_on_RightCollision_body_entered"]
+[connection signal="body_exited" from="Top/RightCollision" to="." method="_on_RightCollision_body_exited"]
+[connection signal="timeout" from="ShootTimer" to="." method="_on_ShootTimer_timeout"]

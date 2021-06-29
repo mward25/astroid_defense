@@ -49,6 +49,18 @@ func get_input():
 		
 		if Input.is_action_pressed("ui_left"):
 			rotation_dir -= spin_thrust
+		
+		if Input.is_action_just_pressed("capture_mouse"):
+			if Input.get_mouse_mode() == Input.MOUSE_MODE_HIDDEN:
+				Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+			else:
+				Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
+		if Input.is_action_just_pressed("ui_fullscrean"):
+			if OS.window_fullscreen == true:
+				OS.window_fullscreen = false
+			else:
+				OS.window_fullscreen = true
+			
 	else:
 		if isThrusting == true:
 			$ExaustFumes.gravity = exaustPower

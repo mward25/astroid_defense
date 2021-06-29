@@ -50,7 +50,7 @@ func save():
 			
 			saveTiles.append(currentTile)
 			locationsInTileMap += 1
-			print(currentTile.position)
+			print("saving tile at position ", currentTile.position)
 	
 	for i in saveTiles:
 		saveTilesDict.append(i.save())
@@ -94,7 +94,7 @@ func loadSave(var saveDict):
 	print(tmpSavDat)
 	
 	for i in tmpSavDat:
-		print(i.tileId)
+#		print(i.tileId)
 		set_cell(i.positionX, i.positionY, i.tileId, i.flipX, i.flipY)
 	
 #	for i in saveDict.tilePosisions:
