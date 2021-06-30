@@ -2,7 +2,7 @@
 
 [ext_resource path="res://levels/home_steads/default.gd" type="Script" id=1]
 [ext_resource path="res://my_assets/retro_tilemap/retro_tileset.tres" type="TileSet" id=2]
-[ext_resource path="res://player/player_default.tscn" type="PackedScene" id=3]
+[ext_resource path="res://player/ships/shooting/shooty_ship.tscn" type="PackedScene" id=3]
 [ext_resource path="res://levels/home_steads/default.png" type="Texture" id=4]
 [ext_resource path="res://icon.png" type="Texture" id=5]
 [ext_resource path="res://levels/home_steads/TileMap.gd" type="Script" id=6]
@@ -30,10 +30,6 @@ cell_tile_origin = 1
 format = 1
 script = ExtResource( 6 )
 
-[node name="player" parent="." instance=ExtResource( 3 )]
-position = Vector2( -540.905, -37.1904 )
-isMyPlayer = true
-
 [node name="MouseCurser" type="Sprite" parent="."]
 position = Vector2( -907.691, -104.117 )
 texture = ExtResource( 5 )
@@ -56,5 +52,9 @@ space_override = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Gravity"]
 shape = SubResource( 2 )
+
+[node name="player" parent="." instance=ExtResource( 3 )]
+position = Vector2( -637.6, -166.42 )
+isMyPlayer = true
 
 [connection signal="activateLevel" from="." to="." method="_on_BaseCamp_activateLevel"]

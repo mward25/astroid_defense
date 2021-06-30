@@ -2,6 +2,7 @@ extends RigidBody2D
 
 var selfPeerID
 export var isMyPlayer = false
+export (PackedScene) var bullet = preload("res://killy_things/bullets/generic_bullet.tscn")
 var myPos = Vector2()
 
 
@@ -60,6 +61,12 @@ func get_input():
 			$FlameAttack.collision_mask = 0
 			$FlameAttack.hide()
 			isThrusting = false
+		
+		if Input.is_action_pressed("shoot"):
+			var Bullet = bullet.instance()
+			Bullet.position = position
+			Bullet.position.y -= 40
+			get_parent().add_child(Bullet)
 		
 		if Input.is_action_pressed("ui_right"):
 			rotation_dir += spin_thrust

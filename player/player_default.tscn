@@ -80,7 +80,8 @@ script = ExtResource( 5 )
 position = Vector2( -2.37024, 32.5062 )
 shape = SubResource( 4 )
 
-[node name="ColorRect" type="ColorRect" parent="FlameAttack"]
+[node name="AnnotativeRect" type="ColorRect" parent="FlameAttack"]
+visible = false
 margin_left = -17.0
 margin_top = 20.0
 margin_right = 13.0
@@ -109,6 +110,7 @@ margin_top = -275.0
 margin_right = 488.0
 margin_bottom = -211.0
 rect_scale = Vector2( 1.02797, 0.271402 )
+value = 100.0
 texture_progress = ExtResource( 7 )
 __meta__ = {
 "_edit_use_anchors_": false
