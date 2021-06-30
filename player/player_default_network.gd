@@ -1,4 +1,4 @@
-extends RigidBody2D
+extends KinematicBody2D
 
 var selfPeerID
 export var isMyPlayer = false
@@ -9,7 +9,6 @@ var myPos = Vector2()
 var velocity = Vector2()
 var posTmp = position
 var overNet = false
-var isDead = false
 export var speed = 50
 export var rotation_dir = 0
 export (int) var spin_thrust
@@ -28,31 +27,22 @@ var exaustPower = -120
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+
 	if isMyPlayer == true:
 		$Camera2D.current = true
-		$ActualMessagingSystem/HealthBar.min_value = 0
-		$ActualMessagingSystem/HealthBar.max_value = health
 	else:
-		mode = RigidBody2D.MODE_KINEMATIC
-		$ActualMessagingSystem/BigMessagingSystem.hide()
-		$ActualMessagingSystem/HealthBar.hide()
+		pass
 		
 		
 
 func get_input():
 	if isMyPlayer == true:
-		$ActualMessagingSystem/HealthBar.value = health
 		if Input.is_action_pressed("ui_up"):
 			velocity.y -= speed
 			$ExaustFumes.gravity = exaustPower
 	#		print($FlameAttack.collision_mask)
-			if isDead == false:
-				$FlameAttack.collision_mask = 1
-				$FlameAttack.show()
-			else:
-				$FlameAttack.collision_layer = 0
-				$FlameAttack.collision_mask = 0
-				$FlameAttack.hide()
+			$FlameAttack.collision_mask = 1
+			$FlameAttack.show()
 			isThrusting = true
 		else:
 			velocity = Vector2()
@@ -95,8 +85,8 @@ func _integrate_forces(state):
 	if isMyPlayer == true and overNet == true:
 		rpc_unreliable("set_pos_and_motion", position, velocity, rotation_dir, isThrusting)
 	rotation = deg2rad(rotation_dir)
-#	if isMyPlayer == false:
-#		position = posTmp
+	if isMyPlayer == false:
+		position = posTmp
 #		if isThrusting == true:
 #			position = posTmp
 #		if rand_range(0,6) >= 5:
@@ -108,11 +98,6 @@ func _integrate_forces(state):
 # warning-ignore:unused_argument
 func _physics_process(delta):
 	get_input()
-#	print(selfPeerID)
-	if isMyPlayer == false:
-		position = posTmp
-	applied_force = velocity.rotated(rotation)
-	applied_torque = rotation
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -123,13 +108,9 @@ func _process(delta):
 	if health <= 0:
 		$BigMessagingSystem.text = "you died"
 		yield(get_tree().create_timer(3), "timeout")
-		
-#		become a spectator uppon death
-		collision_layer = 0
-		collision_mask = 0
-		isDead = true
-#		hide()
-#		print("I died")
+		print("I died")
+#		we are not dying just yet
+#		queue_free()
 	
 	
 	
@@ -139,11 +120,10 @@ func _process(delta):
 
 
 func _on_player_body_entered(body):
-	if isDead == false:
-		if "damage" in body and body != $FlameAttack:
-			health -= body.damage
-			print("took ", body.damage, " damage")
-			print("my health is now at ", health)
+	if "damage" in body and body != $FlameAttack:
+		health -= body.damage
+		print("took ", body.damage, " damage")
+		print("my health is now at ", health)
 
 
 
@@ -152,14 +132,10 @@ func _on_player_body_entered(body):
 
 puppet func set_pos_and_motion(pos, vel, rot_dir, isThrust):
 #	myPos = pos
-	
 	posTmp = pos
 	velocity = vel
 	rotation_dir = rot_dir
 	isThrusting = isThrust
-	
-	
-	
 ##	$BigMessagingSystem.text = str(selfPeerID)
 ###	posTmp = pos
 ###	velocity = vel

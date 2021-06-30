@@ -1,4 +1,5 @@
 extends Node2D
+const GENERIC_TURRET = 2
 var currentBlock = 0
 export (Array) var targets = []
 
@@ -95,7 +96,7 @@ func _process(delta):
 
 
 func _on_BaseCamp_activateLevel():
-	genericTurrets = $TileMap.get_used_cells_by_id(2)
+	genericTurrets = $TileMap.get_used_cells_by_id(GENERIC_TURRET)
 	for i in genericTurrets:
 		var GenericTurret = genericTurret.instance()
 		GenericTurret.position = Vector2(i.x*64.0, i.y*64)
