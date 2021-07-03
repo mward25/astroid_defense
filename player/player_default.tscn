@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://player/player.png" type="Texture" id=1]
 [ext_resource path="res://player/player_default.gd" type="Script" id=2]
@@ -26,6 +26,30 @@ font_data = ExtResource( 4 )
 [sub_resource type="RectangleShape2D" id=4]
 extents = Vector2( 14.7468, 13.1241 )
 
+[sub_resource type="Gradient" id=5]
+offsets = PoolRealArray( 0, 0.356589, 0.627907, 1 )
+colors = PoolColorArray( 0.976471, 0.54902, 0.176471, 1, 0.831373, 0.254902, 0.254902, 1, 0.803922, 0.266947, 0.266947, 1, 0.447059, 0.423529, 0.423529, 1 )
+
+[sub_resource type="GradientTexture" id=6]
+gradient = SubResource( 5 )
+
+[sub_resource type="ParticlesMaterial" id=7]
+emission_shape = 1
+emission_sphere_radius = 1.0
+flag_disable_z = true
+spread = 67.11
+gravity = Vector3( 0, 20, 0 )
+initial_velocity = 460.34
+initial_velocity_random = 1.0
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+linear_accel = 3.99
+scale = 3.0
+scale_random = 0.51
+color_ramp = SubResource( 6 )
+hue_variation = -0.04
+hue_variation_random = 0.7
+
 [node name="player" type="RigidBody2D"]
 position = Vector2( 3.70957, 8.19412 )
 continuous_cd = 2
@@ -33,9 +57,6 @@ contacts_reported = 10
 contact_monitor = true
 can_sleep = false
 script = ExtResource( 2 )
-speed = 5
-spin_thrust = 6
-engine_thrust = 350
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 position = Vector2( -0.744884, -4.40173 )
@@ -115,5 +136,14 @@ texture_progress = ExtResource( 7 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="FlameParticles" type="Particles2D" parent="."]
+position = Vector2( -5.25613, 21.1666 )
+rotation = 1.55769
+amount = 2000
+lifetime = 1.5
+randomness = 0.3
+local_coords = false
+process_material = SubResource( 7 )
 
 [connection signal="body_entered" from="." to="." method="_on_player_body_entered"]

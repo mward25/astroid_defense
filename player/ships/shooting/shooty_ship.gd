@@ -5,6 +5,8 @@ export var isMyPlayer = false
 var myPos = Vector2()
 
 
+export (PackedScene) var bullet = preload("res://killy_things/bullets/generic_bullet.tscn")
+
 
 var velocity = Vector2()
 var posTmp = position
@@ -14,7 +16,9 @@ export var speed = 5
 export var rotation_dir = 0
 export (int) var spin_thrust = 6
 export (int) var engine_thrust = 350
-export (float) var health = 500
+export (float) var health = 100
+export (float) var bulletCoolDown = .3
+export (float) var bulletSize = 1
 
 var isThrusting = false
 
@@ -42,6 +46,18 @@ func _ready():
 func get_input():
 	if isMyPlayer == true:
 		$ActualMessagingSystem/HealthBar.value = health
+		if Input.is_action_pressed("shoot") && isDead == false && $ShooterCoolDown.time_left <= 0:
+			var Bullet = bullet.instance()
+			Bullet.position = position
+			Bullet.position -= Vector2(0, 90).rotated(rotation)
+			Bullet.linear_velocity = Bullet.linear_velocity.rotated(rotation)
+			Bullet.rotation = rotation
+			Bullet.scale = Vector2(bulletSize, bulletSize)
+			Bullet.killTime = 4
+			get_parent().add_child(Bullet)
+			$ShooterCoolDown.wait_time = bulletCoolDown
+			$ShooterCoolDown.start()
+		
 		if Input.is_action_pressed("ui_up"):
 			velocity.y -= speed
 			$ExaustFumes.gravity = exaustPower
@@ -170,12 +186,6 @@ puppet func set_pos_and_motion(pos, vel, rot_dir, isThrust):
 #	rotation_dir = rad2deg(rot)
 #	global_position = pos
 
-#func _process(delta):
-#		if Input.is_action_pressed("shoot"):
-#			var Bullet = bullet.instance()
-#			Bullet.position = position
-#			Bullet.position.y -= 40
-#			get_parent().add_child(Bullet)
 
 
-#export (PackedScene) var bullet = preload("res://killy_things/bullets/generic_bullet.tscn")
+

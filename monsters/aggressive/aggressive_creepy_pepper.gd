@@ -41,15 +41,18 @@ func _process(delta):
 		queue_free()
 
 func _physics_process(delta):
-	if get_node(Target).position.x > position.x:
-		applied_force.x += speed
-	elif get_node(Target).position.x < position.x:
-		applied_force.x -= speed
-	
-	if get_node(Target).position.y > position.y:
-		applied_force.y += speed
-	elif get_node(Target).position.y < position.y:
-		applied_force.y -= speed
+	if get_node_or_null(Target) == null:
+		print("warning, target is null")
+	else:
+		if get_node(Target).position.x > position.x:
+			applied_force.x += speed
+		elif get_node(Target).position.x < position.x:
+			applied_force.x -= speed
+		
+		if get_node(Target).position.y > position.y:
+			applied_force.y += speed
+		elif get_node(Target).position.y < position.y:
+			applied_force.y -= speed
 
 
 func _on_CreepyPepper_body_entered(body):
