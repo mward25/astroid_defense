@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://my_assets/retro_tilemap/retro_tileset.tres" type="TileSet" id=1]
-[ext_resource path="res://player/ships/shooting/shooty_ship.tscn" type="PackedScene" id=2]
+[ext_resource path="res://player/player_default.tscn" type="PackedScene" id=2]
 [ext_resource path="res://my_assets/skys/build/night_sky_with_mountain.tscn" type="PackedScene" id=3]
 [ext_resource path="res://monsters/aggressive/aggressive_creepy_pepper.tscn" type="PackedScene" id=4]
 [ext_resource path="res://levels/tutorial/tutorial_3.gd" type="Script" id=5]
@@ -26,25 +26,21 @@ position = Vector2( 419.14, -90.7691 )
 destroyOnHit = true
 health = 3.0
 speed = 5.0
-Target = NodePath("../player")
 
 [node name="AgressiveCreepyPepper2" parent="." instance=ExtResource( 4 )]
 position = Vector2( 1944, -504 )
 destroyOnHit = true
-Target = NodePath("../player")
 
 [node name="AgressiveCreepyPepper3" parent="." instance=ExtResource( 4 )]
 position = Vector2( 1264, 736 )
 destroyOnHit = true
 health = 100.0
 speed = 50.0
-Target = NodePath("../player")
 
 [node name="AgressiveCreepyPepper4" parent="." instance=ExtResource( 4 )]
 position = Vector2( 2226.34, 1408 )
 destroyOnHit = true
 health = 3.0
-Target = NodePath("../player")
 
 [node name="player" parent="." instance=ExtResource( 2 )]
 isMyPlayer = true

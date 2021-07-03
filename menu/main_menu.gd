@@ -24,7 +24,7 @@ func _process(delta):
 
 
 var playerInfo = {}
-var myInfo = {name = "the dude"}
+var myInfo = {name = "the dude", ship = ""}
 
 func _on_Button_pressed():
 	myInfo.name = $NameEdit/TextEdit.text
@@ -70,3 +70,8 @@ func _on_TutorialButton_pressed():
 func _on_VolumeSlider_value_changed(value):
 	$"/root/GlobalAudioPlayer".musicVolume = value
 	print(value)
+
+
+func _on_ShipSelect_item_selected(index):
+	$"/root/CurrentShip".currentShip = $"/root/CurrentShip".shipList[$ShipSelect.get_item_text(index)]
+	playerInfo["ship"] = $"/root/CurrentShip".currentShip

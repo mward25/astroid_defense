@@ -42,7 +42,7 @@ func _process(delta):
 
 func _physics_process(delta):
 	if get_node_or_null(Target) == null:
-		print("warning, target is null")
+		print("warning, ", name ,"\'s target is null")
 	else:
 		if get_node(Target).position.x > position.x:
 			applied_force.x += speed

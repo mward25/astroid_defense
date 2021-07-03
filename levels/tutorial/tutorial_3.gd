@@ -18,11 +18,19 @@ func addMyPlayer():
 	player.rotation = $player.rotation
 	
 	$player.queue_free()
+	yield($player, "tree_exited")
+	player.name = "player"
+	
+
 	add_child(player)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	addMyPlayer()
+	$AgressiveCreepyPepper.Target = NodePath("/root/Tutorial3/player")
+	$AgressiveCreepyPepper2.Target = NodePath("/root/Tutorial3/player")
+	$AgressiveCreepyPepper3.Target = NodePath("/root/Tutorial3/player")
+	$AgressiveCreepyPepper4.Target = NodePath("/root/Tutorial3/player")
 	
 	$player/BigMessagingSystem.text = "kill all of the aggressive creepy pepers"
 	yield(self, "allCreepyPeppersKilled")

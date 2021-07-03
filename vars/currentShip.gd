@@ -10,7 +10,7 @@ export (Dictionary) var shipList
 func _ready():
 	shipList["playerDefault"] = "res://player/player_default.tscn"
 	shipList["shootyShip"] = "res://player/ships/shooting/shooty_ship.tscn"
-	currentShip = shipList["playerDefault"]
+	currentShip = shipList["shootyShip"]
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

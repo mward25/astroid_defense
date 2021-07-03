@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://menu/main_menu.gd" type="Script" id=1]
+[ext_resource path="res://menu/ShipSelect.gd" type="Script" id=2]
 
 [node name="menu" type="Node2D"]
 script = ExtResource( 1 )
@@ -74,17 +75,17 @@ margin_bottom = 94.0
 text = "enter_name"
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
-margin_left = 496.478
-margin_top = 256.734
-margin_right = 891.478
-margin_bottom = 472.734
+margin_left = 797.499
+margin_top = 216.637
+margin_right = 946.499
+margin_bottom = 303.637
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="StartButton" type="Button" parent="MarginContainer"]
-margin_right = 395.0
-margin_bottom = 216.0
+margin_right = 149.0
+margin_bottom = 87.0
 text = "START!!!!!!!!!!!!!!!!"
 
 [node name="Tutorial" type="MarginContainer" parent="."]
@@ -127,7 +128,22 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="ShipSelect" type="ItemList" parent="."]
+margin_left = 346.0
+margin_top = 230.0
+margin_right = 768.0
+margin_bottom = 456.0
+allow_reselect = true
+max_text_lines = 458
+auto_height = true
+max_columns = 17
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [connection signal="pressed" from="Start/Button" to="." method="_on_Button_pressed"]
 [connection signal="pressed" from="MarginContainer/StartButton" to="." method="_on_StartButton_pressed"]
 [connection signal="pressed" from="Tutorial/TutorialButton" to="." method="_on_TutorialButton_pressed"]
 [connection signal="value_changed" from="AudioOnOf/Vcontain/VolumeSlider" to="." method="_on_VolumeSlider_value_changed"]
+[connection signal="item_selected" from="ShipSelect" to="." method="_on_ShipSelect_item_selected"]

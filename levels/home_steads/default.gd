@@ -17,9 +17,26 @@ var flipYBlock = false
 # var a = 2
 # var b = "text"
 
+func addMyPlayer():
+	var player = load($"/root/CurrentShip".currentShip).instance()
+#	syncronise vairiables from player instansed to the scene through editor
+	player.isMyPlayer = $player.isMyPlayer
+	player.health = $player.health
+	player.spin_thrust = $player.spin_thrust
+	player.speed = $player.speed
+	player.engine_thrust = $player.engine_thrust
+	player.position = $player.position
+	player.rotation = $player.rotation
+	
+	$player.queue_free()
+	yield($player, "tree_exited")
+	player.name = "player"
+	
 
+	add_child(player)
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	addMyPlayer()
 	$TileMap.tile_set = preload("res://my_assets/retro_tilemap/retro_tileset.tres")
 #	print("upper: ", upperTileMapBounds, "\nlower: ", lowerTileMapBounds)
 #	$TileMap.set_cellv(Vector2(0, 0), 0)
@@ -70,9 +87,9 @@ func _process(delta):
 	elif Input.is_action_just_pressed("ui_load"):
 		loadSave()
 	
-	if Input.is_action_pressed("ui_select"):
+	if Input.is_action_pressed("add_block"):
 		$TileMap.set_cellv(Vector2(mouseXCord, mouseYCord), currentBlock, flipXBlock, flipYBlock)
-	if Input.is_action_pressed("ui_deselect"):
+	if Input.is_action_pressed("del_block"):
 		$TileMap.set_cellv(Vector2(mouseXCord, mouseYCord), -1, flipXBlock, flipYBlock)
 
 	if Input.is_action_just_pressed("ui_prev_block"):
