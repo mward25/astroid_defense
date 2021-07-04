@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://player/player_default.tscn" type="PackedScene" id=1]
+[ext_resource path="res://player/ships/shooting/shooty_ship.gd" type="Script" id=2]
+
+[node name="player" instance=ExtResource( 1 )]
+script = ExtResource( 2 )
+health = 500.0
+
+[node name="ShooterCoolDown" type="Timer" parent="." index="8"]
+one_shot = true

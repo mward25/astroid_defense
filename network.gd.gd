@@ -22,7 +22,7 @@ func _ready():
 #func _process(delta):
 #	pass
 var playerInfo = {}
-var myInfo = {name = "the dude"}
+var myInfo = {name = "the dude", ship = "playerDefault"}
 
 
 
@@ -42,7 +42,7 @@ remote func pre_configure_game():
 	get_node("/root").add_child(world)
 	
 	
-	var MyPlayer = preload("res://player/player_default.tscn").instance()
+	var MyPlayer = load(myInfo.ship).instance()
 	MyPlayer.selfPeerID = selfPeerID
 	MyPlayer.isMyPlayer = true
 	MyPlayer.overNet = true
@@ -53,7 +53,7 @@ remote func pre_configure_game():
 	get_node("/root/world").add_child(MyPlayer)
 	
 	for p in playerInfo:
-		var player = preload("res://player/player_default.tscn").instance()
+		var player = load((playerInfo[p])["ship"]).instance()
 		player.overNet = true
 		player.selfPeerID = selfPeerID
 		player.set_name(str(p))
@@ -77,7 +77,7 @@ remote func done_preconfiguring():
 	get_node("/root").add_child(world)
 	
 	
-	var MyPlayer = preload("res://player/player_default.tscn").instance()
+	var MyPlayer = load($"/root/CurrentShip".currentShip).instance()
 	print("adding me, ", str(selfPeerID), " to the scene")
 	MyPlayer.isMyPlayer = true
 	MyPlayer.overNet = true
@@ -87,7 +87,7 @@ remote func done_preconfiguring():
 #	MyPlayer.set_network_master(1)
 	get_node("/root/world").add_child(MyPlayer)
 	
-	var player = preload("res://player/player_default.tscn").instance()
+	var player = load((playerInfo[who])["ship"]).instance()
 	player.overNet = true
 	player.selfPeerID = selfPeerID
 	player.set_name(str(who))
