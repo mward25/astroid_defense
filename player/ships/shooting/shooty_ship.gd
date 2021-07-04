@@ -20,6 +20,8 @@ export (float) var health = 100
 export (float) var bulletCoolDown = .3
 export (float) var bulletSize = 1
 
+var isShooting = false
+
 var isThrusting = false
 
 var rotation_limit = 360
@@ -57,6 +59,7 @@ func get_input():
 			get_parent().add_child(Bullet)
 			$ShooterCoolDown.wait_time = bulletCoolDown
 			$ShooterCoolDown.start()
+			isShooting = true
 		
 		if Input.is_action_pressed("ui_up"):
 			velocity.y -= speed
@@ -79,7 +82,7 @@ func get_input():
 			$FlameParticles.emitting = false
 			isThrusting = false
 		
-
+		
 		
 		if Input.is_action_pressed("ui_right"):
 			rotation_dir += spin_thrust
@@ -103,17 +106,22 @@ func get_input():
 			$ExaustFumes.gravity = exaustPower
 			$FlameAttack.collision_mask = 1
 			$FlameAttack.show()
+			$FlameParticles.emitting = true
 		elif isThrusting == false:
 			velocity = Vector2()
 			$ExaustFumes.gravity = 0
 			$FlameAttack.collision_mask = 0
 			$FlameAttack.hide()
+			$FlameParticles.emitting = false
 
 
 # warning-ignore:unused_argument
 func _integrate_forces(state):
 	if isMyPlayer == true and overNet == true:
 		rpc_unreliable("set_pos_and_motion", position, velocity, rotation_dir, isThrusting)
+		if isShooting == true:
+			rpc("shoot_remote")
+			isShooting = false
 	rotation = deg2rad(rotation_dir)
 #	if isMyPlayer == false:
 #		position = posTmp
@@ -178,8 +186,19 @@ puppet func set_pos_and_motion(pos, vel, rot_dir, isThrust):
 	rotation_dir = rot_dir
 	isThrusting = isThrust
 	
-	
-	
+
+puppet func shoot_remote():
+	var Bullet = bullet.instance()
+	Bullet.position = position
+	Bullet.position -= Vector2(0, 90).rotated(rotation)
+	Bullet.linear_velocity = Bullet.linear_velocity.rotated(rotation)
+	Bullet.rotation = rotation
+	Bullet.scale = Vector2(bulletSize, bulletSize)
+	Bullet.killTime = 4
+	get_parent().add_child(Bullet)
+	$ShooterCoolDown.wait_time = bulletCoolDown
+	$ShooterCoolDown.start()
+
 ##	$BigMessagingSystem.text = str(selfPeerID)
 ###	posTmp = pos
 ###	velocity = vel

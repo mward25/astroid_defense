@@ -32,12 +32,14 @@ func _on_Button_pressed():
 		isServer = true
 		var host = true
 		$"/root/Network".myInfo.name = $NameEdit/TextEdit.text
+		$"/root/Network".myInfo.ship = myInfo.ship
 		var peer = NetworkedMultiplayerENet.new()
 		peer.create_server(9278, 10)
 		get_tree().network_peer = peer
 #		$"/root/Network".playerInfo.host = $NameEdit/TextEdit.text
 	else:
 		$"/root/Network".myInfo.name = $NameEdit/TextEdit.text
+		$"/root/Network".myInfo.ship = myInfo.ship
 		var peer = NetworkedMultiplayerENet.new()
 		peer.create_client($EnterIp/Ip.text, int($EnterServerPort/Port.text))
 		get_tree().network_peer = peer
@@ -74,4 +76,5 @@ func _on_VolumeSlider_value_changed(value):
 
 func _on_ShipSelect_item_selected(index):
 	$"/root/CurrentShip".currentShip = $"/root/CurrentShip".shipList[$ShipSelect.get_item_text(index)]
-	playerInfo["ship"] = $"/root/CurrentShip".currentShip
+	myInfo["ship"] = $"/root/CurrentShip".currentShip
+	print($"/root/CurrentShip".currentShip)

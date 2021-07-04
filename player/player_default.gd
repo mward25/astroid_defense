@@ -87,11 +87,13 @@ func get_input():
 			$ExaustFumes.gravity = exaustPower
 			$FlameAttack.collision_mask = 1
 			$FlameAttack.show()
+			$FlameParticles.emitting = true
 		elif isThrusting == false:
 			velocity = Vector2()
 			$ExaustFumes.gravity = 0
 			$FlameAttack.collision_mask = 0
 			$FlameAttack.hide()
+			$FlameParticles.emitting = false
 
 
 # warning-ignore:unused_argument
