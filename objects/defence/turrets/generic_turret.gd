@@ -7,7 +7,7 @@ export var speed = .5
 var prevAction = PASSIVE
 export var shootingIntervall = 2
 
-onready var TargetNode = get_node(target)
+var TargetNode
 
 enum {ROT_LEFT, ROT_RIGHT, SHOOT, PASSIVE}
 var action = PASSIVE
@@ -22,6 +22,8 @@ var action = PASSIVE
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	print(target)
+	yield(get_tree().create_timer(1.0), "timeout")
+	TargetNode = get_node(target)
 	$ShootTimer.wait_time = shootingIntervall
 
 #365

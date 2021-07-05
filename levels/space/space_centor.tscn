@@ -1,0 +1,36 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://my_assets/skys/build/space_background.tscn" type="PackedScene" id=1]
+[ext_resource path="res://levels/planets/early/the_egg_world.png" type="Texture" id=3]
+[ext_resource path="res://levels/space/default_homestead.gd" type="Script" id=4]
+[ext_resource path="res://levels/space/space_centor.gd" type="Script" id=5]
+
+[sub_resource type="SpriteFrames" id=1]
+animations = [ {
+"frames": [ ExtResource( 3 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[sub_resource type="CapsuleShape2D" id=2]
+radius = 156.496
+height = 30.5444
+
+[node name="SpaceCentor" type="Node2D"]
+script = ExtResource( 5 )
+
+[node name="SpaceBackground" parent="." instance=ExtResource( 1 )]
+
+[node name="default_homestead" type="Area2D" parent="."]
+script = ExtResource( 4 )
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="default_homestead"]
+position = Vector2( -640.723, 165.52 )
+frames = SubResource( 1 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="default_homestead"]
+position = Vector2( -634.036, 178.27 )
+shape = SubResource( 2 )
+
+[connection signal="body_entered" from="default_homestead" to="default_homestead" method="_on_default_homestead_body_entered"]

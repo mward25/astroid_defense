@@ -54,7 +54,10 @@ space_override = 2
 shape = SubResource( 2 )
 
 [node name="player" parent="." instance=ExtResource( 3 )]
-position = Vector2( -637.6, -166.42 )
+position = Vector2( -655.58, -939.546 )
 isMyPlayer = true
+
+[node name="GoToSpace" type="Position2D" parent="."]
+position = Vector2( -8, -1272 )
 
 [connection signal="activateLevel" from="." to="." method="_on_BaseCamp_activateLevel"]

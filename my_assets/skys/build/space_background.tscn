@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://levels/tutorial/tutorial_1_backround.png" type="Texture" id=1]
+
+[node name="SpaceBackground" type="TextureRect"]
+margin_left = -93440.0
+margin_top = -45824.0
+margin_right = 80528.0
+margin_bottom = 51600.0
+texture = ExtResource( 1 )
+stretch_mode = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}

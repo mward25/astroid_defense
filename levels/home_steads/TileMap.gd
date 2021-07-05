@@ -90,12 +90,16 @@ func loadSave(var saveDict):
 #	var upperTileMapBounds = saveDict.upperBounds
 	print(saveDict)
 	
-	var tmpSavDat = parse_json(saveDict.get_line())
+	var strSavData = saveDict.get_line()
+	print(strSavData.find(name)+1)
+	var dataStart =  strSavData.find(name)+name.length()+1
+	strSavData = strSavData.substr(dataStart, strSavData.findn("\n", dataStart))
+	var tmpSavDat = parse_json(strSavData)
 	print(tmpSavDat)
-	
-	for i in tmpSavDat:
-#		print(i.tileId)
-		set_cell(i.positionX, i.positionY, i.tileId, i.flipX, i.flipY)
+	if tmpSavDat != null:
+		for i in tmpSavDat:
+	#		print(i.tileId)
+			set_cell(i.positionX, i.positionY, i.tileId, i.flipX, i.flipY)
 	
 #	for i in saveDict.tilePosisions:
 #		set_cellv(i.position, i.tileId, i.flipX, i.flipY)

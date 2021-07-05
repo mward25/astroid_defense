@@ -24,7 +24,7 @@ func _process(delta):
 
 
 var playerInfo = {}
-var myInfo = {name = "the dude", ship = ""}
+var myInfo = {name = "the dude", ship = "", location = "/root/world"}
 
 func _on_Button_pressed():
 	myInfo.name = $NameEdit/TextEdit.text
@@ -33,6 +33,7 @@ func _on_Button_pressed():
 		var host = true
 		$"/root/Network".myInfo.name = $NameEdit/TextEdit.text
 		$"/root/Network".myInfo.ship = myInfo.ship
+		$"/root/Network".myInfo.location = myInfo.location
 		var peer = NetworkedMultiplayerENet.new()
 		peer.create_server(9278, 10)
 		get_tree().network_peer = peer
@@ -40,6 +41,7 @@ func _on_Button_pressed():
 	else:
 		$"/root/Network".myInfo.name = $NameEdit/TextEdit.text
 		$"/root/Network".myInfo.ship = myInfo.ship
+		$"/root/Network".myInfo.location = myInfo.location
 		var peer = NetworkedMultiplayerENet.new()
 		peer.create_client($EnterIp/Ip.text, int($EnterServerPort/Port.text))
 		get_tree().network_peer = peer
@@ -61,6 +63,8 @@ func _on_StartButton_pressed():
 
 
 func _on_TutorialButton_pressed():
+	$"/root/Network".myInfo.name = $NameEdit/TextEdit.text
+	$"/root/Network".myInfo.ship = myInfo.ship
 	get_tree().change_scene("res://levels/tutorial/tutorial_1.tscn")
 
 
