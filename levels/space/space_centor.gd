@@ -76,7 +76,11 @@ func loadSave():
 					
 					add_child(PlanetShortcutDefault)
 				i += 2
+	
 	save_game.close()
+	for i in get_children():
+		if "levelOwner" in i:
+			i.emit_signal("readyToRoll")
 
 func save():
 	var save_game = File.new()
