@@ -55,34 +55,6 @@ func save():
 	for i in saveTiles:
 		saveTilesDict.append(i.save())
 	
-##	var tileId
-##	var position = Vector2()
-##	var flipX = false
-##	var flipY = false
-#	var saveTilesTitlesId = []
-#	var saveTilesPositionX = []
-#	var saveTilesPositionY = []
-#	var saveTilesFlipX = []
-#	var saveTilesFlipY = []
-#
-#	for i in saveTiles:
-#		saveTilesTitlesId = int(i.tileId)
-#		saveTilesPositionX = i.position.x
-#		saveTilesPositionY = i.position.y
-#		saveTilesFlipX = i.flipX
-#		saveTilesFlipY = i.flipY
-#
-#	var saveDict = {
-#		"tileset": tile_set,
-#		"upperBounds": upperTileMapBounds,
-#		"lowerBounds": lowerTileMapBounds,
-#		"TilesID": saveTilesTitlesId,
-#		"TilesPositionX": saveTilesPositionX,
-#		"TilesPositionY": saveTilesPositionY,
-#		"TilesFlipX": saveTilesFlipX,
-#		"TilesFlipY": saveTilesFlipY
-#	}
-	
 	return saveTilesDict
 
 func loadSave(var saveDict):

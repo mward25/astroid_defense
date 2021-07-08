@@ -13,6 +13,10 @@ onready var lowerTileMapBounds = $TileMap.tile_set.get_tiles_ids().min()
 onready var genericTurrets = $TileMap.get_used_cells_by_id(2)
 var genericTurret = preload("res://objects/defence/turrets/generic_turret.tscn")
 
+signal playerEntered
+var playerEntered = false
+var playerMain
+
 var levelOwner
 var isLevelOwner = false
 var flipXBlock = false
@@ -41,7 +45,7 @@ func addMyPlayer():
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	addMyPlayer()
+	yield(self, "playerEntered")
 	loadSave()
 	yield(get_tree().create_timer(1), "timeout")
 	
@@ -71,7 +75,7 @@ func save():
 		var saveData = i.save()
 		print(saveData)
 		for j in saveData:
-			save_game.store_string(to_json(saveData))
+			save_game.store_line(saveData)
 
 func loadSave():
 	var save_game = File.new()
@@ -97,8 +101,17 @@ func loadSave():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	if $player.position.y <= $GoToSpace.position.y:
-		get_tree().change_scene("res://levels/space/space_centor.tscn")
+	if $"/root/Network".myInfo.location == get_path():
+		if playerEntered == false:
+			for p in get_children():
+				if "isMyPlayer" in p and p.isMyPlayer == true:
+					playerEntered = true
+					playerMain = p.name
+					emit_signal("playerEntered", p)
+					print(p, "entered")
+	if playerEntered == true:
+		if get_node(playerMain).position.y  <= $GoToSpace.position.y:
+			get_node(playerMain).change_my_scene("res://levels/space/space_centor.tscn")
 	if isLevelOwner == true:
 		$MouseCurser.position = Vector2(((int(get_global_mouse_position().x)/64)*64)+32, ((int(get_global_mouse_position().y)/64)*64)+32)
 		var mouseXCord = get_global_mouse_position().x/64.0
@@ -167,3 +180,8 @@ func _on_BaseCamp_activateLevel():
 		print("turrets target is: ", GenericTurret.target)
 #		GenericTurret.position = Vector2(i.x*64.0+32, i.y*64+13)
 		add_child(GenericTurret)
+
+
+func _on_BaseCamp_playerEntered(player):
+	playerEntered = true
+	playerMain = player.name

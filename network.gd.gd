@@ -149,6 +149,7 @@ func changeMyScene(pathToMyPlayer, sceneToChangeTo):
 	var SceneToChangeTo = load(sceneToChangeTo).instance()
 	
 	
+	
 	if player.isMyPlayer == false:
 		player.queue_free()
 	else:

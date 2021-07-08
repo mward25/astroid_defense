@@ -137,6 +137,20 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="MiniMap" type="VSplitContainer" parent="ActualMessagingSystem"]
+margin_left = 318.0
+margin_top = -292.0
+margin_right = 515.0
+margin_bottom = -155.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Coardanates" type="RichTextLabel" parent="ActualMessagingSystem/MiniMap"]
+margin_right = 197.0
+margin_bottom = 137.0
+text = "BLANK"
+
 [node name="FlameParticles" type="Particles2D" parent="."]
 position = Vector2( -5.25613, 21.1666 )
 rotation = 1.55769

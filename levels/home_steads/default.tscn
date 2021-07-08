@@ -1,8 +1,7 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://levels/home_steads/default.gd" type="Script" id=1]
 [ext_resource path="res://my_assets/retro_tilemap/retro_tileset.tres" type="TileSet" id=2]
-[ext_resource path="res://player/ships/shooting/shooty_ship.tscn" type="PackedScene" id=3]
 [ext_resource path="res://levels/home_steads/default.png" type="Texture" id=4]
 [ext_resource path="res://icon.png" type="Texture" id=5]
 [ext_resource path="res://levels/home_steads/TileMap.gd" type="Script" id=6]
@@ -53,11 +52,8 @@ space_override = 2
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Gravity"]
 shape = SubResource( 2 )
 
-[node name="player" parent="." instance=ExtResource( 3 )]
-position = Vector2( -655.58, -939.546 )
-isMyPlayer = true
-
 [node name="GoToSpace" type="Position2D" parent="."]
 position = Vector2( -8, -1272 )
 
 [connection signal="activateLevel" from="." to="." method="_on_BaseCamp_activateLevel"]
+[connection signal="playerEntered" from="." to="." method="_on_BaseCamp_playerEntered"]
