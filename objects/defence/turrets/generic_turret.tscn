@@ -62,7 +62,6 @@ frames = SubResource( 4 )
 position = Vector2( -1.67897, -92.1771 )
 
 [node name="ColorRect" type="ColorRect" parent="Top/Top/ShootyPlace"]
-visible = false
 margin_left = -21.4424
 margin_top = -25.3867
 margin_right = 18.5576

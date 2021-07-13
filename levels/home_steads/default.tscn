@@ -19,7 +19,6 @@ extents = Vector2( 8044.48, 4298.98 )
 
 [node name="BaseCamp" type="Node2D"]
 script = ExtResource( 1 )
-targets = [ "/root/BaseCamp/player" ]
 
 [node name="TileMap" type="TileMap" parent="." groups=[
 "persist",

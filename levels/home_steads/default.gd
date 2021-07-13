@@ -46,6 +46,7 @@ func addMyPlayer():
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	yield(self, "playerEntered")
+	targets.append(get_node(playerMain).get_path())
 	loadSave()
 	yield(get_tree().create_timer(1), "timeout")
 	
@@ -75,7 +76,7 @@ func save():
 		var saveData = i.save()
 		print(saveData)
 		for j in saveData:
-			save_game.store_line(saveData)
+			save_game.store_string(to_json(saveData))
 
 func loadSave():
 	var save_game = File.new()
