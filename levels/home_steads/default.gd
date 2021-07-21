@@ -49,9 +49,10 @@ func addMyPlayer():
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	yield(self, "playerEntered")
+#	yield(get_node(playerMain), "draw")
 	targets.append(get_node(playerMain).get_path())
+	
 	loadSave()
-	yield(get_tree().create_timer(1), "timeout")
 	
 	if levelOwner == $"/root/Network".myInfo.name:
 		isLevelOwner = true
