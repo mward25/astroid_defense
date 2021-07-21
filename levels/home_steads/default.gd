@@ -1,4 +1,7 @@
 extends Node2D
+
+
+var saveDataBaseDict : Dictionary
 const GENERIC_TURRET = 2
 var currentBlock = 0
 export (Array) var targets = []
@@ -17,7 +20,7 @@ signal playerEntered
 var playerEntered = false
 var playerMain
 
-var levelOwner
+var levelOwner = "host"
 var isLevelOwner = false
 var flipXBlock = false
 var flipYBlock = false
@@ -67,18 +70,27 @@ func _ready():
 	
 
 func save():
+	var saveNodes = get_tree().get_nodes_in_group("persist")
+	saveDataBaseDict["node"] = name
+	saveDataBaseDict["owner"] = $"/root/Network".myInfo.name
+	for i in saveNodes:
+		saveDataBaseDict[i.name] = i.save()
+	
+#	SaveDataBase.create_table(name, saveDataBaseDict)
+	
+	
 	var save_game = File.new()
 	save_game.open(saveFile, File.WRITE)
-	var saveNodes = get_tree().get_nodes_in_group("persist")
-	save_game.store_string("[" + $"/root/Network".myInfo.name + "]\n")
-	for i in saveNodes:
-		save_game.store_string("[" + i.name + "]")
-		var saveData = i.save()
-		print(saveData)
-		for j in saveData:
-			save_game.store_string(to_json(saveData))
+	
+	save_game.store_string(to_json(saveDataBaseDict))
+	
+	save_game.close()
 
 func loadSave():
+	var saveNodes = get_tree().get_nodes_in_group("persist")
+	
+	
+	
 	var save_game = File.new()
 	if save_game.file_exists(saveFile):
 		save_game.open(saveFile, File.READ)
@@ -86,17 +98,14 @@ func loadSave():
 		save()
 		save_game.open(saveFile, File.READ)
 	
+	var saveDict = parse_json(save_game.get_as_text())
 	
-	
-	var saveNodes = get_tree().get_nodes_in_group("persist")
-#	var saveData = parse_json(str(save_game))
-	var firstLine = save_game.get_line()
-#	levelOwner, we use substr to remove the []
-	levelOwner = firstLine.substr(1,firstLine.length()-2)
+	name = saveDict["node"]
+	levelOwner =  saveDict["owner"]
 	
 	
 	for i in saveNodes:
-		i.loadSave(save_game)
+		i.loadSave(saveDict[i.name].duplicate(true))
 
 
 

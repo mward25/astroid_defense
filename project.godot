@@ -24,6 +24,7 @@ Moneys="*res://vars/moneys.gd"
 Network="*res://network.gd.gd"
 GlobalAudioPlayer="*res://global_audio_player.gd"
 CurrentShip="*res://vars/currentShip.gd"
+UsefullConstantsAndEnums="*res://vars/usefull_constants_and_enums.gd"
 
 [display]
 
