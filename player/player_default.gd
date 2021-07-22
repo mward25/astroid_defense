@@ -36,8 +36,7 @@ func _ready():
 		mode = RigidBody2D.MODE_KINEMATIC
 		$ActualMessagingSystem/BigMessagingSystem.hide()
 		$ActualMessagingSystem/HealthBar.hide()
-	
-	formatStringWithCommas("1000000000")
+
 
 
 func get_input():
@@ -64,7 +63,6 @@ func get_input():
 			$FlameParticles.emitting = false
 			isThrusting = false
 		
-
 		
 		if Input.is_action_pressed("ui_right"):
 			rotation_dir += spin_thrust
@@ -134,8 +132,9 @@ func _process(delta):
 		if isMyPlayer == true and overNet == true:
 #			for p in $"/root/Network".playerInfo:
 #				if ($"/root/Network".playerInfo[p])["location"] == $"/root/Network".myInfo.location:
-			rpc("update_scene_location", "res://levels/space/space_centor.tscn")
+#			rpc("update_scene_location", "res://levels/space/space_centor.tscn")
 #			$"/root/Network".changeMyScene(get_path(), "res://levels/space/space_centor.tscn")
+			pass
 	
 	if isMyPlayer == true:
 		$ActualMessagingSystem/MiniMap/Coardanates.text = str(global_position.x) + ", " + str(global_position.y)
@@ -187,34 +186,18 @@ puppet func set_pos_and_motion(pos, vel, rot_dir, isThrust):
 #	rotation_dir = rad2deg(rot)
 #	global_position = pos
 
-#func _process(delta):
-#		if Input.is_action_pressed("shoot"):
-#			var Bullet = bullet.instance()
-#			Bullet.position = position
-#			Bullet.position.y -= 40
-#			get_parent().add_child(Bullet)
+
 
 
 #export (PackedScene) var bullet = preload("res://killy_things/bullets/generic_bullet.tscn")
 
 func change_my_scene(sceneToChangeTo):
 	rpc("update_scene_location", sceneToChangeTo)
+	$"/root/Network".changeMyScene(get_path(), sceneToChangeTo)
 
 puppetsync func update_scene_location(sceneToChangeTo):
 #	print("puppet_changing_scene")
 	$"/root/Network".changeMyScene(get_path(), sceneToChangeTo)
 
 
-func formatStringWithCommas(theString):
-	var i = theString.length()
-	print("input is ", theString)
-	while i >= 0:
-		if i%(3+1) == 0:
-			print(theString)
-			theString = theString.substr(i,theString.length()) + "," + theString.substr(i, 0)
-		i -= 1
-		if theString.substr(i) == ",":
-			i -= 1
-	
-	print("output is ", theString)
-	return theString
+

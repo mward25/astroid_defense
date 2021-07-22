@@ -155,7 +155,7 @@ func changeMyScene(pathToMyPlayer, sceneToChangeTo, positionToSpawn: Vector2 = V
 	if player.isMyPlayer == false:
 		player.queue_free()
 	else:
-#		detect ig the scene we want to change to exists, if it does not add it
+#		detect is the scene we want to change to exists, if it does not add it
 		if get_node_or_null("/root/" + SceneToChangeTo.name) == null:
 			$"/root".add_child(SceneToChangeTo)
 			player.get_parent().remove_child(player)
