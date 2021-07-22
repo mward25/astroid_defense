@@ -9,5 +9,10 @@
 script = ExtResource( 5 )
 
 [node name="SpaceBackground" parent="." instance=ExtResource( 1 )]
+margin_right = 9.99066e+07
+margin_bottom = 9.99542e+07
+grow_horizontal = 2
+grow_vertical = 2
+expand = true
 
 [connection signal="playerEntered" from="." to="." method="_on_SpaceCentor_playerEntered"]

@@ -98,7 +98,10 @@ func loadSave():
 		save_game.close()
 		for i in get_children():
 			if "type" in i && i.type == UsefullConstantsAndEnums.PLANET && "levelOwner" in i && i.levelOwner == $"/root/Network".myInfo.name:
-				i.emit_signal("readyToRoll")
+				if "isReady" in i:
+					i.isReady = true
+				else:
+					print("isReady is not in the planet, it probobly should be")
 
 func save():
 	print("saving ", name)
