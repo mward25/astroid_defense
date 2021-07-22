@@ -1,6 +1,6 @@
-extends Node
-export (String) var currentShip
-export (Dictionary) var shipList
+extends Area2D
+
+
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
@@ -8,11 +8,14 @@ export (Dictionary) var shipList
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	shipList["playerDefault"] = "res://player/player_default.tscn"
-	shipList["shootyShip"] = "res://player/ships/shooting/shooty_ship.tscn"
-	currentShip = shipList["playerDefault"]
+	pass # Replace with function body.
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
+
+
+func _on_default_homestead_body_entered(body):
+	if body == $"../player":
+		get_tree().change_scene("res://levels/home_steads/default.tscn")

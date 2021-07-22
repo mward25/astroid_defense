@@ -118,10 +118,13 @@ func get_input():
 # warning-ignore:unused_argument
 func _integrate_forces(state):
 	if isMyPlayer == true and overNet == true:
-		rpc_unreliable("set_pos_and_motion", position, velocity, rotation_dir, isThrusting)
-		if isShooting == true:
-			rpc("shoot_remote")
-			isShooting = false
+		for p in $"/root/Network".playerInfo:
+			if ($"/root/Network".playerInfo[p])["location"] == $"/root/Network".myInfo.location:
+#				print("sending signal to ", p)
+				rpc_unreliable_id(p, "set_pos_and_motion", position, velocity, rotation_dir, isThrusting)
+				if isShooting == true:
+					rpc_id(p, "shoot_remote")
+					isShooting = false
 	rotation = deg2rad(rotation_dir)
 #	if isMyPlayer == false:
 #		position = posTmp
@@ -147,6 +150,14 @@ func _physics_process(delta):
 # warning-ignore:unused_argument
 func _process(delta):
 #	var myRotLoc = position.rotated(rotation)
+#	if Input.is_action_just_pressed("ui_cancel"):
+#		if isMyPlayer == true and overNet == true:
+#			for p in $"/root/Network".playerInfo:
+#				if ($"/root/Network".playerInfo[p])["location"] == $"/root/Network".myInfo.location:
+#					rpc_id(p, "update_scene_location", "res://levels/space/space_centor.tscn")
+#		$"/root/Network".changeMyScene(get_path(), "res://levels/space/space_centor.tscn")
+	if isMyPlayer == true:
+		$ActualMessagingSystem/MiniMap/Coardanates.text = str(global_position.x) + ", " + str(global_position.y)
 	$ExaustFumes.gravity_vec = $ExaustFumes.position
 	if health <= 0:
 		$BigMessagingSystem.text = "you died"
@@ -207,4 +218,10 @@ puppet func shoot_remote():
 
 
 
+func change_my_scene(sceneToChangeTo):
+	rpc("update_scene_location", sceneToChangeTo)
+	$"/root/Network".changeMyScene(get_path(), sceneToChangeTo)
 
+puppetsync func update_scene_location(sceneToChangeTo):
+	print("puppet_changing_scene")
+	$"/root/Network".changeMyScene(get_path(), sceneToChangeTo)

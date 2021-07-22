@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://my_assets/skys/build/space_background.tscn" type="PackedScene" id=1]
+[ext_resource path="res://levels/space/space_centor.gd" type="Script" id=5]
+
+[node name="SpaceCentor" type="Node2D" groups=[
+"userPlanets",
+]]
+script = ExtResource( 5 )
+
+[node name="SpaceBackground" parent="." instance=ExtResource( 1 )]
+margin_right = 9.99066e+07
+margin_bottom = 9.99542e+07
+grow_horizontal = 2
+grow_vertical = 2
+expand = true
+
+[connection signal="playerEntered" from="." to="." method="_on_SpaceCentor_playerEntered"]

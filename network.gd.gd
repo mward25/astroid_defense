@@ -1,6 +1,7 @@
 extends Node
 var finishedOnReady = false
 signal finishedOnReadySignal
+export var defaultWorld = "res://levels/space/space_centor.tscn"
 var playing = false
 # Declare member variables here. Examples:
 # var a = 2
@@ -22,7 +23,7 @@ func _ready():
 #func _process(delta):
 #	pass
 var playerInfo = {}
-var myInfo = {name = "the dude", ship = "playerDefault"}
+var myInfo = {name = "the dude", ship = "playerDefault", location = ""}
 
 
 
@@ -37,9 +38,10 @@ remote func pre_configure_game():
 		get_tree().set_pause(true)
 	var selfPeerID = get_tree().get_network_unique_id()
 	
-	var world = load("res://levels/test/super_simple.tscn").instance()
+	var world = load(defaultWorld).instance()
 	world.set_name("world")
 	get_node("/root").add_child(world)
+	
 	
 	
 	var MyPlayer = load(myInfo.ship).instance()
@@ -72,7 +74,7 @@ remote func done_preconfiguring():
 	print("done_preconfiguring")
 	var who = get_tree().get_rpc_sender_id()
 	
-	var world = load("res://levels/test/super_simple.tscn").instance()
+	var world = load(defaultWorld).instance()
 	world.set_name("world")
 	get_node("/root").add_child(world)
 	
@@ -136,6 +138,71 @@ remote func register_player(info):
 func _server_disconnected():
 	pass
 
+
+func changeMyScene(pathToMyPlayer, sceneToChangeTo, positionToSpawn: Vector2 = Vector2(0,0)):
+	print("tree_before:")
+	$"/root".print_tree_pretty()
+	if get_node_or_null(pathToMyPlayer) == null:
+		print("error, ", pathToMyPlayer, " not found")
+	var playerName = get_node(pathToMyPlayer).name
+	var player = get_node(pathToMyPlayer)
+	player.name = playerName
+	
+	var SceneToChangeTo = load(sceneToChangeTo).instance()
+	
+	
+#	if it is not on the machine playing on destroy our player
+	if player.isMyPlayer == false:
+		player.queue_free()
+	else:
+#		detect is the scene we want to change to exists, if it does not add it
+		if get_node_or_null("/root/" + SceneToChangeTo.name) == null:
+			$"/root".add_child(SceneToChangeTo)
+			player.get_parent().remove_child(player)
+			get_node("/root/" + SceneToChangeTo.name).add_child(player)
+			
+			get_node(myInfo.location).queue_free()
+			
+			myInfo.location = player.get_parent().get_path()
+			rpc("update_player_info", myInfo)
+			var selfPeerID = get_tree().get_network_unique_id()
+			for p in playerInfo:
+				print("p\'s location is ", (playerInfo[p])["location"])
+				print("my location is ", myInfo["location"])
+				if (playerInfo[p])["location"] == myInfo.location:
+					var playertmp = load((playerInfo[p])["ship"]).instance()
+					playertmp.overNet = true
+					playertmp.selfPeerID = selfPeerID
+					playertmp.set_name(str(p))
+					print("adding ", str(p), " to scene")
+					playertmp.set_network_master(int(p))
+					playertmp.position = positionToSpawn
+			#		player.set_network_master(1)
+					get_node(myInfo.location).add_child(playertmp)
+					
+					rpc_id(p, "add_my_player")
+	
+	
+	
+	print("tree_after:")
+	$"/root".print_tree_pretty()
+
+remote func update_player_info(info):
+	print("player ", info, " is being updated")
+	var id = get_tree().get_rpc_sender_id()
+	playerInfo[id] = info
+
+remote func add_my_player():
+	var selfPeerID = get_tree().get_network_unique_id()
+	var id = get_tree().get_rpc_sender_id()
+	var playertmp = load((playerInfo[id])["ship"]).instance()
+	playertmp.overNet = true
+	playertmp.selfPeerID = selfPeerID
+	playertmp.set_name(str(id))
+	print("adding ", str(id), " to scene")
+	playertmp.set_network_master(int(id))
+#	player.set_network_master(1)
+	get_node(myInfo.location).add_child(playertmp)
 #func _process(delta):
 #	if playing == true:
 #		for p in playerInfo:

@@ -1,5 +1,12 @@
 extends TileMap
 
+var SaveDataBase
+var pathToDataBase = "user://save.db"
+onready var tableName = get_parent().name
+
+
+
+
 class TileMiniSave:
 	var tileId = 1
 	var position = Vector2()
@@ -14,7 +21,11 @@ class TileMiniSave:
 			"flipX": flipX,
 			"flipY": flipY
 		}
-		return saveDict
+		
+		
+		
+		
+		return saveDict.duplicate(true)
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
@@ -22,15 +33,16 @@ class TileMiniSave:
 
 
 # Called when the node enters the scene tree for the first time.
-func _ready():
-	pass # Replace with function body.
-
+func ready():
+	pass
 #	var tileId
 #	var position = Vector2()
 #	var flipX = false
 #	var flipY = false
 
 func save():
+	var saveTilesDataBaseDict : Dictionary
+	
 	var saveTiles = []
 	var saveTilesDict = []
 	var lowerTileMapBounds = get_parent().lowerTileMapBounds
@@ -52,50 +64,31 @@ func save():
 			locationsInTileMap += 1
 			print("saving tile at position ", currentTile.position)
 	
-	for i in saveTiles:
-		saveTilesDict.append(i.save())
 	
-##	var tileId
-##	var position = Vector2()
-##	var flipX = false
-##	var flipY = false
-#	var saveTilesTitlesId = []
-#	var saveTilesPositionX = []
-#	var saveTilesPositionY = []
-#	var saveTilesFlipX = []
-#	var saveTilesFlipY = []
-#
-#	for i in saveTiles:
-#		saveTilesTitlesId = int(i.tileId)
-#		saveTilesPositionX = i.position.x
-#		saveTilesPositionY = i.position.y
-#		saveTilesFlipX = i.flipX
-#		saveTilesFlipY = i.flipY
-#
-#	var saveDict = {
-#		"tileset": tile_set,
-#		"upperBounds": upperTileMapBounds,
-#		"lowerBounds": lowerTileMapBounds,
-#		"TilesID": saveTilesTitlesId,
-#		"TilesPositionX": saveTilesPositionX,
-#		"TilesPositionY": saveTilesPositionY,
-#		"TilesFlipX": saveTilesFlipX,
-#		"TilesFlipY": saveTilesFlipY
-#	}
 	
-	return saveTilesDict
+#	if true is used so that j will be removed when we are done with it
+	if true:
+		var j = 0
+		for i in saveTiles:
+			if j == 0:
+				saveTilesDataBaseDict["tiles"] = {j:i.save()}
+			else:
+				(saveTilesDataBaseDict["tiles"])[String(j)] = i.save()
+			j += 1
+	
+	print(saveTilesDataBaseDict)
+	return saveTilesDataBaseDict.duplicate(true)
 
 func loadSave(var saveDict):
 #	var lowerTileMapBounds = saveDict.lowerBounds
 #	var upperTileMapBounds = saveDict.upperBounds
 	print(saveDict)
+	var saveTilesDict = saveDict["tiles"]
+	if saveDict != null:
+		for i in saveTilesDict:
+			var currentTile = saveTilesDict[i]
+			set_cell(currentTile.positionX, currentTile.positionY, currentTile.tileId, currentTile.flipX, currentTile.flipY)
 	
-	var tmpSavDat = parse_json(saveDict.get_line())
-	print(tmpSavDat)
-	
-	for i in tmpSavDat:
-#		print(i.tileId)
-		set_cell(i.positionX, i.positionY, i.tileId, i.flipX, i.flipY)
 	
 #	for i in saveDict.tilePosisions:
 #		set_cellv(i.position, i.tileId, i.flipX, i.flipY)

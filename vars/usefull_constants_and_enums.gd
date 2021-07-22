@@ -1,6 +1,6 @@
 extends Node
-export (String) var currentShip
-export (Dictionary) var shipList
+enum {PLANET, SHIP}
+
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
@@ -8,9 +8,7 @@ export (Dictionary) var shipList
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	shipList["playerDefault"] = "res://player/player_default.tscn"
-	shipList["shootyShip"] = "res://player/ships/shooting/shooty_ship.tscn"
-	currentShip = shipList["playerDefault"]
+	pass # Replace with function body.
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

@@ -24,6 +24,7 @@ Moneys="*res://vars/moneys.gd"
 Network="*res://network.gd.gd"
 GlobalAudioPlayer="*res://global_audio_player.gd"
 CurrentShip="*res://vars/currentShip.gd"
+UsefullConstantsAndEnums="*res://vars/usefull_constants_and_enums.gd"
 
 [display]
 
@@ -116,7 +117,7 @@ ui_fullscrean={
 }
 activate_level={
 "deadzone": 0.5,
-"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":true,"control":true,"meta":false,"command":true,"pressed":false,"scancode":65,"unicode":0,"echo":false,"script":null)
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":true,"shift":false,"control":true,"meta":false,"command":true,"pressed":false,"scancode":65,"unicode":0,"echo":false,"script":null)
  ]
 }
 shoot={
@@ -138,6 +139,10 @@ del_block={
 [layer_names]
 
 2d_physics/layer_2="killingThings"
+
+[logging]
+
+file_logging/max_log_files=20
 
 [physics]
 
