@@ -19,13 +19,19 @@ func _ready():
 	finishedOnReady = true
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
 var playerInfo = {}
+var playersInMyLocation = {}
 var myInfo = {name = "the dude", ship = "playerDefault", location = ""}
 
+func updatePlayersInMyLocation():
+	for p in $"/root/Network".playerInfo:
+		if ($"/root/Network".playerInfo[p])["location"] == $"/root/Network".myInfo.location:
+			playersInMyLocation[p] = playerInfo[p].duplicate(true)
+		elif playersInMyLocation.has(p) && (playersInMyLocation[p])["location"] != (playerInfo[p])["location"]:
+			playersInMyLocation.erase(p)
 
+func _process(delta):
+	updatePlayersInMyLocation()
 
 remotesync func update_ui(var info):
 	$"/root/menu".update_ui(info)
@@ -203,12 +209,7 @@ remote func add_my_player():
 	playertmp.set_network_master(int(id))
 #	player.set_network_master(1)
 	get_node(myInfo.location).add_child(playertmp)
-#func _process(delta):
-#	if playing == true:
-#		for p in playerInfo:
-##			get_node("/root/world/" + str(playerInfo.keys()[0])).applied_force = get_node("/root/world/" + str(playerInfo.keys()[0])).velocity.rotated(get_node("/root/world/" + str(playerInfo.keys()[0])).rotation)
-##			get_node("/root/world/" + str(playerInfo.keys()[0])).applied_torque = get_node("/root/world/" + str(playerInfo.keys()[0])).rotation
-##			get_node("/root/world/" + str(playerInfo.keys()[0])).rotation = deg2rad(get_node("/root/world/" + str(playerInfo.keys()[0])).rotation_dir)
+
 
 
 #master func set_pos_and_motion(position, velocity, rotation):

@@ -128,9 +128,8 @@ func rotateSelf():
 # warning-ignore:unused_argument
 func _integrate_forces(state):
 	if isMyPlayer == true and overNet == true:
-		for p in $"/root/Network".playerInfo:
-			if ($"/root/Network".playerInfo[p])["location"] == $"/root/Network".myInfo.location:
-				doRemoteUpdates(p)
+		for p in $"/root/Network".playersInMyLocation:
+			doRemoteUpdates(p)
 	rotateSelf()
 
 func movePlayerLocal():
