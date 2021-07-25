@@ -1,5 +1,5 @@
-extends Node
-enum {PLANET, SHIP, MONSTER}
+extends RigidBody2D
+var type = UsefullConstantsAndEnums.PLANET
 
 # Declare member variables here. Examples:
 # var a = 2

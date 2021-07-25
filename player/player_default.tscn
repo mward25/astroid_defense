@@ -130,7 +130,7 @@ margin_left = -507.0
 margin_top = -275.0
 margin_right = 488.0
 margin_bottom = -211.0
-rect_scale = Vector2( 1.02797, 0.271402 )
+rect_scale = Vector2( 0.676935, 0.273811 )
 value = 100.0
 texture_progress = ExtResource( 7 )
 __meta__ = {
@@ -138,10 +138,11 @@ __meta__ = {
 }
 
 [node name="MiniMap" type="VSplitContainer" parent="ActualMessagingSystem"]
-margin_left = 318.0
-margin_top = -292.0
-margin_right = 515.0
-margin_bottom = -155.0
+margin_left = 39.5574
+margin_top = -289.48
+margin_right = 236.557
+margin_bottom = -152.48
+rect_scale = Vector2( 2.40227, 1.40148 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -149,7 +150,6 @@ __meta__ = {
 [node name="Coardanates" type="RichTextLabel" parent="ActualMessagingSystem/MiniMap"]
 margin_right = 197.0
 margin_bottom = 137.0
-text = "BLANK"
 
 [node name="FlameParticles" type="Particles2D" parent="."]
 position = Vector2( -5.25613, 21.1666 )

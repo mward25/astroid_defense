@@ -1,17 +1,25 @@
 extends RigidBody2D
 
 var selfPeerID
+var type = UsefullConstantsAndEnums.SHIP
 export var isMyPlayer = false
 var myPos = Vector2()
 
-
-# \$[^"]
-
+var zoomMax = Vector2(.1, .1)
 
 var velocity = Vector2()
 var posTmp = position
 var overNet = false
 var isDead = false
+
+var miniMapDisplay = {}
+
+var miniMapImages = {
+	UsefullConstantsAndEnums.PLANET:preload("res://my_assets/mini_map_tilemap/PlanetMiniMapIcon.tscn"),
+	UsefullConstantsAndEnums.SHIP:preload("res://my_assets/mini_map_tilemap/PlayerMiniMapIcon.tscn"),
+	UsefullConstantsAndEnums.MONSTER:preload("res://my_assets/mini_map_tilemap/MonsterMiniMapIcon.tscn"),
+}
+
 export var speed = 5
 export var rotation_dir = 0
 export (int) var spin_thrust = 6
@@ -101,11 +109,21 @@ func calculateExhaustEmmissionRemote():
 		$FlameAttack.hide()
 		$FlameParticles.emitting = false
 
+func changeZoom():
+#	 && $Camera2D.zoom.x <= zoomMax.x
+	if Input.is_action_pressed("zoom_in"):
+		$Camera2D.zoom -= Vector2(.1, .1)
+	elif Input.is_action_pressed("zoom_out"):
+		$Camera2D.zoom += Vector2(.1, .1)
+	elif Input.is_action_pressed("zoom_normalise"):
+		$Camera2D.zoom = Vector2(1,1)
+
 func doPlayerTasks():
 	$ActualMessagingSystem/HealthBar.value = health
 	calculateMovement()
 	calculateRotation()
 	CapMouseOrDoFullscrean()
+	changeZoom()
 
 func doNonPlayerTasks():
 	calculateExhaustEmmissionRemote()
@@ -128,8 +146,10 @@ func rotateSelf():
 # warning-ignore:unused_argument
 func _integrate_forces(state):
 	if isMyPlayer == true and overNet == true:
-		for p in $"/root/Network".playersInMyLocation:
-			doRemoteUpdates(p)
+		if $"/root/Network".playersInMyLocation.size() > 0:
+			print("players in my location: ",  $"/root/Network".playersInMyLocation)
+			for p in $"/root/Network".playersInMyLocation:
+				doRemoteUpdates(p)
 	rotateSelf()
 
 func movePlayerLocal():
@@ -162,21 +182,16 @@ func testForDead():
 		collision_mask = 0
 		isDead = true
 
+
+
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 # warning-ignore:unused_argument
 func _process(delta):
-	
-#	var myRotLoc = position.rotated(rotation)
-	# if Input.is_action_just_pressed("ui_cancel"):
-		# if isMyPlayer == true and overNet == true:
-#			for p in $"/root/Network".playerInfo:
-#				if ($"/root/Network".playerInfo[p])["location"] == $"/root/Network".myInfo.location:
-#			rpc("update_scene_location", "res://levels/space/space_centor.tscn")
-#			$"/root/Network".changeMyScene(get_path(), "res://levels/space/space_centor.tscn")
-			# pass
 	updateMessagingSystem()
 	updateGravityVec()
+	
 	testForDead()
+	
 	
 #		hide()
 #		print("I died")
@@ -229,3 +244,5 @@ puppetsync func update_scene_location(sceneToChangeTo):
 
 
 
+func _exit_tree():
+	pass

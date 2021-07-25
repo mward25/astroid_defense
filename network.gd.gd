@@ -23,11 +23,11 @@ var playerInfo = {}
 var playersInMyLocation = {}
 var myInfo = {name = "the dude", ship = "playerDefault", location = ""}
 
-func updatePlayersInMyLocation():
+remotesync func updatePlayersInMyLocation():
 	for p in $"/root/Network".playerInfo:
 		if ($"/root/Network".playerInfo[p])["location"] == $"/root/Network".myInfo.location:
 			playersInMyLocation[p] = playerInfo[p].duplicate(true)
-		elif playersInMyLocation.has(p) && (playersInMyLocation[p])["location"] != (playerInfo[p])["location"]:
+		elif playersInMyLocation.has(p):
 			playersInMyLocation.erase(p)
 
 func _process(delta):
@@ -147,18 +147,18 @@ func _server_disconnected():
 
 func changeMyScene(pathToMyPlayer, sceneToChangeTo, positionToSpawn: Vector2 = Vector2(0,0)):
 	print("tree_before:")
-	$"/root".print_tree_pretty()
+#	$"/root".print_tree_pretty()
 	if get_node_or_null(pathToMyPlayer) == null:
 		print("error, ", pathToMyPlayer, " not found")
 	var playerName = get_node(pathToMyPlayer).name
 	var player = get_node(pathToMyPlayer)
 	player.name = playerName
-	
 	var SceneToChangeTo = load(sceneToChangeTo).instance()
 	
 	
 #	if it is not on the machine playing on destroy our player
 	if player.isMyPlayer == false:
+#		rpc("updatePlayersInMyLocation")
 		player.queue_free()
 	else:
 #		detect is the scene we want to change to exists, if it does not add it
@@ -171,6 +171,7 @@ func changeMyScene(pathToMyPlayer, sceneToChangeTo, positionToSpawn: Vector2 = V
 			
 			myInfo.location = player.get_parent().get_path()
 			rpc("update_player_info", myInfo)
+			
 			var selfPeerID = get_tree().get_network_unique_id()
 			for p in playerInfo:
 				print("p\'s location is ", (playerInfo[p])["location"])
@@ -197,6 +198,7 @@ remote func update_player_info(info):
 	print("player ", info, " is being updated")
 	var id = get_tree().get_rpc_sender_id()
 	playerInfo[id] = info
+	rpc("updatePlayersInMyLocation")
 
 remote func add_my_player():
 	var selfPeerID = get_tree().get_network_unique_id()
