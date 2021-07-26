@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://my_assets/mini_map_tilemap/minimap_tilemap/build/monster.png" type="Texture" id=1]
+
+[node name="MonsterMiniMapIcon" type="Sprite"]
+texture = ExtResource( 1 )

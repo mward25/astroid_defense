@@ -1,17 +1,24 @@
 extends RigidBody2D
 
 var selfPeerID
+var type = UsefullConstantsAndEnums.SHIP
 export var isMyPlayer = false
 var myPos = Vector2()
-
-
-# \$[^"]
 
 
 var velocity = Vector2()
 var posTmp = position
 var overNet = false
 var isDead = false
+
+var miniMapDisplay = {}
+
+var miniMapImages = {
+	UsefullConstantsAndEnums.PLANET:preload("res://my_assets/mini_map_tilemap/PlanetMiniMapIcon.tscn"),
+	UsefullConstantsAndEnums.SHIP:preload("res://my_assets/mini_map_tilemap/PlayerMiniMapIcon.tscn"),
+	UsefullConstantsAndEnums.MONSTER:preload("res://my_assets/mini_map_tilemap/MonsterMiniMapIcon.tscn"),
+}
+
 export var speed = 5
 export var rotation_dir = 0
 export (int) var spin_thrust = 6
@@ -61,9 +68,11 @@ func CapMouseOrDoFullscrean():
 
 func calculateMovement():
 	if Input.is_action_pressed("ui_up"):
+		# accelerate and make thrustor work
 		velocity.y -= speed
 		$ExaustFumes.gravity = exaustPower
-#		print($FlameAttack.collision_mask)
+		
+		# if we are not dead make our flame atack do damage
 		if isDead == false:
 			$FlameAttack.collision_mask = 1
 			$FlameAttack.show()
@@ -72,8 +81,11 @@ func calculateMovement():
 			$FlameAttack.collision_layer = 0
 			$FlameAttack.collision_mask = 0
 			$FlameAttack.hide()
+			
+		# set isThrusting to true
 		isThrusting = true
 	else:
+		# otherwise stop accelerating
 		velocity = Vector2()
 		$ExaustFumes.gravity = 0
 		$FlameAttack.collision_mask = 0
@@ -101,11 +113,20 @@ func calculateExhaustEmmissionRemote():
 		$FlameAttack.hide()
 		$FlameParticles.emitting = false
 
+func changeZoom():
+	if Input.is_action_pressed("zoom_in"):
+		$Camera2D.zoom -= Vector2(.1, .1)
+	elif Input.is_action_pressed("zoom_out"):
+		$Camera2D.zoom += Vector2(.1, .1)
+	elif Input.is_action_pressed("zoom_normalise"):
+		$Camera2D.zoom = Vector2(1,1)
+
 func doPlayerTasks():
 	$ActualMessagingSystem/HealthBar.value = health
 	calculateMovement()
 	calculateRotation()
 	CapMouseOrDoFullscrean()
+	changeZoom()
 
 func doNonPlayerTasks():
 	calculateExhaustEmmissionRemote()
@@ -128,8 +149,9 @@ func rotateSelf():
 # warning-ignore:unused_argument
 func _integrate_forces(state):
 	if isMyPlayer == true and overNet == true:
-		for p in $"/root/Network".playerInfo:
-			if ($"/root/Network".playerInfo[p])["location"] == $"/root/Network".myInfo.location:
+		if $"/root/Network".playersInMyLocation.size() > 0:
+			print("players in my location: ",  $"/root/Network".playersInMyLocation)
+			for p in $"/root/Network".playersInMyLocation:
 				doRemoteUpdates(p)
 	rotateSelf()
 
@@ -163,21 +185,16 @@ func testForDead():
 		collision_mask = 0
 		isDead = true
 
+
+
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 # warning-ignore:unused_argument
 func _process(delta):
-	
-#	var myRotLoc = position.rotated(rotation)
-	# if Input.is_action_just_pressed("ui_cancel"):
-		# if isMyPlayer == true and overNet == true:
-#			for p in $"/root/Network".playerInfo:
-#				if ($"/root/Network".playerInfo[p])["location"] == $"/root/Network".myInfo.location:
-#			rpc("update_scene_location", "res://levels/space/space_centor.tscn")
-#			$"/root/Network".changeMyScene(get_path(), "res://levels/space/space_centor.tscn")
-			# pass
 	updateMessagingSystem()
 	updateGravityVec()
+	
 	testForDead()
+	
 	
 #		hide()
 #		print("I died")
@@ -190,6 +207,7 @@ func _process(delta):
 
 
 func _on_player_body_entered(body):
+	# if the body we hit can do damage do it unless it is $FlameAtack
 	if isDead == false:
 		if "damage" in body and body != $FlameAttack:
 			health -= body.damage
@@ -207,26 +225,15 @@ puppet func set_pos_and_motion(pos, vel, rot_dir, isThrust):
 	velocity = vel
 	rotation_dir = rot_dir
 	isThrusting = isThrust
-	
-
-##	$BigMessagingSystem.text = str(selfPeerID)
-###	posTmp = pos
-###	velocity = vel
-#	rotation_dir = rad2deg(rot)
-#	global_position = pos
-
-
-
-
-#export (PackedScene) var bullet = preload("res://killy_things/bullets/generic_bullet.tscn")
 
 func change_my_scene(sceneToChangeTo):
 	rpc("update_scene_location", sceneToChangeTo)
-#	$"/root/Network".changeMyScene(get_path(), sceneToChangeTo)
+
 
 puppetsync func update_scene_location(sceneToChangeTo):
-#	print("puppet_changing_scene")
 	$"/root/Network".changeMyScene(get_path(), sceneToChangeTo)
 
 
 
+func _exit_tree():
+	pass

@@ -1,5 +1,5 @@
 extends Node
-enum {PLANET, SHIP}
+enum {PLANET, SHIP, MONSTER}
 
 # Declare member variables here. Examples:
 # var a = 2
