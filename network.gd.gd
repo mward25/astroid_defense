@@ -162,6 +162,7 @@ remote func register_player(info):
 	playerInfo[id] = info
 	
 	rpc("update_ui", playerInfo[id].name)
+	updatePlayersInMyLocation()
 
 func _server_disconnected():
 	pass
