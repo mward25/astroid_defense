@@ -19,7 +19,6 @@ var saveFile = "user://savegame_space_center.save"
 var hasWorld = false
 
 var playersInThisWorld = {}
-#var selfPeerID = get_tree().get_network_unique_id()
 
 var planetShortcutDefault = preload("res://objects/shortcuts/planet/planet_shortcut_default.tscn")
 
@@ -129,12 +128,6 @@ func save():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-#	if playerEntered == false:
-#		if get_node_or_null(str(selfPeerID)) != null:
-#			emit_signal("playerEntered")
-#	else:
-#		pass
-	
 	if $"/root/Network".myInfo.location == get_path():
 		if playerEntered == false:
 			for p in get_children():
@@ -150,8 +143,6 @@ func _process(delta):
 				pass
 			else:
 				playersInThisWorld[p] = $"/root/Network".playerInfo[p]
-#			print("player ", p, " is here")
-	
 	if isPlacingHomeStead == true:
 		if Input.is_action_just_pressed("ui_accept"):
 			emit_signal("placeHomeStead")
