@@ -5,7 +5,6 @@ var type = UsefullConstantsAndEnums.SHIP
 export var isMyPlayer = false
 var myPos = Vector2()
 
-var zoomMax = Vector2(.1, .1)
 
 var velocity = Vector2()
 var posTmp = position
@@ -69,9 +68,11 @@ func CapMouseOrDoFullscrean():
 
 func calculateMovement():
 	if Input.is_action_pressed("ui_up"):
+		# accelerate and make thrustor work
 		velocity.y -= speed
 		$ExaustFumes.gravity = exaustPower
-#		print($FlameAttack.collision_mask)
+		
+		# if we are not dead make our flame atack do damage
 		if isDead == false:
 			$FlameAttack.collision_mask = 1
 			$FlameAttack.show()
@@ -80,8 +81,11 @@ func calculateMovement():
 			$FlameAttack.collision_layer = 0
 			$FlameAttack.collision_mask = 0
 			$FlameAttack.hide()
+			
+		# set isThrusting to true
 		isThrusting = true
 	else:
+		# otherwise stop accelerating
 		velocity = Vector2()
 		$ExaustFumes.gravity = 0
 		$FlameAttack.collision_mask = 0
@@ -110,7 +114,6 @@ func calculateExhaustEmmissionRemote():
 		$FlameParticles.emitting = false
 
 func changeZoom():
-#	 && $Camera2D.zoom.x <= zoomMax.x
 	if Input.is_action_pressed("zoom_in"):
 		$Camera2D.zoom -= Vector2(.1, .1)
 	elif Input.is_action_pressed("zoom_out"):
@@ -204,6 +207,7 @@ func _process(delta):
 
 
 func _on_player_body_entered(body):
+	# if the body we hit can do damage do it unless it is $FlameAtack
 	if isDead == false:
 		if "damage" in body and body != $FlameAttack:
 			health -= body.damage
@@ -221,25 +225,12 @@ puppet func set_pos_and_motion(pos, vel, rot_dir, isThrust):
 	velocity = vel
 	rotation_dir = rot_dir
 	isThrusting = isThrust
-	
-
-##	$BigMessagingSystem.text = str(selfPeerID)
-###	posTmp = pos
-###	velocity = vel
-#	rotation_dir = rad2deg(rot)
-#	global_position = pos
-
-
-
-
-#export (PackedScene) var bullet = preload("res://killy_things/bullets/generic_bullet.tscn")
 
 func change_my_scene(sceneToChangeTo):
 	rpc("update_scene_location", sceneToChangeTo)
-#	$"/root/Network".changeMyScene(get_path(), sceneToChangeTo)
+
 
 puppetsync func update_scene_location(sceneToChangeTo):
-#	print("puppet_changing_scene")
 	$"/root/Network".changeMyScene(get_path(), sceneToChangeTo)
 
 

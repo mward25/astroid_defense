@@ -8,7 +8,6 @@ extends Node2D
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-#	get_node("/root/").call_deferred("add_child", preload("res://menu/mini_map.tscn").instance())
 	get_tree().change_scene("res://menu/main_menu.tscn")
 	
 

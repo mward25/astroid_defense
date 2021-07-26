@@ -30,61 +30,79 @@ remotesync func updatePlayersInMyLocation():
 		elif playersInMyLocation.has(p):
 			playersInMyLocation.erase(p)
 
-func _process(delta):
-	updatePlayersInMyLocation()
+#func _process(delta):
+#	pass
 
 remotesync func update_ui(var info):
 	$"/root/menu".update_ui(info)
 
 remote func pre_configure_game():
 	print("preconfiguring")
+	
+	# wait until function _onready is finished
 	if finishedOnReady == false:
 		yield(self, "finishedOnReadySignal")
+	
+	# if we are the server make ourselves paused
 	if 1 == get_tree().get_rpc_sender_id():
 		get_tree().set_pause(true)
+	
 	var selfPeerID = get_tree().get_network_unique_id()
 	
+	# load the level we are going to spawn in and place it in /root/world
 	var world = load(defaultWorld).instance()
 	world.set_name("world")
 	get_node("/root").add_child(world)
 	
 	
-	
+	# load my players ship
 	var MyPlayer = load(myInfo.ship).instance()
-	MyPlayer.selfPeerID = selfPeerID
-	MyPlayer.isMyPlayer = true
+	
+	# setup my players vairiables
+	MyPlayer.selfPeerID = selfPeerID # used to identify the player
+	MyPlayer.isMyPlayer = true # used to determine if this is the player being played
 	MyPlayer.overNet = true
 	print("adding me, ", str(selfPeerID), " to the scene")
 	MyPlayer.set_name(str(selfPeerID))
-	MyPlayer.set_network_master(selfPeerID)
-#	MyPlayer.set_network_master(1)
+	MyPlayer.set_network_master(selfPeerID) # the player is set to be a master of itself
+	
+	# add my player to the world
 	get_node("/root/world").add_child(MyPlayer)
 	
+	# p is the players identifier in playerInfo, which stores all the players, there locations, and the ships they use
 	for p in playerInfo:
+		# load the ship specified in player info
 		var player = load((playerInfo[p])["ship"]).instance()
+		
+		# setup vairiables
 		player.overNet = true
 		player.selfPeerID = selfPeerID
 		player.set_name(str(p))
 		print("adding ", str(p), " to scene")
 		player.set_network_master(int(p))
-#		player.set_network_master(1)
+		# add the player
 		get_node("/root/world").add_child(player)
 	
+	# start function done_preconfiguring on the host
 	rpc_id(1, "done_preconfiguring")
 
 #	done_preconfiguring()
 
 var players_done = []
 remote func done_preconfiguring():
+	
 	var selfPeerID = get_tree().get_network_unique_id()
 	print("done_preconfiguring")
+	
+	# this is the player who told us that they were done preconfiguring
 	var who = get_tree().get_rpc_sender_id()
+	
 	
 	var world = load(defaultWorld).instance()
 	world.set_name("world")
 	get_node("/root").add_child(world)
 	
-	
+	# add my player
 	var MyPlayer = load($"/root/CurrentShip".currentShip).instance()
 	print("adding me, ", str(selfPeerID), " to the scene")
 	MyPlayer.isMyPlayer = true
@@ -95,6 +113,7 @@ remote func done_preconfiguring():
 #	MyPlayer.set_network_master(1)
 	get_node("/root/world").add_child(MyPlayer)
 	
+	# add the player who was done preconfiguring
 	var player = load((playerInfo[who])["ship"]).instance()
 	player.overNet = true
 	player.selfPeerID = selfPeerID
@@ -108,14 +127,17 @@ remote func done_preconfiguring():
 #	assert(who in playerInfo)
 #	assert(not who in players_done)
 	
+	# add them to players done
 	players_done.append(who)
 	
+	# when they are all done post configure game
 	if players_done.size() == playerInfo.size():
 		rpc("post_configure_game")
 #		post_configure_game()
 
 remote func post_configure_game():
 	print("post_configure_game")
+	# unpause game
 	if 1 == get_tree().get_rpc_sender_id():
 		get_tree().set_pause(false)
 		playing = true
@@ -144,12 +166,18 @@ remote func register_player(info):
 func _server_disconnected():
 	pass
 
-
+"""
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+| This is a simple function to change a players scene |
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+"""
 func changeMyScene(pathToMyPlayer, sceneToChangeTo, positionToSpawn: Vector2 = Vector2(0,0)):
-	print("tree_before:")
-#	$"/root".print_tree_pretty()
+	
+	# if the player path is invalid tell the User
 	if get_node_or_null(pathToMyPlayer) == null:
 		print("error, ", pathToMyPlayer, " not found")
+	
+	# Vairiables
 	var playerName = get_node(pathToMyPlayer).name
 	var player = get_node(pathToMyPlayer)
 	player.name = playerName
@@ -158,41 +186,57 @@ func changeMyScene(pathToMyPlayer, sceneToChangeTo, positionToSpawn: Vector2 = V
 	
 #	if it is not on the machine playing on destroy our player
 	if player.isMyPlayer == false:
-#		rpc("updatePlayersInMyLocation")
 		player.queue_free()
 	else:
 #		detect is the scene we want to change to exists, if it does not add it
 		if get_node_or_null("/root/" + SceneToChangeTo.name) == null:
-			$"/root".add_child(SceneToChangeTo)
+			
+			# add the scene we want to change to
+			$"/root/".add_child(SceneToChangeTo)
+			
+			# detach the player from the old scene
 			player.get_parent().remove_child(player)
+			
+			
+			# add player to the scene we want to change to
 			get_node("/root/" + SceneToChangeTo.name).add_child(player)
 			
+			# remove old level
 			get_node(myInfo.location).queue_free()
 			
+			# update location for myinfo
 			myInfo.location = player.get_parent().get_path()
+			
+			# update player info on everybody elses computer with new location
 			rpc("update_player_info", myInfo)
 			
 			var selfPeerID = get_tree().get_network_unique_id()
+			
 			for p in playerInfo:
 				print("p\'s location is ", (playerInfo[p])["location"])
 				print("my location is ", myInfo["location"])
+				
+				# if the location of the player is the same as my location add the player
 				if (playerInfo[p])["location"] == myInfo.location:
+					# load the player
 					var playertmp = load((playerInfo[p])["ship"]).instance()
+					
+					# setup vairiables
 					playertmp.overNet = true
 					playertmp.selfPeerID = selfPeerID
 					playertmp.set_name(str(p))
 					print("adding ", str(p), " to scene")
 					playertmp.set_network_master(int(p))
+					
+					# set position
 					playertmp.position = positionToSpawn
-			#		player.set_network_master(1)
+					
+					# add the player
 					get_node(myInfo.location).add_child(playertmp)
 					
+					# add my player on the other players game
 					rpc_id(p, "add_my_player")
-	
-	
-	
-	print("tree_after:")
-	$"/root".print_tree_pretty()
+
 
 remote func update_player_info(info):
 	print("player ", info, " is being updated")
@@ -209,23 +253,4 @@ remote func add_my_player():
 	playertmp.set_name(str(id))
 	print("adding ", str(id), " to scene")
 	playertmp.set_network_master(int(id))
-#	player.set_network_master(1)
 	get_node(myInfo.location).add_child(playertmp)
-
-
-
-#master func set_pos_and_motion(position, velocity, rotation):
-#	var sender = get_tree().get_rpc_sender_id()
-#	print("set_pos_and_motion sent by ", sender)
-#	if sender == 1:
-#		pass
-#	elif sender == 0:
-##		for some reason the servers id here is showing up as zero, this is a work around for that
-#		get_node("/root/world/" + str(1)).applied_force = velocity.rotated(rotation)
-#		get_node("/root/world/" + str(1)).applied_torque = rotation
-#	else:
-#		get_node("/root/world/" + str(sender)).applied_force = velocity.rotated(rotation)
-#		get_node("/root/world/" + str(sender)).applied_torque = rotation
-#		#	applied_force = velocity.rotated(rotation)
-#		#	applied_torque = rotation
-#
