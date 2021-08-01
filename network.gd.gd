@@ -149,6 +149,7 @@ func _player_connected(id):
 
 func _player_disconnected(id):
 	playerInfo.erase(id)
+	rpc("updatePlayersInMyLocation")
 
 func _connected_ok():
 	pass
@@ -189,7 +190,7 @@ func changeMyScene(pathToMyPlayer, sceneToChangeTo, positionToSpawn: Vector2 = V
 	if player.isMyPlayer == false:
 		player.queue_free()
 	else:
-#		detect is the scene we want to change to exists, if it does not add it
+#		detect if the scene we want to change to exists, if it does not add it
 		if get_node_or_null("/root/" + SceneToChangeTo.name) == null:
 			
 			# add the scene we want to change to

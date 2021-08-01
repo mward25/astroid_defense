@@ -82,7 +82,8 @@ func flip_rotation_x(rot):
 func flip_rotation_y(rot):
 	print("flipping rotation y")
 
-func _on_ShootTimer_timeout():
+
+func shootBullet(theBullet = bullet):
 	var Bullet = bullet.instance()
 #	Bullet.rotation = $Top.rotation
 	
@@ -104,10 +105,10 @@ func _on_ShootTimer_timeout():
 		Bullet.scale.y *= -1
 		Bullet.linear_velocity.y *= -1
 	
-	
-#	Bullet.angular_velocity = $Top.rotation + PI
-#	print("shooty place positoin: ", $Top/Top/ShootyPlace.global_position, " shooty place rotation: ", $Top/Top/ShootyPlace.rotation)
-#	Bullet.position.y -= -100
-	
-#	add bullet to scene
 	get_parent().add_child(Bullet)
+
+func _on_ShootTimer_timeout():
+	shootBullet(bullet)
+
+puppet func updateRotAndShoot(rot, isShoot):
+	pass

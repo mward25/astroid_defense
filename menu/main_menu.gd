@@ -2,7 +2,7 @@ extends Node
 var finishedOnReady = false
 signal finishedOnReadySignal
 var isServer = false
-
+var isInView = true
 const AUDIO_OFF_ON_ART ="      /\n    / )))\n---|  )))))\n--- \\ )))\n     \\ \n"
 # Declare member variables here. Examples:
 # var a = 2
@@ -19,6 +19,8 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	$AudioOnOf/Vcontain/AudioVolume.text = str($"/root/GlobalAudioPlayer".musicVolume)
+
+
 
 
 
@@ -57,7 +59,8 @@ func update_ui(var info):
 
 func _on_StartButton_pressed():
 	print($"/root/Network".playerInfo)
-	queue_free()
+	get_parent().remove_child(get_node(get_path()))
+#	queue_free()
 	if isServer == false:
 		$"/root/Network".pre_configure_game()
 
