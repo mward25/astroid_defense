@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=2]
+[gd_scene load_steps=23 format=2]
 
 [ext_resource path="res://my_assets/monsters/build/creepy_pepper.png" type="Texture" id=1]
 [ext_resource path="res://monsters/passive/creepy_pepper.gd" type="Script" id=2]
@@ -20,6 +20,7 @@
 [ext_resource path="res://my_assets/common_animations/death/explode/0012.png" type="Texture" id=18]
 [ext_resource path="res://my_assets/common_animations/death/explode/0010.png" type="Texture" id=19]
 [ext_resource path="res://my_assets/common_animations/death/explode/0014.png" type="Texture" id=20]
+[ext_resource path="res://my_assets/common_particles/hurt/blood.tres" type="Material" id=21]
 
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {
@@ -46,5 +47,14 @@ frames = SubResource( 1 )
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
 polygon = PoolVector2Array( 43.1515, -38.5276, 49.25, -29.75, 28.75, 8.25, 27, 41.75, 21.5, 55.25, -19, 50.75, -40.2759, 33.22, -51.5, 16.75, -56.75, -14, -56.5, -33.5, -35, -45.75, -12.2443, -47.2041, -8.90723, -61.5536, 2.1052, -63.2221, 8.44569, -43.8669, 25, -43.25 )
+
+[node name="HitDisplay" type="Particles2D" parent="."]
+emitting = false
+amount = 1000
+one_shot = true
+explosiveness = 1.0
+visibility_rect = Rect2( -200, -200, 400, 400 )
+draw_order = 1
+process_material = ExtResource( 21 )
 
 [connection signal="body_entered" from="." to="." method="_on_CreepyPepper_body_entered"]
