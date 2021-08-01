@@ -17,6 +17,7 @@ func _ready():
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
+# warning-ignore:unused_argument
 func _process(delta):
 	$AudioOnOf/Vcontain/AudioVolume.text = str($"/root/GlobalAudioPlayer".musicVolume)
 
@@ -32,7 +33,6 @@ func _on_Button_pressed():
 	myInfo.name = $NameEdit/TextEdit.text
 	if $EnterIp/Ip.text == "":
 		isServer = true
-		var host = true
 		Network.myInfo.name = $NameEdit/TextEdit.text
 		Network.myInfo.ship = myInfo.ship
 		Network.myInfo.location = myInfo.location
@@ -65,6 +65,7 @@ func _on_StartButton_pressed():
 func _on_TutorialButton_pressed():
 	Network.myInfo.name = $NameEdit/TextEdit.text
 	Network.myInfo.ship = myInfo.ship
+# warning-ignore:return_value_discarded
 	get_tree().change_scene("res://levels/tutorial/tutorial_1.tscn")
 
 
