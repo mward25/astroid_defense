@@ -1,7 +1,10 @@
 extends Node
-var finishedOnReady = false
+
 signal finishedOnReadySignal
+
 export var defaultWorld = "res://levels/space/space_centor.tscn"
+
+var finishedOnReady = false
 var playing = false
 # Declare member variables here. Examples:
 # var a = 2
@@ -34,7 +37,7 @@ remotesync func updatePlayersInMyLocation():
 #	pass
 
 remotesync func update_ui(var info):
-	$"/root/menu".update_ui(info)
+	MenuBringerUpper.menu.update_ui(info)
 
 remote func pre_configure_game():
 	print("preconfiguring")
