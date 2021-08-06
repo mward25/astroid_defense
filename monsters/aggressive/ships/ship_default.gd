@@ -5,15 +5,31 @@ var action = {
 	MovementEnums.TURN_LEFT:false,
 	MovementEnums.TURN_RIGHT:false,
 	MovementEnums.THRUST:false,
-	}
+}
+
+
+
+func calculateAction():
+	pass
+
 
 func setupScene():
 	$ActualMessagingSystem/BigMessagingSystem.hide()
 	$ActualMessagingSystem/HealthBar.hide()
-	if overNet && is_network_master():
-		pass
+	if overNet:
+		if is_network_master():
+			pass
+		else:
+			mode = RigidBody2D.MODE_KINEMATIC
+
+func get_input():
+	if overNet:
+		if isMyPlayer == true:
+			doPlayerTasks()
+		else:
+			doNonPlayerTasks()
 	else:
-		mode = RigidBody2D.MODE_KINEMATIC
+		doPlayerTasks()
 
 
 func calculateMovement():
@@ -23,13 +39,13 @@ func calculateMovement():
 		# otherwise stop accelerating
 		deactivateThrust()
 
-
+func calculateRotation():
+	if action[MovementEnums.TURN_RIGHT] == true:
+		spinRight()
+	if action[MovementEnums.TURN_LEFT] == true:
+		spinLeft()
 
 func doPlayerTasks():
-#	$ActualMessagingSystem/HealthBar.value = health
+	calculateAction()
 	calculateMovement()
 	calculateRotation()
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass

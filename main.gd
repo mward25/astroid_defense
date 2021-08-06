@@ -9,6 +9,8 @@ var mainMenu = preload("res://menu/main_menu.tscn")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	randomize()
+	
 	var MainMenu = mainMenu.instance()
 	MainMenu.name = "MainMenu"
 	get_node("/root/MenuBringerUpper").menu = MainMenu
