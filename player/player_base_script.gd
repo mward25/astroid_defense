@@ -66,39 +66,51 @@ func CapMouseOrDoFullscrean():
 		else:
 			OS.window_fullscreen = true
 
-func calculateMovement():
-	if Input.is_action_pressed("ui_up"):
-		# accelerate and make thrustor work
-		velocity.y -= speed
-		$ExaustFumes.gravity = exaustPower
-		
-		# if we are not dead make our flame atack do damage
-		if isDead == false:
-			$FlameAttack.collision_mask = 1
-			$FlameAttack.show()
-			$FlameParticles.emitting = true
-		else:
-			$FlameAttack.collision_layer = 0
-			$FlameAttack.collision_mask = 0
-			$FlameAttack.hide()
-			
-		# set isThrusting to true
-		isThrusting = true
+func activateThrust():
+	# accelerate and make thrustor work
+	velocity.y -= speed
+	$ExaustFumes.gravity = exaustPower
+	
+	# if we are not dead make our flame atack do damage
+	if isDead == false:
+		$FlameAttack.collision_mask = 1
+		$FlameAttack.show()
+		$FlameParticles.emitting = true
 	else:
-		# otherwise stop accelerating
-		velocity = Vector2()
-		$ExaustFumes.gravity = 0
+		$FlameAttack.collision_layer = 0
 		$FlameAttack.collision_mask = 0
 		$FlameAttack.hide()
-		$FlameParticles.emitting = false
-		isThrusting = false
+		
+	# set isThrusting to true
+	isThrusting = true
+
+func deactivateThrust():
+	velocity = Vector2()
+	$ExaustFumes.gravity = 0
+	$FlameAttack.collision_mask = 0
+	$FlameAttack.hide()
+	$FlameParticles.emitting = false
+	isThrusting = false
+
+func calculateMovement():
+	if Input.is_action_pressed("ui_up"):
+		activateThrust()
+	else:
+		# otherwise stop accelerating
+		deactivateThrust()
+
+
+func spinRight():
+	rotation_dir += spin_thrust
+
+func spinLeft():
+	rotation_dir -= spin_thrust
 
 func calculateRotation():
 	if Input.is_action_pressed("ui_right"):
-		rotation_dir += spin_thrust
-	
+		spinRight()
 	if Input.is_action_pressed("ui_left"):
-		rotation_dir -= spin_thrust
+		spinLeft()
 
 func calculateExhaustEmmissionRemote():
 	if isThrusting == true:
