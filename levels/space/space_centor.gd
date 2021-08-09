@@ -69,19 +69,24 @@ func loadSave():
 		if save_game.get_as_text() == "":
 			hasWorld = false
 		else:
-			hasWorld = true
-		
-		if hasWorld == true:
 			saveData = parse_json(save_game.get_as_text())
 			var planetSaveData = saveData[PLANET_SAV_SECTION]
 			for i in planetSaveData:
 				print("i is ", i)
 				var PlanetShortcutDefault = planetShortcutDefault.instance()
 				PlanetShortcutDefault.loadSave(planetSaveData[i].duplicate(true))
+				if PlanetShortcutDefault.levelOwner == Network.myInfo.name:
+					hasWorld = true
 				add_child(PlanetShortcutDefault)
+				rpc("addMyWorld", PLANET_SHORTCUT_DEFAULT_FILE, PlanetShortcutDefault.save())
+			hasWorld = true
+		
+		if hasWorld == true:
+			pass
+		
 		save_game.close()
 		for i in get_children():
-			if "type" in i && i.type == UsefullConstantsAndEnums.PLANET && "levelOwner" in i && i.levelOwner == $"/root/Network".myInfo.name:
+			if "type" in i && i.type == UsefullConstantsAndEnums.PLANET && "levelOwner" in i && i.levelOwner == Network.myInfo.name:
 				if "isReady" in i:
 					i.isReady = true
 				else:
