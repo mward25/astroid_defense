@@ -50,6 +50,7 @@ func _on_Button_pressed():
 
 
 func update_ui(var info):
+	yield(self, "tree_entered")
 	get_node(String(MenuBringerUpper.menu.get_path()) + "/Names/RichTextLabel").text += "\n"
 	get_node(String(MenuBringerUpper.menu.get_path()) +"/Names/RichTextLabel").text += info
 
