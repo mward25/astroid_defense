@@ -19,3 +19,4 @@ polygon = PoolVector2Array( -1439.46, -862.889, 2152.64, -851.575, 2146.99, -919
 isMyPlayer = true
 
 [node name="cpu" parent="." instance=ExtResource( 3 )]
+oponent = NodePath("../player")

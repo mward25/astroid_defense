@@ -217,14 +217,21 @@ func _process(delta):
 	
 #	print($ExaustFumes.gravity_vec)
 
+func takeDamage(body):
+	health -= body.damage
+	print("took ", body.damage, " damage")
+	print("my health is now at ", health)
 
-func _on_player_body_entered(body):
+func iHitBody(body):
 	# if the body we hit can do damage do it unless it is $FlameAtack
 	if isDead == false:
 		if "damage" in body and body != $FlameAttack:
 			health -= body.damage
 			print("took ", body.damage, " damage")
 			print("my health is now at ", health)
+
+func _on_player_body_entered(body):
+	iHitBody(body)
 
 
 
