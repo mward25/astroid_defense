@@ -6,6 +6,7 @@ export var defaultWorld = "res://levels/space/space_centor.tscn"
 
 var finishedOnReady = false
 var playing = false
+var isServer = false
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
@@ -95,6 +96,11 @@ var players_done = []
 remote func done_preconfiguring():
 	
 	var selfPeerID = get_tree().get_network_unique_id()
+	
+	if selfPeerID == 1:
+		isServer = true
+	
+	
 	print("done_preconfiguring")
 	
 	# this is the player who told us that they were done preconfiguring

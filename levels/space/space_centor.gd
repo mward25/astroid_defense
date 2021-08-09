@@ -20,6 +20,7 @@ var hasWorld = false
 
 var playersInThisWorld = {}
 
+const PLANET_SHORTCUT_DEFAULT_FILE = "res://objects/shortcuts/planet/planet_shortcut_default.tscn"
 var planetShortcutDefault = preload("res://objects/shortcuts/planet/planet_shortcut_default.tscn")
 
 # Declare member variables here. Examples:
@@ -44,7 +45,7 @@ func _ready():
 		FirstHomeStead.levelOwner = $"/root/Network".myInfo.name
 		
 		add_child(FirstHomeStead)
-		
+		rpc("addMyWorld", PLANET_SHORTCUT_DEFAULT_FILE, FirstHomeStead.save())
 		yield(FirstHomeStead, "draw")
 		hasWorld = true
 		save()
@@ -78,22 +79,6 @@ func loadSave():
 				var PlanetShortcutDefault = planetShortcutDefault.instance()
 				PlanetShortcutDefault.loadSave(planetSaveData[i].duplicate(true))
 				add_child(PlanetShortcutDefault)
-	#		if true is used so that i is restricted to this scope
-	#		if true:
-	#			var i = 0
-	#			while i <= save_game.get_len():
-	#				var thisLine = save_game.get_line()
-	#				var nextLine = save_game.get_line()
-	#
-	#				if thisLine != "" and nextLine != "":
-	#					var PlanetShortcutDefault = planetShortcutDefault.instance()
-	#
-	#					PlanetShortcutDefault.name = thisLine.substr(thisLine.find("[")+1, thisLine.find("]")-1)
-	#
-	#					PlanetShortcutDefault.loadSave(nextLine)
-	#
-	#					add_child(PlanetShortcutDefault)
-	#				i += 2
 		save_game.close()
 		for i in get_children():
 			if "type" in i && i.type == UsefullConstantsAndEnums.PLANET && "levelOwner" in i && i.levelOwner == $"/root/Network".myInfo.name:
@@ -104,19 +89,37 @@ func loadSave():
 
 func save():
 	print("saving ", name)
+	if Network.isServer:
+		pass
 	var saveDict : Dictionary
 	var save_game = File.new()
 	save_game.open(saveFile, File.WRITE)
 	
 	saveDict["hasWorld"] = hasWorld
 	for i in get_children():
+		
+		# if true is used so that vairiable j will fall out of scope and be deleted
 		if true:
 			var j = 0
 			if "type" in i && i.type == UsefullConstantsAndEnums.PLANET:
 				saveDict[PLANET_SAV_SECTION] = {j:i.save()}
+				j += 1
+	
 	save_game.store_string(to_json(saveDict))
 	save_game.close()
-	
+
+
+remote func saveMyWorld():
+	pass
+
+remote func addMyWorld(planet, planetSaveDict : Dictionary):
+	var Planet = planet.instance()
+	for i in get_children():
+		if i.name == planetSaveDict["nodeName"]:
+			i.queue_free()
+	Planet.loadSave(planetSaveDict)
+	add_child(Planet)
+
 #func save():
 #	if selfPeerID == 1:
 #		var save_game = File.new()
