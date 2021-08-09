@@ -162,7 +162,7 @@ func rotateSelf():
 func _integrate_forces(state):
 	if isMyPlayer == true and overNet == true:
 		if $"/root/Network".playersInMyLocation.size() > 0:
-			print("players in my location: ",  $"/root/Network".playersInMyLocation)
+#			print("players in my location: ",  $"/root/Network".playersInMyLocation)
 			for p in $"/root/Network".playersInMyLocation:
 				doRemoteUpdates(p)
 	rotateSelf()

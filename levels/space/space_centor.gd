@@ -113,6 +113,7 @@ remote func saveMyWorld():
 	pass
 
 remote func addMyWorld(planet, planetSaveDict : Dictionary):
+	print("the planetSaveDict is: ", planetSaveDict)
 	var Planet = planet.instance()
 	for i in get_children():
 		if i.name == planetSaveDict["nodeName"]:
