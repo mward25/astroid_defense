@@ -13,11 +13,11 @@ var isDead = false
 
 var miniMapDisplay = {}
 
-var miniMapImages = {
-	UsefullConstantsAndEnums.PLANET:preload("res://my_assets/mini_map_tilemap/PlanetMiniMapIcon.tscn"),
-	UsefullConstantsAndEnums.SHIP:preload("res://my_assets/mini_map_tilemap/PlayerMiniMapIcon.tscn"),
-	UsefullConstantsAndEnums.MONSTER:preload("res://my_assets/mini_map_tilemap/MonsterMiniMapIcon.tscn"),
-}
+#var miniMapImages = {
+#	UsefullConstantsAndEnums.PLANET:preload("res://my_assets/mini_map_tilemap/PlanetMiniMapIcon.tscn"),
+#	UsefullConstantsAndEnums.SHIP:preload("res://my_assets/mini_map_tilemap/PlayerMiniMapIcon.tscn"),
+#	UsefullConstantsAndEnums.MONSTER:preload("res://my_assets/mini_map_tilemap/MonsterMiniMapIcon.tscn"),
+#}
 
 export var speed = 5
 export var rotation_dir = 0
@@ -100,17 +100,12 @@ func calculateMovement():
 		deactivateThrust()
 
 
-func spinRight():
-	rotation_dir += spin_thrust
-
-func spinLeft():
-	rotation_dir -= spin_thrust
 
 func calculateRotation():
 	if Input.is_action_pressed("ui_right"):
-		spinRight()
+		rotation_dir += spin_thrust
 	if Input.is_action_pressed("ui_left"):
-		spinLeft()
+		rotation_dir -= spin_thrust
 
 func calculateExhaustEmmissionRemote():
 	if isThrusting == true:
