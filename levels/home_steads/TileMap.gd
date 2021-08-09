@@ -75,6 +75,9 @@ func save():
 			else:
 				(saveTilesDataBaseDict["tiles"])[String(j)] = i.save()
 			j += 1
+		
+		if j == 0:
+			saveTilesDataBaseDict["tiles"] = {}
 	
 	print(saveTilesDataBaseDict)
 	return saveTilesDataBaseDict.duplicate(true)

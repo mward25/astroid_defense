@@ -201,16 +201,6 @@ func _process(delta):
 	updateGravityVec()
 	
 	testForDead()
-	
-	
-#		hide()
-#		print("I died")
-	
-	
-	
-#	rpc_id(1, "set_pos_and_motion", globalPosition)
-	
-#	print($ExaustFumes.gravity_vec)
 
 func takeDamage(body):
 	health -= body.damage
