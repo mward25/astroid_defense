@@ -17,4 +17,4 @@ data_*/
 
 # ignored stuff for c++
 libgodot-cpp.*
-build/
+/build/
