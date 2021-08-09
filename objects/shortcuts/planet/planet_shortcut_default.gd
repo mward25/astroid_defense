@@ -4,6 +4,7 @@ export (String) var levelOwner
 var type = UsefullConstantsAndEnums.PLANET
 var isReady = false
 var firstTime = true
+var fromServer : bool
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
@@ -30,17 +31,19 @@ func save():
 		nodeName = name,
 		posX = position.x,
 		posY = position.y,
-		firstTime = false
+		firstTime = false,
+		fromServer = Network.isServer,
 	}
+	
 	
 	return saveDict.duplicate(true)
 
 func loadSave(saveDict):
-	
 	levelOwner = saveDict["levelOwner"]
 	name = saveDict["nodeName"]
 	position.x = saveDict["posX"]
 	position.y = saveDict["posY"]
 	firstTime = saveDict["firstTime"]
+	fromServer = saveDict["fromServer"]
 
 

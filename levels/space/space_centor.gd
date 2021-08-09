@@ -124,6 +124,7 @@ remote func addMyWorld(planet, planetSaveDict : Dictionary):
 			i.queue_free()
 	Planet.loadSave(planetSaveDict)
 	add_child(Planet)
+	save()
 
 #func save():
 #	if selfPeerID == 1:
