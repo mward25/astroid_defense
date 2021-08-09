@@ -79,7 +79,6 @@ func loadSave():
 					hasWorld = true
 				add_child(PlanetShortcutDefault)
 				rpc("addMyWorld", PLANET_SHORTCUT_DEFAULT_FILE, PlanetShortcutDefault.save())
-			hasWorld = true
 		
 		if hasWorld == true:
 			pass
