@@ -119,7 +119,7 @@ remote func saveMyWorld():
 
 remote func addMyWorld(planet, planetSaveDict : Dictionary):
 	print("the planetSaveDict is: ", planetSaveDict)
-	var Planet = planet.instance()
+	var Planet = load(planet).instance()
 	for i in get_children():
 		if i.name == planetSaveDict["nodeName"]:
 			i.queue_free()
