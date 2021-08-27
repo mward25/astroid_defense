@@ -26,7 +26,8 @@ func _ready():
 
 var playerInfo = {}
 var playersInMyLocation = {}
-var myInfo = {name = "the dude", ship = "playerDefault", location = ""}
+#var myInfo = {name = "the dude", ship = "playerDefault", location = ""}
+var myInfo = {}
 
 remotesync func updatePlayersInMyLocation():
 	for p in $"/root/Network".playerInfo:
