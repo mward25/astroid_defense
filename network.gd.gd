@@ -42,8 +42,9 @@ func _player_connected(id):
 	rpc_id(id, "register_player", myInfo)
 	
 remote func register_player(info):
-	print("player ", info, " is being registered")
+	print("player ", info, " is being registered on ", get_tree().get_network_unique_id())
 	var id = get_tree().get_rpc_sender_id()
+	
 	playerInfo[id] = info
 	
 	if !isHeadless:
