@@ -32,7 +32,7 @@ var myInfo = {}
 
 remotesync func updatePlayersInMyLocation():
 	for p in $"/root/Network".playerInfo:
-		if ($"/root/Network".playerInfo[p])["location"] == $"/root/Network".myInfo.location:
+		if "location" in playerInfo[p] && ($"/root/Network".playerInfo[p])["location"] == $"/root/Network".myInfo.location:
 			playersInMyLocation[p] = playerInfo[p].duplicate(true)
 		elif playersInMyLocation.has(p):
 			playersInMyLocation.erase(p)
@@ -114,17 +114,18 @@ remote func pre_configure_game():
 	
 	# p is the players identifier in playerInfo, which stores all the players, there locations, and the ships they use
 	for p in playerInfo:
-		# load the ship specified in player info
-		var player = load((playerInfo[p])["ship"]).instance()
-		
-		# setup vairiables
-		player.overNet = true
-		player.selfPeerID = selfPeerID
-		player.set_name(str(p))
-		print("adding ", str(p), " to scene")
-		player.set_network_master(int(p))
-		# add the player
-		get_node("/root/world").add_child(player)
+		if p != null && "ship" in playerInfo[p]:
+			# load the ship specified in player info
+			var player = load((playerInfo[p])["ship"]).instance()
+			
+			# setup vairiables
+			player.overNet = true
+			player.selfPeerID = selfPeerID
+			player.set_name(str(p))
+			print("adding ", str(p), " to scene")
+			player.set_network_master(int(p))
+			# add the player
+			get_node("/root/world").add_child(player)
 	
 	# start function done_preconfiguring on the host
 	rpc_id(1, "done_preconfiguring")
@@ -239,11 +240,12 @@ func changeMyScene(pathToMyPlayer, sceneToChangeTo, positionToSpawn: Vector2 = V
 			var selfPeerID = get_tree().get_network_unique_id()
 			
 			for p in playerInfo:
-				print("p\'s location is ", (playerInfo[p])["location"])
-				print("my location is ", myInfo["location"])
+				if "location" in playerInfo[p]:
+					print("p\'s location is ", (playerInfo[p])["location"])
+					print("my location is ", myInfo["location"])
 				
 				# if the location of the player is the same as my location add the player
-				if (playerInfo[p])["location"] == myInfo.location:
+				if "location" in playerInfo[p] && (playerInfo[p])["location"] == myInfo.location:
 					# load the player
 					var playertmp = load((playerInfo[p])["ship"]).instance()
 					

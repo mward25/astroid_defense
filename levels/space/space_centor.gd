@@ -70,16 +70,17 @@ func loadSave():
 			hasWorld = false
 		else:
 			saveData = parse_json(save_game.get_as_text())
-			var planetSaveData = saveData[PLANET_SAV_SECTION]
-			for i in planetSaveData:
-				print("i is ", i)
-				var PlanetShortcutDefault = planetShortcutDefault.instance()
-				PlanetShortcutDefault.loadSave(planetSaveData[i].duplicate(true))
-				if PlanetShortcutDefault.levelOwner == Network.myInfo.name:
-					hasWorld = true
-				add_child(PlanetShortcutDefault)
-				
-				rpc("addMyWorld", PLANET_SHORTCUT_DEFAULT_FILE, PlanetShortcutDefault.save())
+			if PLANET_SAV_SECTION in saveData:
+				var planetSaveData = saveData[PLANET_SAV_SECTION]
+				for i in planetSaveData:
+					print("i is ", i)
+					var PlanetShortcutDefault = planetShortcutDefault.instance()
+					PlanetShortcutDefault.loadSave(planetSaveData[i].duplicate(true))
+					if PlanetShortcutDefault.levelOwner == Network.myInfo.name:
+						hasWorld = true
+					add_child(PlanetShortcutDefault)
+					
+					rpc("addMyWorld", PLANET_SHORTCUT_DEFAULT_FILE, PlanetShortcutDefault.save())
 		
 		if hasWorld == true:
 			pass
@@ -148,7 +149,7 @@ func _process(delta):
 					print(p, "entered")
 	
 	for p in $"/root/Network".playerInfo:
-		if ($"/root/Network".playerInfo[p])["location"] == get_path():
+		if "location" in Network.playerInfo[p] && ($"/root/Network".playerInfo[p])["location"] == get_path():
 			if playersInThisWorld.has(p) == true:
 				pass
 			else:
