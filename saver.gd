@@ -10,14 +10,17 @@ var saveDict = null
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	if SaveFile.file_exists(saveFile):
-		SaveFile.open(saveFile, File.READ_WRITE)
-	else:
-		SaveFile.open(saveFile, File.WRITE_READ)
-	saveDict = parse_json((SaveFile.get_as_text()))
-	if saveDict == null || saveDict.is_empty():
-		SaveFile.store_string(setupSaveDictAndFile())
-		SaveFile.close()
+	yield(Network, "isServerDetermined")
+	
+	if Network.isServer:
+		if SaveFile.file_exists(saveFile):
+			SaveFile.open(saveFile, File.READ_WRITE)
+		else:
+			SaveFile.open(saveFile, File.WRITE_READ)
+		saveDict = parse_json((SaveFile.get_as_text()))
+		if saveDict == null || saveDict.is_empty():
+			SaveFile.store_string(setupSaveDictAndFile())
+			SaveFile.close()
 
 # Warning, passwd should always be a hashed string
 remote func createUser(username: String, passwd: String):
@@ -56,8 +59,15 @@ func setupSaveDictAndFile():
 	return to_json(saveDictTemplate)
 
 
-remote func addMyPlanetToSpacecentor(planet):
-	pass
+remote func addMyPlanetToSpacecentor(user, planet):
+	if saveDict == null:
+		print("saveDict is null")
+	else:
+		saveDict["space_centor"][user][planet.name] = planet.save()
+		updateSaveDict(saveDict)
+
+remote func updateSaveDict(_saveDict):
+	saveDict = _saveDict
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):

@@ -3,6 +3,7 @@ extends Node
 signal finishedOnReadySignal
 
 export var defaultWorld = "res://levels/space/space_centor.tscn"
+signal isServerDetermined
 
 var finishedOnReady = false
 var playing = false
@@ -127,7 +128,9 @@ remote func pre_configure_game():
 	
 	# start function done_preconfiguring on the host
 	rpc_id(1, "done_preconfiguring")
-
+	
+	emit_signal("isServerDetermined")
+	
 #	done_preconfiguring()
 
 var players_done = []
