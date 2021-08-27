@@ -46,8 +46,9 @@ remote func register_player(info):
 	var id = get_tree().get_rpc_sender_id()
 	playerInfo[id] = info
 	
-	rpc("update_ui", playerInfo[id].name)
-	updatePlayersInMyLocation()
+	if !isHeadless:
+		rpc("update_ui", playerInfo[id].name)
+		updatePlayersInMyLocation()
 
 
 func _player_disconnected(id):
