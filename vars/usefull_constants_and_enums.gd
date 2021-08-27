@@ -1,4 +1,5 @@
 extends Node
+const SERVER = 1
 enum {PLANET, SHIP, MONSTER}
 
 # Declare member variables here. Examples:

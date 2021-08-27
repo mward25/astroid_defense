@@ -7,6 +7,7 @@ export var defaultWorld = "res://levels/space/space_centor.tscn"
 var finishedOnReady = false
 var playing = false
 var isServer = false
+var isHeadless = false
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
@@ -33,6 +34,37 @@ remotesync func updatePlayersInMyLocation():
 			playersInMyLocation[p] = playerInfo[p].duplicate(true)
 		elif playersInMyLocation.has(p):
 			playersInMyLocation.erase(p)
+
+
+
+func _player_connected(id):
+	print("player ", id, " has connected")
+	rpc_id(id, "register_player", myInfo)
+	
+remote func register_player(info):
+	print("player ", info, " is being registered")
+	var id = get_tree().get_rpc_sender_id()
+	playerInfo[id] = info
+	
+	rpc("update_ui", playerInfo[id].name)
+	updatePlayersInMyLocation()
+
+
+func _player_disconnected(id):
+	playerInfo.erase(id)
+	rpc("updatePlayersInMyLocation")
+
+func _connected_ok():
+	pass
+
+func _connected_fail():
+	pass
+
+
+
+func _server_disconnected():
+	pass
+
 
 #func _process(delta):
 #	pass
@@ -106,35 +138,32 @@ remote func done_preconfiguring():
 	# this is the player who told us that they were done preconfiguring
 	var who = get_tree().get_rpc_sender_id()
 	
+	# if we are not headless, we are both player and host
+	if !isHeadless:
+		var world = load(defaultWorld).instance()
+		world.set_name("world")
+		get_node("/root").add_child(world)
+		
+		# add my player
+		var MyPlayer = load($"/root/CurrentShip".currentShip).instance()
+		print("adding me, ", str(selfPeerID), " to the scene")
+		MyPlayer.isMyPlayer = true
+		MyPlayer.overNet = true
+		MyPlayer.selfPeerID = selfPeerID
+		MyPlayer.set_name(str(selfPeerID))
+		MyPlayer.set_network_master(selfPeerID)
+	#	MyPlayer.set_network_master(1)
+		get_node("/root/world").add_child(MyPlayer)
+		
+		# add the player who was done preconfiguring
+		var player = load((playerInfo[who])["ship"]).instance()
+		player.overNet = true
+		player.selfPeerID = selfPeerID
+		player.set_name(str(who))
+		print("adding ", str(who), " to scene")
+		player.set_network_master(int(who))
+		get_node("/root/world").add_child(player)
 	
-	var world = load(defaultWorld).instance()
-	world.set_name("world")
-	get_node("/root").add_child(world)
-	
-	# add my player
-	var MyPlayer = load($"/root/CurrentShip".currentShip).instance()
-	print("adding me, ", str(selfPeerID), " to the scene")
-	MyPlayer.isMyPlayer = true
-	MyPlayer.overNet = true
-	MyPlayer.selfPeerID = selfPeerID
-	MyPlayer.set_name(str(selfPeerID))
-	MyPlayer.set_network_master(selfPeerID)
-#	MyPlayer.set_network_master(1)
-	get_node("/root/world").add_child(MyPlayer)
-	
-	# add the player who was done preconfiguring
-	var player = load((playerInfo[who])["ship"]).instance()
-	player.overNet = true
-	player.selfPeerID = selfPeerID
-	player.set_name(str(who))
-	print("adding ", str(who), " to scene")
-	player.set_network_master(int(who))
-#	player.set_network_master(1)
-	get_node("/root/world").add_child(player)
-	
-#	assert(get_tree().is_network_server())
-#	assert(who in playerInfo)
-#	assert(not who in players_done)
 	
 	# add them to players done
 	players_done.append(who)
@@ -152,30 +181,7 @@ remote func post_configure_game():
 		playing = true
 
 
-func _player_connected(id):
-	print("player ", id, " has connected")
-	rpc_id(id, "register_player", myInfo)
 
-func _player_disconnected(id):
-	playerInfo.erase(id)
-	rpc("updatePlayersInMyLocation")
-
-func _connected_ok():
-	pass
-
-func _connected_fail():
-	pass
-
-remote func register_player(info):
-	print("player ", info, " is being registered")
-	var id = get_tree().get_rpc_sender_id()
-	playerInfo[id] = info
-	
-	rpc("update_ui", playerInfo[id].name)
-	updatePlayersInMyLocation()
-
-func _server_disconnected():
-	pass
 
 """
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
