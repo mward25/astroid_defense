@@ -45,7 +45,10 @@ remote func register_player(info):
 	print("player ", info, " is being registered on ", get_tree().get_network_unique_id())
 	var id = get_tree().get_rpc_sender_id()
 	
+	
 	playerInfo[id] = info
+	
+	print("player_info_has_been_changed")
 	
 	if !isHeadless:
 		rpc("update_ui", playerInfo[id].name)
