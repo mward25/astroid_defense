@@ -78,6 +78,7 @@ func loadSave():
 				if PlanetShortcutDefault.levelOwner == Network.myInfo.name:
 					hasWorld = true
 				add_child(PlanetShortcutDefault)
+				
 				rpc("addMyWorld", PLANET_SHORTCUT_DEFAULT_FILE, PlanetShortcutDefault.save())
 		
 		if hasWorld == true:
