@@ -11,6 +11,7 @@ var mainMenu = preload("res://menu/main_menu.tscn")
 func _ready():
 	randomize()
 	if "--server" in OS.get_cmdline_args() || OS.has_feature("Server"):
+		print("running as server")
 		Network.isHeadless = true
 		var peer = NetworkedMultiplayerENet.new()
 		peer.create_server(9278, 10)
