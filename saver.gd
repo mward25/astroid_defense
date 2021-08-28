@@ -3,6 +3,7 @@ var passwdFile = "user://passwds.sav"
 var saveFile = "user://astroid_defence_save.sav"
 onready var SaveFile = File.new()
 var saveDict = null
+signal getSpaceCentorSaveFinished
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
@@ -59,19 +60,28 @@ func setupSaveDictAndFile():
 	return to_json(saveDictTemplate)
 
 
+var tmpSpacecentor = null
+
 remote func addMyPlanetToSpacecentor(user, planet):
 	if saveDict == null:
 		print("saveDict is null")
 	else:
 		saveDict["space_centor"][user][planet.name] = planet.save()
-		var _saveDict = (rpc_id(1, "getSpaceCenterSave"))[user][planet]
+		
+		rpc_id(1, "getSpaceCenterSave")
+		yield(self, "getSpaceCentorSaveFinished")
+		var _saveDict = tmpSpacecentor
 		_saveDict[user][planet] = planet.save()
 		rpc_id(1, "updateSaveDict", _saveDict)
 		
 
 
 remote func getSpaceCenterSave():
-	return saveDict["space_centor"]
+	rpc_id(get_tree().get_rpc_sender_id(),"getSpaceCentorSave" ,saveDict["space_centor"])
+
+remote func getSpaceCentorSave(theDict):
+	tmpSpacecentor = theDict
+	emit_signal("getSpaceCentorSaveFinished")
 
 remote func updateSpaceScentorSave():
 	saveDict["space_center"] = rpc_id(1, "getSpaceCenterSave")
