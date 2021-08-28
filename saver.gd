@@ -12,7 +12,7 @@ signal getSpaceCentorSaveFinished
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	yield(Network, "isServerDetermined")
-	
+	print("isServer has been determined")
 	if Network.isServer:
 		print("starting to make save file")
 		if SaveFile.file_exists(saveFile):
@@ -25,6 +25,7 @@ func _ready():
 			print("made the save file")
 			SaveFile.close()
 	else:
+		print("running on non-server device")
 		rpc_id(1, "updateMySaveDict")
 
 # Warning, passwd should always be a hashed string
