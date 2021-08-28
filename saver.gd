@@ -21,6 +21,7 @@ func _ready():
 		saveDict = parse_json((SaveFile.get_as_text()))
 		if saveDict == null || saveDict.is_empty():
 			SaveFile.store_string(setupSaveDictAndFile())
+			print("made the save file")
 			SaveFile.close()
 	else:
 		rpc_id(1, "updateMySaveDict")
