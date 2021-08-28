@@ -14,6 +14,7 @@ func _ready():
 	yield(Network, "isServerDetermined")
 	
 	if Network.isServer:
+		print("starting to make save file")
 		if SaveFile.file_exists(saveFile):
 			SaveFile.open(saveFile, File.READ_WRITE)
 		else:
