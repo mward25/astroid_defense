@@ -84,7 +84,9 @@ remote func getSpaceCentorSave(theDict):
 	emit_signal("getSpaceCentorSaveFinished")
 
 remote func updateSpaceScentorSave():
-	saveDict["space_center"] = rpc_id(1, "getSpaceCenterSave")
+	rpc_id(1, "getSpaceCenterSave")
+	yield(self, "getSpaceCentorSaveFinished")
+	saveDict["space_center"] = tmpSpacecentor
 
 #remote func updateSpaceCentor(spaceCenterDict : Dictionary):
 #	saveDict["space_centor"] = spaceCenterDict
