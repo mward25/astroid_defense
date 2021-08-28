@@ -142,6 +142,15 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="UnplacedPlanetSelect" type="ItemList" parent="."]
+margin_left = 788.0
+margin_top = 339.0
+margin_right = 1020.0
+margin_bottom = 596.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [connection signal="pressed" from="Start/Button" to="." method="_on_Button_pressed"]
 [connection signal="pressed" from="MarginContainer/StartButton" to="." method="_on_StartButton_pressed"]
 [connection signal="pressed" from="Tutorial/TutorialButton" to="." method="_on_TutorialButton_pressed"]

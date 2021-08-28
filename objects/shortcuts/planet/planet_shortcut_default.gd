@@ -2,6 +2,7 @@ extends Area2D
 
 export (String) var levelOwner
 var type = UsefullConstantsAndEnums.PLANET
+var placed = false
 var isReady = false
 var firstTime = true
 var fromServer : bool
@@ -32,6 +33,7 @@ func save():
 		posX = position.x,
 		posY = position.y,
 		firstTime = false,
+		placed = placed,
 		fromServer = Network.isServer,
 	}
 	
@@ -39,11 +41,14 @@ func save():
 	return saveDict.duplicate(true)
 
 func loadSave(saveDict):
-	levelOwner = saveDict["levelOwner"]
-	name = saveDict["nodeName"]
-	position.x = saveDict["posX"]
-	position.y = saveDict["posY"]
-	firstTime = saveDict["firstTime"]
-	fromServer = saveDict["fromServer"]
+	if !placed:
+		levelOwner = saveDict["levelOwner"]
+		name = saveDict["nodeName"]
+		position.x = saveDict["posX"]
+		position.y = saveDict["posY"]
+		firstTime = saveDict["firstTime"]
+		fromServer = saveDict["fromServer"]
+	else:
+		print("error, trying to load save on a thing that has not yet been placed")
 
 

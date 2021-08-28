@@ -64,10 +64,24 @@ remote func addMyPlanetToSpacecentor(user, planet):
 		print("saveDict is null")
 	else:
 		saveDict["space_centor"][user][planet.name] = planet.save()
-		updateSaveDict(saveDict)
+		var _saveDict = (rpc_id(1, "getSpaceCenterSave"))[user][planet]
+		_saveDict[user][planet] = planet.save()
+		rpc_id(1, "updateSaveDict", _saveDict)
+		
+
+
+remote func getSpaceCenterSave():
+	return saveDict["space_centor"]
+
+remote func updateSpaceScentorSave():
+	saveDict["space_center"] = rpc_id(1, "getSpaceCenterSave")
+
+#remote func updateSpaceCentor(spaceCenterDict : Dictionary):
+#	saveDict["space_centor"] = spaceCenterDict
 
 remote func updateSaveDict(_saveDict):
 	saveDict = _saveDict
+	rpc("updateSaveDict", saveDict)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
