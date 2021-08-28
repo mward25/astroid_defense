@@ -22,6 +22,8 @@ func _ready():
 		if saveDict == null || saveDict.is_empty():
 			SaveFile.store_string(setupSaveDictAndFile())
 			SaveFile.close()
+	else:
+		rpc_id(1, "updateMySaveDict")
 
 # Warning, passwd should always be a hashed string
 remote func createUser(username: String, passwd: String):
@@ -95,6 +97,8 @@ remote func updateSaveDict(_saveDict):
 	saveDict = _saveDict
 	rpc("updateSaveDict", saveDict)
 
+remote func updateMySaveDict():
+	rpc_id(get_tree().get_rpc_sender_id(), "updateSaveDict", saveDict)
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
