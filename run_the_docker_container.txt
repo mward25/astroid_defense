@@ -1,0 +1,3 @@
+This is a simple document to explain what command to use for the docker container
+
+docker run -ti -p 9278:9278/tcp -p 9278:9278/udp  CONTAINER_NAME bash
