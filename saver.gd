@@ -6,6 +6,8 @@ var saveDict = null
 
 signal updateMySaveDictFinished
 signal getSpaceCentorSaveFinished
+
+signal initialSaveDictWritten
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
@@ -26,6 +28,7 @@ func _ready():
 			SaveFile.store_string(setupSaveDictAndFile())
 			print("made the save file")
 			SaveFile.close()
+		emit_signal("initialSaveDictWritten")
 	else:
 		print("running on non-server device")
 		rpc_id(1, "updateMySaveDict")
@@ -107,6 +110,10 @@ remote func updateSaveDict(_saveDict):
 
 remote func updateMySaveDict():
 	print("saveDict is ", saveDict)
+	if saveDict == null:
+		print("saveDict is null, waiting for saveDict to be written")
+		yield(self, "initialSaveDictWritten")
+		print("saveDict has been written")
 	rpc_id(get_tree().get_rpc_sender_id(), "updateSaveDict", saveDict.duplicate())
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

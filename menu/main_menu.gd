@@ -58,8 +58,6 @@ func update_ui(var info):
 
 func _on_StartButton_pressed():
 	print(Network.playerInfo)
-	Saver.rpc_id(1, "updateMySaveDict")
-	yield(Saver, "updateMySaveDictFinished")
 	get_parent().remove_child(get_node(get_path()))
 #	queue_free()
 	if isServer == false:
