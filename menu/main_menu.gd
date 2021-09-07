@@ -39,6 +39,7 @@ func _on_Button_pressed():
 		var peer = NetworkedMultiplayerENet.new()
 		peer.create_server(9278, 10)
 		get_tree().network_peer = peer
+		Saver.rpc_id(1, "updateMySaveDict")
 	else:
 		Network.myInfo.name = $NameEdit/TextEdit.text
 		Network.myInfo.ship = myInfo.ship
