@@ -4,16 +4,10 @@ const PLANET_SHORTCUT_DEFAULT_FILE = "res://objects/shortcuts/planet/planet_shor
 #signal placeHomeStead
 
 
-
-
-
-
-
-
-
 func _ready():
 	MenuBringerUpper.menu.connect("item_selected", self, "_on_UnplacedPlanetSelect_item_selected")
 	Saver.updateSpaceScentorSave()
+	yield(Saver, "getSpaceCentorSaveFinished")
 	if Network.myInfo.name in Saver.saveDict["space_centor"]:
 		for thePlanet in Saver.saveDict["space_centor"][Network.myInfo.name]:
 			if thePlanet.placed == false:
@@ -22,18 +16,6 @@ func _ready():
 				var ThePlanet = load(PLANET_SHORTCUT_DEFAULT_FILE).instance()
 				ThePlanet.loadSave(thePlanet)
 				add_child(ThePlanet)
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 func _on_UnplacedPlanetSelect_item_selected(index):

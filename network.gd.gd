@@ -40,6 +40,13 @@ remotesync func updatePlayersInMyLocation():
 
 
 func _player_connected(id):
+	if !isServer:
+		var selfPeerID = get_tree().get_network_unique_id()
+		if selfPeerID == 1:
+			isServer = true
+		else:
+			isServer = false
+		emit_signal("isServerDetermined")
 	print("player ", id, " has connected")
 	rpc_id(id, "register_player", myInfo)
 	
