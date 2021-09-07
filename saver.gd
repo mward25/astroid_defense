@@ -103,9 +103,11 @@ remote func updateSaveDict(_saveDict):
 	if Network.isServer:
 		rpc("updateSaveDict", saveDict)
 	emit_signal("updateMySaveDictFinished")
+	print("saveDict is now ", saveDict)
 
 remote func updateMySaveDict():
-	rpc_id(get_tree().get_rpc_sender_id(), "updateSaveDict", saveDict)
+	print("saveDict is ", saveDict)
+	rpc_id(get_tree().get_rpc_sender_id(), "updateSaveDict", saveDict.duplicate())
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
