@@ -141,6 +141,7 @@ remote func done_preconfiguring():
 	
 	if selfPeerID == 1:
 		isServer = true
+	emit_signal("isServerDetermined")
 	
 	
 	print("done_preconfiguring")

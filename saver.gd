@@ -4,6 +4,7 @@ var saveFile = "user://astroid_defence_save.sav"
 onready var SaveFile = File.new()
 var saveDict = null
 
+signal updateMySaveDictFinished
 signal getSpaceCentorSaveFinished
 # Declare member variables here. Examples:
 # var a = 2
@@ -101,6 +102,7 @@ remote func updateSaveDict(_saveDict):
 	saveDict = _saveDict
 	if Network.isServer:
 		rpc("updateSaveDict", saveDict)
+	emit_signal("updateMySaveDictFinished")
 
 remote func updateMySaveDict():
 	rpc_id(get_tree().get_rpc_sender_id(), "updateSaveDict", saveDict)
