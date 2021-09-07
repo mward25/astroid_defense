@@ -20,14 +20,21 @@ func _ready():
 	if Network.isServer:
 		print("starting to make save file")
 		if SaveFile.file_exists(saveFile):
+			print("saveFile exists, we are oppening it")
 			SaveFile.open(saveFile, File.READ_WRITE)
+			print("opened saveFile")
 		else:
+			print("saveFile does not exist exist, we are creating a new one")
 			SaveFile.open(saveFile, File.WRITE_READ)
+		print("getting the information from the file")
 		saveDict = parse_json((SaveFile.get_as_text()))
+		print("checking if the dictonary is null or empty")
 		if saveDict == null || saveDict.is_empty():
+			print("storing default stuff in the save dict")
 			SaveFile.store_string(setupSaveDictAndFile())
 			print("made the save file")
 			SaveFile.close()
+		print("emitting signal initialSaveDictWritten")
 		emit_signal("initialSaveDictWritten")
 	else:
 		print("running on non-server device")
