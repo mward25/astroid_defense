@@ -17,6 +17,7 @@ func _ready():
 		var peer = NetworkedMultiplayerENet.new()
 		peer.create_server(9278, 10)
 		get_tree().network_peer = peer
+		Network.isServer = true
 	else:
 		var MainMenu = mainMenu.instance()
 		MainMenu.name = "MainMenu"

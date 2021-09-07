@@ -3,6 +3,7 @@ var passwdFile = "user://passwds.sav"
 var saveFile = "user://astroid_defence_save.sav"
 onready var SaveFile = File.new()
 var saveDict = null
+
 signal getSpaceCentorSaveFinished
 # Declare member variables here. Examples:
 # var a = 2
@@ -82,7 +83,7 @@ remote func addMyPlanetToSpacecentor(user, planet):
 
 
 remote func getSpaceCenterSave():
-	rpc_id(get_tree().get_rpc_sender_id(),"getSpaceCentorSave" ,saveDict["space_centor"])
+	rpc_id(get_tree().get_rpc_sender_id(),"getSpaceCentorSave" , saveDict["space_centor"])
 
 remote func getSpaceCentorSave(theDict):
 	tmpSpacecentor = theDict
@@ -98,10 +99,12 @@ remote func updateSpaceScentorSave():
 
 remote func updateSaveDict(_saveDict):
 	saveDict = _saveDict
-	rpc("updateSaveDict", saveDict)
+	if Network.isServer:
+		rpc("updateSaveDict", saveDict)
 
 remote func updateMySaveDict():
 	rpc_id(get_tree().get_rpc_sender_id(), "updateSaveDict", saveDict)
+
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
