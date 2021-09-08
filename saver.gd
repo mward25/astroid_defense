@@ -81,7 +81,7 @@ remote func createUser(username: String, passwd: String):
 	
 
 
-remote func login(username: String, passwd: String):
+remote func login(username: String, passwd):
 	var senderId = get_tree().get_rpc_sender_id()
 	var tmpPasswdFile = File.new()
 	tmpPasswdFile.open(passwdFile, File.READ)
