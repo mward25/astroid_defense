@@ -49,8 +49,11 @@ func _player_connected(id):
 			isServer = false
 		emit_signal("isServerDetermined")
 	print("player ", id, " has connected")
-	rpc_id(id, "register_player", myInfo)
 	
+	rpc_id(id, "register_player", myInfo)
+
+
+
 remote func register_player(info):
 	print("player ", info, " is being registered on ", get_tree().get_network_unique_id())
 	var id = get_tree().get_rpc_sender_id()

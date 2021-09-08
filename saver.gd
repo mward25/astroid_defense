@@ -2,14 +2,24 @@ extends Node
 var passwdFile = "user://passwds.sav"
 var saveFile = "user://astroid_defence_save.sav"
 onready var SaveFile = File.new()
+
+
+
 var saveDict = null
+signal initialSaveDictWritten
+signal updateMySaveDictFinished
+signal getSpaceCentorSaveFinish
+
 
 var loginStatus := false
 
-signal updateMySaveDictFinished
-signal getSpaceCentorSaveFinished
+enum IncorectPasswdStatus  {BEING_DETERMINED, INCORECT, CORRECT}
+var incorectPassword = IncorectPasswdStatus.BEING_DETERMINED
+signal loginStatusUpdated
 
-signal initialSaveDictWritten
+
+
+
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
@@ -44,33 +54,59 @@ func _ready():
 
 # Warning, passwd should always be a hashed string
 remote func createUser(username: String, passwd: String):
+	var senderID = get_tree().get_rpc_sender_id()
 	var returnValue = false
 	
 	# if true is used so that all vairiables storing passwords will be deleted afterwords
 	if true:
+		# Deal with password
 		var tmpPasswdFile = File.new()
 		tmpPasswdFile.open(passwdFile, File.READ_WRITE)
 		
-		var passwdDict = to_json(tmpPasswdFile)
+		var passwdDict = parse_json(tmpPasswdFile.get_as_text())
 		if passwdDict.has(username):
 			returnValue = false
 		else:
 			passwdDict[username] = passwd
 			returnValue = true
+	
+	# Set up player
+	saveDict["users"][username] = {}
+	
+	# give them a planet
+	giveUserPlanet(senderID, username, generatePlanetDict("default_homestead-" + username, username, ""))
+	
+	
+	rpc_id(senderID, "setLoginStatus", true, IncorectPasswdStatus.CORRECT)
+	
+
 
 remote func login(username: String, passwd: String):
-	var senderId
+	var senderId = get_tree().get_rpc_sender_id()
 	var tmpPasswdFile = File.new()
-	tmpPasswdFile.open(passwdFile, File.READ_WRITE)
+	tmpPasswdFile.open(passwdFile, File.READ)
 	var passwdDict = to_json(tmpPasswdFile)
 	
 	if passwdDict.has(username) && (passwdDict[username]) == passwd:
-		rpc_id(senderId, "setLoginStatus", true)
+		rpc_id(senderId, "setLoginStatus", true, IncorectPasswdStatus.CORRECT)
+	elif passwdDict.has(username) && passwdDict[username] != passwd:
+		rpc_id(senderId, "setLoginStatus", false, IncorectPasswdStatus.INCORECT)
 	else:
-		rpc_id(senderId, "setLoginStatus", false)
+		rpc_id(senderId, "setLoginStatus", false, IncorectPasswdStatus.BEING_DETERMINED)
+	
+	# give other scripts time to run
+	yield(get_tree().create_timer(1), "timeout")
+	
+	if passwdDict.has(username) && passwdDict[username] != passwd:
+		rpc_id(senderId, "emitIncorectPassword")
 
-remote func setLoginStatus(status : bool):
+
+
+remote func setLoginStatus(status : bool, _incorectPassword):
 	loginStatus = status
+	incorectPassword = _incorectPassword
+	emit_signal("loginStatusUpdated")
+
 
 func setupSaveDictAndFile():
 	var saveDictTemplate = {
@@ -133,9 +169,16 @@ remote func updateMySaveDict():
 	rpc_id(get_tree().get_rpc_sender_id(), "updateSaveDict", saveDict.duplicate())
 
 
-remote func giveUserPlanet(theUser : String, thePlanetDict : Dictionary):
+remote func giveUserPlanet(theUserID, theUser : String, thePlanetDict : Dictionary):
 	saveDict[theUser][thePlanetDict[name]] = thePlanetDict
+	rpc_id(theUserID, "addNewPlanetToUnplacedPlanetSelect")
 	updateSaveDict(saveDict)
+
+remote func addNewPlanetToUnplacedPlanetSelect():
+	MenuBringerUpper.menu.UnplacedPlanetSelectNodeShortcut.clear()
+	for thePlanet in saveDict["users"][Network.myInfo.name]:
+		if thePlanet.placed == false:
+			MenuBringerUpper.menu.UnplacedPlanetSelectNodeShortcut.add_item(thePlanet.name)
 
 func generatePlanetDict(name : String, owner : String, resource : String):
 	
@@ -145,7 +188,7 @@ func generatePlanetDict(name : String, owner : String, resource : String):
 	else:
 		theResource = resource
 	
-	return {name=name, owner = owner, resource = theResource}
+	return {name=name, owner = owner, placed = false, resource = theResource}
 	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

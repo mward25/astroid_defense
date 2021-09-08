@@ -86,3 +86,16 @@ func _on_ShipSelect_item_selected(index):
 	$"/root/CurrentShip".currentShip = $"/root/CurrentShip".shipList[$ShipSelect.get_item_text(index)]
 	myInfo["ship"] = $"/root/CurrentShip".currentShip
 	print($"/root/CurrentShip".currentShip)
+
+
+func _on_LoginButton_pressed():
+	var passwdString = ($password_enterer/TextEdit.text).hash()
+	$password_enterer/TextEdit.text = ""
+	
+	Saver.rpc_id(1, "login", $NameEdit/TextEdit.text, passwdString)
+	yield(Saver, "loginStatusUpdated")
+	
+	if !Saver.loginStatus && Saver.incorectPassword == Saver.IncorectPasswdStatus.INCORECT:
+		$password_enterer/TextEdit.text = "INCORECT PASSWORD"
+	elif !Saver.loginStatus:
+		Saver.rpc_id(1, "createUser", $NameEdit/TextEdit.text, passwdString)
