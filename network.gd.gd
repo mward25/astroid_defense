@@ -60,6 +60,7 @@ remote func register_player(info):
 	print("player_info_has_been_changed")
 	
 	if !isHeadless && id in playerInfo && "name" in playerInfo[id]:
+		print("id and name are in playerInfo")
 		rpc("update_ui", playerInfo[id].name)
 		updatePlayersInMyLocation()
 

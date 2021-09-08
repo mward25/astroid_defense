@@ -5,7 +5,7 @@ const PLANET_SHORTCUT_DEFAULT_FILE = "res://objects/shortcuts/planet/planet_shor
 
 
 func _ready():
-	MenuBringerUpper.menu.connect("item_selected", self, "_on_UnplacedPlanetSelect_item_selected")
+	MenuBringerUpper.menu.UnplacedPlanetSelectNodeShortcut.connect("item_selected", self, "_on_UnplacedPlanetSelect_item_selected")
 	Saver.updateSpaceScentorSave()
 	yield(Saver, "getSpaceCentorSaveFinished")
 	if Network.myInfo.name in Saver.saveDict["space_centor"]:
@@ -19,7 +19,7 @@ func _ready():
 
 
 func _on_UnplacedPlanetSelect_item_selected(index):
-	var thePlanet = Saver.saveDict["space_centor"][Network.myInfo.name][MenuBringerUpper.menu.UnplacedPlanetSelect.get_item_text(index)]
+	var thePlanet = Saver.saveDict["space_centor"][Network.myInfo.name][MenuBringerUpper.menu.UnplacedPlanetSelectNodeShortcut.get_item_text(index)]
 	var ThePlanet = thePlanet.instance()
 	ThePlanet.placed = true
 	Saver.addMyPlanetToSpacecentor(Network.myInfo.name, ThePlanet)

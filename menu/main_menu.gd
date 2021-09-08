@@ -3,6 +3,7 @@ var finishedOnReady = false
 signal finishedOnReadySignal
 var isServer = false
 var isInView = true
+onready var UnplacedPlanetSelectNodeShortcut = $UnplacedPlanetSelect
 const AUDIO_OFF_ON_ART ="      /\n    / )))\n---|  )))))\n--- \\ )))\n     \\ \n"
 # Declare member variables here. Examples:
 # var a = 2
