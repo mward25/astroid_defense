@@ -9,6 +9,7 @@ var finishedOnReady = false
 var playing = false
 var isServer = false
 var isHeadless = false
+
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
@@ -190,6 +191,7 @@ remote func done_preconfiguring():
 	# when they are all done post configure game
 	if players_done.size() == playerInfo.size():
 		rpc("post_configure_game")
+		rpc("updatePlayersInMyLocation")
 #		post_configure_game()
 
 remote func post_configure_game():
