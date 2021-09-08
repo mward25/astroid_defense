@@ -175,6 +175,7 @@ remote func giveUserPlanet(theUserID, theUser : String, thePlanetDict : Dictiona
 	updateSaveDict(saveDict)
 
 remote func addNewPlanetToUnplacedPlanetSelect():
+	yield(self, "updateMySaveDictFinished")
 	MenuBringerUpper.menu.UnplacedPlanetSelectNodeShortcut.clear()
 	for thePlanet in saveDict["users"][Network.myInfo.name]:
 		if thePlanet.placed == false:
