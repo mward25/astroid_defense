@@ -102,6 +102,11 @@ remote func getSpaceCentorSave(theDict):
 	emit_signal("getSpaceCentorSaveFinished")
 
 remote func updateSpaceScentorSave():
+	# if we have not updated our save dict yet, we want to do that first
+	if saveDict == null || saveDict.empty():
+		print("saveDict not yet written, updating saveDict first")
+		rpc_id(1, "updateMySaveDict")
+		yield(self, "updateMySaveDictFinished")
 	rpc_id(1, "getSpaceCenterSave")
 	yield(self, "getSpaceCentorSaveFinished")
 	saveDict["space_center"] = tmpSpacecentor
