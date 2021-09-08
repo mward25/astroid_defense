@@ -29,7 +29,7 @@ func _ready():
 		print("getting the information from the file")
 		saveDict = parse_json(SaveFile.get_as_text())
 		print("checking if the dictonary is null or empty")
-		if saveDict == null || saveDict.is_empty():
+		if saveDict == null || saveDict.empty():
 			print("storing default stuff in the save dict")
 			SaveFile.store_string(setupSaveDictAndFile())
 			print("made the save file")
