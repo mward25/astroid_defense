@@ -93,7 +93,7 @@ remote func login(username: String, passwd: int):
 	var tmpPasswdFile = File.new()
 	tmpPasswdFile.open(passwdFile, File.READ)
 	var passwdDict = to_json(tmpPasswdFile)
-	if !(passwdDict == null || passwdDict.empty()):
+	if !(passwdDict == null && passwdDict.empty()):
 		print("determining if password is valid")
 		if passwdDict.has(username) && (passwdDict[username]) == passwd:
 			rpc_id(senderId, "setLoginStatus", true, IncorectPasswdStatus.CORRECT)
