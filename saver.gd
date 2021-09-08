@@ -81,7 +81,7 @@ remote func createUser(username: String, passwd: String):
 	
 
 
-remote func login(username: String, passwd):
+remote func login(username: String, passwd: int):
 	var senderId = get_tree().get_rpc_sender_id()
 	var tmpPasswdFile = File.new()
 	tmpPasswdFile.open(passwdFile, File.READ)
@@ -93,12 +93,6 @@ remote func login(username: String, passwd):
 		rpc_id(senderId, "setLoginStatus", false, IncorectPasswdStatus.INCORECT)
 	else:
 		rpc_id(senderId, "setLoginStatus", false, IncorectPasswdStatus.BEING_DETERMINED)
-	
-	# give other scripts time to run
-	yield(get_tree().create_timer(1), "timeout")
-	
-	if passwdDict.has(username) && passwdDict[username] != passwd:
-		rpc_id(senderId, "emitIncorectPassword")
 
 
 
