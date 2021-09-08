@@ -4,6 +4,8 @@ var saveFile = "user://astroid_defence_save.sav"
 onready var SaveFile = File.new()
 var saveDict = null
 
+var loginStatus := false
+
 signal updateMySaveDictFinished
 signal getSpaceCentorSaveFinished
 
@@ -55,19 +57,20 @@ remote func createUser(username: String, passwd: String):
 		else:
 			passwdDict[username] = passwd
 			returnValue = true
-	
-	
-	
 
 remote func login(username: String, passwd: String):
+	var senderId
 	var tmpPasswdFile = File.new()
 	tmpPasswdFile.open(passwdFile, File.READ_WRITE)
 	var passwdDict = to_json(tmpPasswdFile)
 	
 	if passwdDict.has(username) && (passwdDict[username]) == passwd:
-		return saveDict
+		rpc_id(senderId, "setLoginStatus", true)
 	else:
-		return null
+		rpc_id(senderId, "setLoginStatus", false)
+
+remote func setLoginStatus(status : bool):
+	loginStatus = status
 
 func setupSaveDictAndFile():
 	var saveDictTemplate = {
@@ -128,6 +131,22 @@ remote func updateMySaveDict():
 		yield(self, "initialSaveDictWritten")
 		print("saveDict has been written")
 	rpc_id(get_tree().get_rpc_sender_id(), "updateSaveDict", saveDict.duplicate())
+
+
+remote func giveUserPlanet(theUser : String, thePlanetDict : Dictionary):
+	saveDict[theUser][thePlanetDict[name]] = thePlanetDict
+	updateSaveDict(saveDict)
+
+func generatePlanetDict(name : String, owner : String, resource : String):
+	
+	var theResource = ""
+	if resource == "":
+		theResource = "res://objects/shortcuts/planet/planet_shortcut_default.tscn"
+	else:
+		theResource = resource
+	
+	return {name=name, owner = owner, resource = theResource}
+	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
