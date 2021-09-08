@@ -27,7 +27,7 @@ func _ready():
 			print("saveFile does not exist exist, we are creating a new one")
 			SaveFile.open(saveFile, File.WRITE_READ)
 		print("getting the information from the file")
-		saveDict = parse_json((SaveFile.get_as_text()))
+		saveDict = parse_json(SaveFile.get_as_text())
 		print("checking if the dictonary is null or empty")
 		if saveDict == null || saveDict.is_empty():
 			print("storing default stuff in the save dict")
