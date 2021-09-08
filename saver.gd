@@ -63,14 +63,28 @@ remote func createUser(username: String, passwd):
 		# Deal with password
 		print("dealing with passwords")
 		var tmpPasswdFile = File.new()
-		tmpPasswdFile.open(passwdFile, File.READ_WRITE)
+		if !tmpPasswdFile.file_exists(passwdFile):
+			tmpPasswdFile.open(passwdFile, File.WRITE_READ)
+		else:
+			tmpPasswdFile.open(passwdFile, File.READ_WRITE)
+		 
 		
 		var passwdDict = parse_json(tmpPasswdFile.get_as_text())
+		
+		# if the passwdDict is not a dictonary, make it one
+		if passwdDict == null:
+			passwdDict = {}
+		
 		if passwdDict.has(username):
-			returnValue = false
+			#returnValue = false
+			pass
 		else:
 			passwdDict[username] = passwd
-			returnValue = true
+			#returnValue = true
+		
+		
+		
+		
 	
 	print("setting up player")
 	# Set up player
