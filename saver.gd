@@ -53,13 +53,15 @@ func _ready():
 		rpc_id(1, "updateMySaveDict")
 
 # Warning, passwd should always be a hashed string
-remote func createUser(username: String, passwd: String):
+remote func createUser(username: String, passwd):
+	print("creating user ", username)
 	var senderID = get_tree().get_rpc_sender_id()
 	var returnValue = false
 	
 	# if true is used so that all vairiables storing passwords will be deleted afterwords
 	if true:
 		# Deal with password
+		print("dealing with passwords")
 		var tmpPasswdFile = File.new()
 		tmpPasswdFile.open(passwdFile, File.READ_WRITE)
 		
@@ -70,28 +72,37 @@ remote func createUser(username: String, passwd: String):
 			passwdDict[username] = passwd
 			returnValue = true
 	
+	print("setting up player")
 	# Set up player
 	saveDict["users"][username] = {}
 	
+	
 	# give them a planet
+	print("giving player a planet")
 	giveUserPlanet(senderID, username, generatePlanetDict("default_homestead-" + username, username, ""))
 	
-	
+	print("setting thier login status")
 	rpc_id(senderID, "setLoginStatus", true, IncorectPasswdStatus.CORRECT)
 	
 
 
 remote func login(username: String, passwd: int):
+	print("setting senderID")
 	var senderId = get_tree().get_rpc_sender_id()
+	print("opening tmpPasswd file")
 	var tmpPasswdFile = File.new()
 	tmpPasswdFile.open(passwdFile, File.READ)
 	var passwdDict = to_json(tmpPasswdFile)
 	
+	print("determining if password is valid")
 	if passwdDict.has(username) && (passwdDict[username]) == passwd:
 		rpc_id(senderId, "setLoginStatus", true, IncorectPasswdStatus.CORRECT)
+		print("password is valid")
 	elif passwdDict.has(username) && passwdDict[username] != passwd:
+		print("username is valid but password is not")
 		rpc_id(senderId, "setLoginStatus", false, IncorectPasswdStatus.INCORECT)
 	else:
+		print("niether username nor password are determined")
 		rpc_id(senderId, "setLoginStatus", false, IncorectPasswdStatus.BEING_DETERMINED)
 
 
