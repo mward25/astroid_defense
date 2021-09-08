@@ -93,16 +93,19 @@ remote func login(username: String, passwd: int):
 	var tmpPasswdFile = File.new()
 	tmpPasswdFile.open(passwdFile, File.READ)
 	var passwdDict = to_json(tmpPasswdFile)
-	
-	print("determining if password is valid")
-	if passwdDict.has(username) && (passwdDict[username]) == passwd:
-		rpc_id(senderId, "setLoginStatus", true, IncorectPasswdStatus.CORRECT)
-		print("password is valid")
-	elif passwdDict.has(username) && passwdDict[username] != passwd:
-		print("username is valid but password is not")
-		rpc_id(senderId, "setLoginStatus", false, IncorectPasswdStatus.INCORECT)
+	if !(passwdDict == null || passwdDict.empty()):
+		print("determining if password is valid")
+		if passwdDict.has(username) && (passwdDict[username]) == passwd:
+			rpc_id(senderId, "setLoginStatus", true, IncorectPasswdStatus.CORRECT)
+			print("password is valid")
+		elif passwdDict.has(username) && passwdDict[username] != passwd:
+			print("username is valid but password is not")
+			rpc_id(senderId, "setLoginStatus", false, IncorectPasswdStatus.INCORECT)
+		else:
+			print("niether username nor password are determined")
+			rpc_id(senderId, "setLoginStatus", false, IncorectPasswdStatus.BEING_DETERMINED)
 	else:
-		print("niether username nor password are determined")
+		print("no password file has been created, saying all logins are invalid")
 		rpc_id(senderId, "setLoginStatus", false, IncorectPasswdStatus.BEING_DETERMINED)
 
 
