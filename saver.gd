@@ -94,6 +94,7 @@ remote func addMyPlanetToSpacecentor(user, planet):
 
 
 remote func getSpaceCenterSave():
+	print("gettingSpacecentor")
 	rpc_id(get_tree().get_rpc_sender_id(),"getSpaceCentorSave" , saveDict["space_centor"])
 
 remote func getSpaceCentorSave(theDict):
