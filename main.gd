@@ -18,6 +18,7 @@ func _ready():
 		peer.create_server(9278, 10)
 		get_tree().network_peer = peer
 		Network.isServer = true
+		Network.emit_signal("isServerDetermined")
 	else:
 		var MainMenu = mainMenu.instance()
 		MainMenu.name = "MainMenu"

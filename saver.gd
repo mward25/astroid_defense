@@ -80,6 +80,7 @@ remote func createUser(username: String, passwd):
 			pass
 		else:
 			passwdDict[username] = passwd
+			tmpPasswdFile.store_string(to_json(passwdDict))
 			#returnValue = true
 		
 		
@@ -94,6 +95,8 @@ remote func createUser(username: String, passwd):
 	# give them a planet
 	print("giving player a planet")
 	giveUserPlanet(senderID, username, generatePlanetDict("default_homestead-" + username, username, ""))
+	
+	saveSaveDict()
 	
 	print("setting thier login status")
 	rpc_id(senderID, "setLoginStatus", true, IncorectPasswdStatus.CORRECT)
@@ -214,6 +217,11 @@ func generatePlanetDict(name : String, owner : String, resource : String):
 	
 	return {name=name, owner = owner, placed = false, resource = theResource}
 	
+
+func saveSaveDict():
+	SaveFile.open(saveFile, File.WRITE_READ)
+	SaveFile.store_string(to_json(saveDict))
+	SaveFile.close()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
