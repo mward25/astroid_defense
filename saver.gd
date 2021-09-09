@@ -194,6 +194,7 @@ remote func updateMySaveDict():
 remote func giveUserPlanet(theUserID, theUser : String, thePlanetDict : Dictionary):
 	saveDict[theUser][thePlanetDict[name]] = thePlanetDict
 	rpc_id(theUserID, "addNewPlanetToUnplacedPlanetSelect")
+	print("the saveDict is ", saveDict)
 	updateSaveDict(saveDict)
 
 remote func addNewPlanetToUnplacedPlanetSelect():
