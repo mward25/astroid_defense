@@ -150,7 +150,7 @@ remote func addMyPlanetToSpacecentor(user, planet):
 		saveDict["space_centor"][user][planet.name] = planet.save()
 		
 		rpc_id(1, "getSpaceCenterSave")
-		yield(self, "getSpaceCentorSaveFinished")
+		yield(self, "getSpaceCentorSaveFinish")
 		var _saveDict = tmpSpacecentor
 		_saveDict[user][planet] = planet.save()
 		rpc_id(1, "updateSaveDict", _saveDict)
@@ -163,7 +163,7 @@ remote func getSpaceCenterSave():
 
 remote func getSpaceCentorSave(theDict):
 	tmpSpacecentor = theDict
-	emit_signal("getSpaceCentorSaveFinished")
+	emit_signal("getSpaceCentorSaveFinish")
 
 remote func updateSpaceScentorSave():
 	# if we have not updated our save dict yet, we want to do that first
@@ -172,7 +172,7 @@ remote func updateSpaceScentorSave():
 		rpc_id(1, "updateMySaveDict")
 		yield(self, "updateMySaveDictFinished")
 	rpc_id(1, "getSpaceCenterSave")
-	yield(self, "getSpaceCentorSaveFinished")
+	yield(self, "getSpaceCentorSaveFinish")
 	saveDict["space_center"] = tmpSpacecentor
 
 #remote func updateSpaceCentor(spaceCenterDict : Dictionary):
