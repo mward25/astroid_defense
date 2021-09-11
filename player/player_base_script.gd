@@ -134,6 +134,8 @@ func doPlayerTasks():
 	calculateRotation()
 	CapMouseOrDoFullscrean()
 	changeZoom()
+	
+	setPlayerShortcutIfNotNull()
 
 func setPlayerShortcutIfNotNull():
 	if Shortcuts.playerShortcut == null:
