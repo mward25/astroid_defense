@@ -94,10 +94,10 @@ remote func createUser(username: String, passwd):
 	print("setting up player")
 	
 	# Set up player
-	if !saveDict.has("users"):
-		saveDict["users"] = {}
-	saveDict["users"][username] = {}
-	
+	if !saveDict.has(SAV_USERS):
+		saveDict[SAV_USERS] = {}
+	saveDict[SAV_USERS][username] = {}
+	saveDict[SAV_SPACE_CENTOR][username] = {}
 	
 	
 	# give them a planet
@@ -212,7 +212,7 @@ remote func updateMySaveDict():
 
 
 remote func giveUserPlanet(theUserID, theUser : String, thePlanetDict : Dictionary):
-	saveDict["users"][theUser][thePlanetDict["name"]] = thePlanetDict
+	saveDict[SAV_USERS][theUser][thePlanetDict["name"]] = thePlanetDict
 	rpc_id(theUserID, "addNewPlanetToUnplacedPlanetSelect")
 	print("the saveDict is ", saveDict)
 	updateSaveDict(saveDict)
@@ -220,8 +220,8 @@ remote func giveUserPlanet(theUserID, theUser : String, thePlanetDict : Dictiona
 remote func addNewPlanetToUnplacedPlanetSelect():
 	yield(self, "updateMySaveDictFinished")
 	MenuBringerUpper.menu.UnplacedPlanetSelectNodeShortcut.clear()
-	var tmpUserPlanetDict = saveDict["users"][Network.myInfo.name]
-	for thePlanet in saveDict["users"][Network.myInfo.name]:
+	var tmpUserPlanetDict = saveDict[SAV_USERS][Network.myInfo.name]
+	for thePlanet in saveDict[SAV_USERS][Network.myInfo.name]:
 		if tmpUserPlanetDict[thePlanet]["placed"] == false:
 			MenuBringerUpper.menu.UnplacedPlanetSelectNodeShortcut.add_item(tmpUserPlanetDict[thePlanet]["name"])
 
