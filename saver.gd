@@ -17,7 +17,8 @@ enum IncorectPasswdStatus  {BEING_DETERMINED, INCORECT, CORRECT}
 var incorectPassword = IncorectPasswdStatus.BEING_DETERMINED
 signal loginStatusUpdated
 
-
+const SAV_USERS = "users"
+const SAV_SPACE_CENTOR = "space_centor"
 
 
 # Declare member variables here. Examples:
@@ -45,12 +46,17 @@ func _ready():
 			print("storing default stuff in the save dict")
 			SaveFile.store_string(setupSaveDictAndFile())
 			print("made the save file")
+			saveDict = parse_json(SaveFile.get_as_text())
 			SaveFile.close()
+			
+			
 		print("emitting signal initialSaveDictWritten")
 		emit_signal("initialSaveDictWritten")
 	else:
 		print("running on non-server device")
 		rpc_id(1, "updateMySaveDict")
+	
+	print("after _on_ready saveDict is ", saveDict)
 
 # Warning, passwd should always be a hashed string
 remote func createUser(username: String, passwd):
@@ -88,8 +94,12 @@ remote func createUser(username: String, passwd):
 		
 	
 	print("setting up player")
+	
 	# Set up player
+	if !saveDict.has("users"):
+		saveDict["users"] = {}
 	saveDict["users"][username] = {}
+	
 	
 	
 	# give them a planet
@@ -195,7 +205,7 @@ remote func updateMySaveDict():
 
 
 remote func giveUserPlanet(theUserID, theUser : String, thePlanetDict : Dictionary):
-	saveDict[theUser][thePlanetDict[name]] = thePlanetDict
+	saveDict["users"][theUser][thePlanetDict[name]] = thePlanetDict
 	rpc_id(theUserID, "addNewPlanetToUnplacedPlanetSelect")
 	print("the saveDict is ", saveDict)
 	updateSaveDict(saveDict)

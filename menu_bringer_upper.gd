@@ -15,8 +15,12 @@ func _ready():
 func _process(delta):
 	if menu != null:
 		if Input.is_action_just_released("activate_menu") && !isInView:
+			if menu.get_parent() != null:
+				menu.get_parent().remove_child(menu)
 			add_child(menu)
 			isInView = true
 		elif Input.is_action_just_released("activate_menu") && isInView:
+			if menu.get_parent() == null:
+				add_child(menu)
 			menu.get_parent().remove_child(menu)
 			isInView = false
