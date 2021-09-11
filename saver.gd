@@ -48,8 +48,6 @@ func _ready():
 			print("made the save file")
 			saveDict = parse_json(SaveFile.get_as_text())
 			SaveFile.close()
-			
-			
 		print("emitting signal initialSaveDictWritten")
 		emit_signal("initialSaveDictWritten")
 	else:
@@ -205,7 +203,7 @@ remote func updateMySaveDict():
 
 
 remote func giveUserPlanet(theUserID, theUser : String, thePlanetDict : Dictionary):
-	saveDict["users"][theUser][thePlanetDict[name]] = thePlanetDict
+	saveDict["users"][theUser][thePlanetDict["name"]] = thePlanetDict
 	rpc_id(theUserID, "addNewPlanetToUnplacedPlanetSelect")
 	print("the saveDict is ", saveDict)
 	updateSaveDict(saveDict)
@@ -226,7 +224,6 @@ func generatePlanetDict(name : String, owner : String, resource : String):
 		theResource = resource
 	
 	return {name=name, owner = owner, placed = false, resource = theResource}
-	
 
 func saveSaveDict():
 	SaveFile.open(saveFile, File.WRITE_READ)
