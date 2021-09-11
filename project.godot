@@ -30,6 +30,7 @@ UsefullConstantsAndEnums="*res://vars/usefull_constants_and_enums.gd"
 MenuBringerUpper="*res://menu_bringer_upper.gd"
 MovementEnums="*res://vars/movement_enums.gd"
 Saver="*res://saver.gd"
+Shortcuts="*res://shortcuts.gd"
 
 [display]
 

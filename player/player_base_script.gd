@@ -135,6 +135,10 @@ func doPlayerTasks():
 	CapMouseOrDoFullscrean()
 	changeZoom()
 
+func setPlayerShortcutIfNotNull():
+	if Shortcuts.playerShortcut == null:
+		Shortcuts.playerShortcut = self
+
 func doNonPlayerTasks():
 	calculateExhaustEmmissionRemote()
 

@@ -20,12 +20,22 @@ func _ready():
 
 func _on_UnplacedPlanetSelect_item_selected(index):
 	var thePlanet = Saver.saveDict["users"][Network.myInfo.name][MenuBringerUpper.menu.UnplacedPlanetSelectNodeShortcut.get_item_text(index)]
+	
+	thePlanet[Saver.PLANET_PLACED] = true
+	thePlanet[Saver.PLANET_IF_PLACED][Saver.PLANET_POSITION_X] = Shortcuts.playerShortcut.position.x
+	thePlanet[Saver.PLANET_IF_PLACED][Saver.PLANET_POSITION_Y] = Shortcuts.playerShortcut.position.y
+	
 	var ThePlanet = load(thePlanet["resource"]).instance()
 	
 	ThePlanet.placed = true
+	ThePlanet.levelOwner = thePlanet[Saver.PLANET_OWNER]
+	ThePlanet.position.x = thePlanet[Saver.PLANET_IF_PLACED][Saver.PLANET_POSITION_X]
+	ThePlanet.position.y = thePlanet[Saver.PLANET_IF_PLACED][Saver.PLANET_POSITION_Y]
+	add_child(ThePlanet)
 	Saver.addMyPlanetToSpacecentor(Network.myInfo.name, thePlanet)
 
-
+remote func placePlanet(planet : Dictionary):
+	pass
 
 #
 #const PLANET_SAV_SECTION = "planets"

@@ -21,6 +21,17 @@ const SAV_USERS = "users"
 const SAV_SPACE_CENTOR = "space_centor"
 
 
+# {name=name, owner = owner, placed = false, resource = theResource, ifPlaced = {posX = null, posY = null}}
+# Planet Dictonary Constants based off of comment above which was taken from the generatePlanet function
+const PLANET_NAME = "name"
+const PLANET_OWNER = "owner"
+const PLANET_PLACED = "placed"
+const PLANET_RESOURCE = "resource"
+const PLANET_IF_PLACED = "ifPlaced"
+const PLANET_POSITION_X = "posX"
+const PLANET_POSITION_Y = "posY"
+
+
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
@@ -233,7 +244,7 @@ func generatePlanetDict(name : String, owner : String, resource : String):
 	else:
 		theResource = resource
 	
-	return {name=name, owner = owner, placed = false, resource = theResource}
+	return {name=name, owner = owner, placed = false, resource = theResource, ifPlaced = {posX = null, posY = null}}
 
 func saveSaveDict():
 	SaveFile.open(saveFile, File.WRITE_READ)

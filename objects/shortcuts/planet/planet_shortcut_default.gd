@@ -26,19 +26,19 @@ func _on_PlanetShortcutDefault_body_entered(body):
 	if "isMyPlayer" in body and body.isMyPlayer == true and isReady == true:
 		body.change_my_scene("res://levels/home_steads/default.tscn")
 
-func save():
-	var saveDict = {
-		levelOwner = levelOwner,
-		nodeName = name,
-		posX = position.x,
-		posY = position.y,
-		firstTime = false,
-		placed = placed,
-		fromServer = Network.isServer,
-	}
-	
-	
-	return saveDict.duplicate(true)
+#func save():
+#	var saveDict = {
+#		levelOwner = levelOwner,
+#		nodeName = name,
+#		posX = position.x,
+#		posY = position.y,
+#		firstTime = false,
+#		placed = placed,
+#		fromServer = Network.isServer,
+#	}
+#
+#
+#	return saveDict.duplicate(true)
 
 func loadSave(saveDict):
 	if !placed:
