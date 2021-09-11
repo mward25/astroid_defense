@@ -19,10 +19,11 @@ func _ready():
 
 
 func _on_UnplacedPlanetSelect_item_selected(index):
-	var thePlanet = Saver.saveDict["space_centor"][Network.myInfo.name][MenuBringerUpper.menu.UnplacedPlanetSelectNodeShortcut.get_item_text(index)]
-	var ThePlanet = thePlanet.instance()
+	var thePlanet = Saver.saveDict["users"][Network.myInfo.name][MenuBringerUpper.menu.UnplacedPlanetSelectNodeShortcut.get_item_text(index)]
+	var ThePlanet = load(thePlanet["resource"]).instance()
+	
 	ThePlanet.placed = true
-	Saver.addMyPlanetToSpacecentor(Network.myInfo.name, ThePlanet)
+	Saver.addMyPlanetToSpacecentor(Network.myInfo.name, thePlanet)
 
 
 

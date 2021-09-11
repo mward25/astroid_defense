@@ -155,19 +155,28 @@ remote func addMyPlanetToSpacecentor(user, planet):
 	if saveDict == null:
 		print("saveDict is null")
 	else:
-		saveDict["space_centor"][user][planet.name] = planet.save()
+		saveDict[SAV_SPACE_CENTOR][user][planet.name] = planet
+		if saveDict[SAV_USERS][user].has(planet.name):
+			saveDict[SAV_USERS][user].erase(planet.name)
+		else:
+			print("saveDict[SAV_USERS][user].has(planet.name) was false for some reason")
+		if Network.isServer:
+			updateSaveDict(saveDict)
+		else:
+			print("warning, modifying server from a client, should be used sparringly")
+			rpc_id(1, "updateSaveDict", saveDict)
 		
-		rpc_id(1, "getSpaceCenterSave")
-		yield(self, "getSpaceCentorSaveFinish")
-		var _saveDict = tmpSpacecentor
-		_saveDict[user][planet] = planet.save()
-		rpc_id(1, "updateSaveDict", _saveDict)
 		
+#		rpc_id(1, "getSpaceCenterSave")
+#		yield(self, "getSpaceCentorSaveFinish")
+#		var _spaceSaveDict = tmpSpacecentor
+#		_spaceSaveDict[user][planet] = planet.save()
+#		rpc_id(1, "updateSaveDict", _spaceSaveDict)
 
 
 remote func getSpaceCenterSave():
 	print("gettingSpacecentor")
-	rpc_id(get_tree().get_rpc_sender_id(),"getSpaceCentorSave" , saveDict["space_centor"])
+	rpc_id(get_tree().get_rpc_sender_id(),"getSpaceCentorSave" , saveDict[SAV_SPACE_CENTOR])
 
 remote func getSpaceCentorSave(theDict):
 	tmpSpacecentor = theDict
