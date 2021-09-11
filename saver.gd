@@ -173,9 +173,11 @@ remote func addMyPlanetToSpacecentor(user, planet):
 			print("saveDict[SAV_USERS][user].has(planet.name) was false for some reason")
 		if Network.isServer:
 			updateSaveDict(saveDict)
+			saveSaveDict()
 		else:
 			print("warning, modifying server from a client, should be used sparringly")
 			rpc_id(1, "updateSaveDict", saveDict)
+			
 		
 		
 #		rpc_id(1, "getSpaceCenterSave")
@@ -246,7 +248,7 @@ func generatePlanetDict(name : String, owner : String, resource : String):
 	
 	return {name=name, owner = owner, placed = false, resource = theResource, ifPlaced = {posX = null, posY = null}}
 
-func saveSaveDict():
+remote func saveSaveDict():
 	SaveFile.open(saveFile, File.WRITE_READ)
 	SaveFile.store_string(to_json(saveDict))
 	SaveFile.close()

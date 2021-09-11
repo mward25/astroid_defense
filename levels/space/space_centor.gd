@@ -32,7 +32,7 @@ func _on_UnplacedPlanetSelect_item_selected(index):
 	ThePlanet.position.x = thePlanet[Saver.PLANET_IF_PLACED][Saver.PLANET_POSITION_X]
 	ThePlanet.position.y = thePlanet[Saver.PLANET_IF_PLACED][Saver.PLANET_POSITION_Y]
 	add_child(ThePlanet)
-	Saver.addMyPlanetToSpacecentor(Network.myInfo.name, thePlanet)
+	Saver.rpc("addMyPlanetToSpacecentor", Network.myInfo.name, thePlanet)
 
 remote func placePlanet(planet : Dictionary):
 	pass
