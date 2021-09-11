@@ -6,6 +6,7 @@ var placed = false
 var isReady = false
 var firstTime = true
 var fromServer : bool
+const WAIT_TIME = 4
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
@@ -13,7 +14,8 @@ var fromServer : bool
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass
+	yield(get_tree().create_timer(WAIT_TIME), "timeout")
+	isReady = true
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
