@@ -8,14 +8,23 @@ func _ready():
 	MenuBringerUpper.menu.UnplacedPlanetSelectNodeShortcut.connect("item_selected", self, "_on_UnplacedPlanetSelect_item_selected")
 	Saver.updateSpaceScentorSave()
 	yield(Saver, "getSpaceCentorSaveFinish")
-	if Network.myInfo.name in Saver.saveDict["space_centor"]:
-		for thePlanet in Saver.saveDict["space_centor"][Network.myInfo.name]:
-			if thePlanet.placed == false:
-				MenuBringerUpper.menu.UnplacedPlanetSelect.add_item(thePlanet.name)
-			else:
-				var ThePlanet = load(PLANET_SHORTCUT_DEFAULT_FILE).instance()
-				ThePlanet.loadSave(thePlanet)
-				add_child(ThePlanet)
+	var tmpSpaceCentorSaveDict = Saver.saveDict[Saver.SAV_SPACE_CENTOR][Network.myInfo.name]
+	if Network.myInfo.name in Saver.saveDict[Saver.SAV_SPACE_CENTOR]:
+		for thePlanet in Saver.saveDict[Saver.SAV_SPACE_CENTOR][Network.myInfo.name]:
+			var thePlanetShortcut = tmpSpaceCentorSaveDict[thePlanet]
+			
+			var ThePlanet = load(thePlanetShortcut["resource"]).instance()
+			ThePlanet.placed = true
+			ThePlanet.levelOwner = thePlanetShortcut[Saver.PLANET_OWNER]
+			ThePlanet.position.x = thePlanetShortcut[Saver.PLANET_IF_PLACED][Saver.PLANET_POSITION_X]
+			ThePlanet.position.y = thePlanetShortcut[Saver.PLANET_IF_PLACED][Saver.PLANET_POSITION_Y]
+			add_child(ThePlanet)
+#			if tmpSpaceCentorSaveDict[thePlanet][Saver.PLANET_PLACED] == false:
+#				MenuBringerUpper.menu.UnplacedPlanetSelect.add_item(tmpSpaceCentorSaveDict[thePlanet][Saver.PLANET_NAME])
+#			else:
+#				var ThePlanet = load(PLANET_SHORTCUT_DEFAULT_FILE).instance()
+#				ThePlanet.loadSave(thePlanet)
+#				add_child(ThePlanet)
 
 
 func _on_UnplacedPlanetSelect_item_selected(index):
