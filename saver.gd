@@ -251,7 +251,7 @@ func generatePlanetDict(name : String, owner : String, resource : String, planet
 
 remote func saveHomestead(owner : String, levelName : String, homesteadSaveDict : Dictionary):
 	
-	saveDict[SAV_SPACE_CENTOR][owner][levelName] = homesteadSaveDict
+	saveDict[SAV_SPACE_CENTOR][owner][levelName][PLANET_THE_PLANET_SAVE] = homesteadSaveDict
 	
 	if Network.isServer == true:
 		updateSaveDict(saveDict)
