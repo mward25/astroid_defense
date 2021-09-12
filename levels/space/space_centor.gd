@@ -45,6 +45,7 @@ func _on_UnplacedPlanetSelect_item_selected(index):
 	
 	ThePlanet.placed = true
 	ThePlanet.levelOwner = thePlanet[Saver.PLANET_OWNER]
+	ThePlanet.levelName = thePlanet[Saver.PLANET_NAME]
 	ThePlanet.position.x = thePlanet[Saver.PLANET_IF_PLACED][Saver.PLANET_POSITION_X]
 	ThePlanet.position.y = thePlanet[Saver.PLANET_IF_PLACED][Saver.PLANET_POSITION_Y]
 	add_child(ThePlanet)
