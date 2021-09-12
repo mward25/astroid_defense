@@ -1,0 +1,18 @@
+[gd_resource type="ParticlesMaterial" format=2]
+
+[resource]
+lifetime_randomness = 1.0
+emission_shape = 1
+emission_sphere_radius = 94.33
+flag_disable_z = true
+direction = Vector3( 0, 0, 0 )
+spread = 180.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 139.53
+angular_velocity = 301.4
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+linear_accel = 37.21
+scale = 3.0
+scale_random = 1.0
+color = Color( 1, 0.14902, 0.14902, 1 )

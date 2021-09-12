@@ -8,6 +8,7 @@
 
 # Godot-specific ignores
 .import/
+*.import
 export.cfg
 export_presets.cfg
 
@@ -17,4 +18,4 @@ data_*/
 
 # ignored stuff for c++
 libgodot-cpp.*
-build/
+/build/

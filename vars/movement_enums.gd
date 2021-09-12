@@ -1,0 +1,2 @@
+extends Node
+enum {DO_NOTHING, TURN_LEFT, TURN_RIGHT, THRUST, SHOOT}

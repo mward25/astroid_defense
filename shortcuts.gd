@@ -1,6 +1,5 @@
 extends Node
-const SERVER = 1
-enum {PLANET, SHIP, MONSTER}
+var playerShortcut = null
 
 # Declare member variables here. Examples:
 # var a = 2

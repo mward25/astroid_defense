@@ -16,7 +16,7 @@ __meta__ = {
 [node name="Ip" type="TextEdit" parent="EnterIp"]
 margin_right = 425.0
 margin_bottom = 66.0
-text = "127.0.0.1"
+text = "192.168.86.49"
 
 [node name="Start" type="HSplitContainer" parent="."]
 margin_left = 514.0
@@ -61,17 +61,17 @@ margin_bottom = 128.0
 text = "Names:"
 
 [node name="NameEdit" type="MarginContainer" parent="."]
-margin_left = 485.818
-margin_top = 114.59
-margin_right = 749.818
-margin_bottom = 208.59
+margin_left = 486.0
+margin_top = 115.0
+margin_right = 750.0
+margin_bottom = 152.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="TextEdit" type="TextEdit" parent="NameEdit"]
 margin_right = 264.0
-margin_bottom = 94.0
+margin_bottom = 37.0
 text = "enter_name"
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
@@ -142,8 +142,49 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="UnplacedPlanetSelect" type="ItemList" parent="."]
+margin_left = 788.0
+margin_top = 339.0
+margin_right = 1020.0
+margin_bottom = 596.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="password_enterer" type="MarginContainer" parent="."]
+margin_left = 486.0
+margin_top = 160.0
+margin_right = 749.0
+margin_bottom = 197.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextEdit" type="TextEdit" parent="password_enterer"]
+margin_right = 263.0
+margin_bottom = 37.0
+text = "enter_password"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Login" type="MarginContainer" parent="."]
+margin_left = 336.686
+margin_top = 144.63
+margin_right = 462.686
+margin_bottom = 217.63
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="LoginButton" type="Button" parent="Login"]
+margin_right = 126.0
+margin_bottom = 73.0
+text = "Login/CreateUser"
+
 [connection signal="pressed" from="Start/Button" to="." method="_on_Button_pressed"]
 [connection signal="pressed" from="MarginContainer/StartButton" to="." method="_on_StartButton_pressed"]
 [connection signal="pressed" from="Tutorial/TutorialButton" to="." method="_on_TutorialButton_pressed"]
 [connection signal="value_changed" from="AudioOnOf/Vcontain/VolumeSlider" to="." method="_on_VolumeSlider_value_changed"]
 [connection signal="item_selected" from="ShipSelect" to="." method="_on_ShipSelect_item_selected"]
+[connection signal="pressed" from="Login/LoginButton" to="." method="_on_LoginButton_pressed"]

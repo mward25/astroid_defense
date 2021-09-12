@@ -18,7 +18,6 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	if health <= 0:
-#		print("imDead")
 		emit_signal("imDead")
 		$AnimatedSprite.play("explode")
 		yield($AnimatedSprite, "animation_finished")
@@ -27,12 +26,8 @@ func _process(delta):
 
 func _on_CreepyPepper_body_entered(body):
 	emit_signal("imHit")
-#	print("imHit")
-#	print(body)
 	if destroyOnHit == true:
-#		print("meDead")
 		if "damage" in body:
-#			print("theres damage")
+			$HitDisplay.emitting = true
 			health -= body.damage
-#		print("imHit")
 

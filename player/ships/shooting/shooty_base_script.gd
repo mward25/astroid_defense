@@ -1,4 +1,4 @@
-extends RigidBody2D
+extends "res://player/player_base_script.gd"
 
 
 export (PackedScene) var bullet = preload("res://killy_things/bullets/generic_bullet.tscn")

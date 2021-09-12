@@ -13,11 +13,11 @@ var isDead = false
 
 var miniMapDisplay = {}
 
-var miniMapImages = {
-	UsefullConstantsAndEnums.PLANET:preload("res://my_assets/mini_map_tilemap/PlanetMiniMapIcon.tscn"),
-	UsefullConstantsAndEnums.SHIP:preload("res://my_assets/mini_map_tilemap/PlayerMiniMapIcon.tscn"),
-	UsefullConstantsAndEnums.MONSTER:preload("res://my_assets/mini_map_tilemap/MonsterMiniMapIcon.tscn"),
-}
+#var miniMapImages = {
+#	UsefullConstantsAndEnums.PLANET:preload("res://my_assets/mini_map_tilemap/PlanetMiniMapIcon.tscn"),
+#	UsefullConstantsAndEnums.SHIP:preload("res://my_assets/mini_map_tilemap/PlayerMiniMapIcon.tscn"),
+#	UsefullConstantsAndEnums.MONSTER:preload("res://my_assets/mini_map_tilemap/MonsterMiniMapIcon.tscn"),
+#}
 
 export var speed = 5
 export var rotation_dir = 0
@@ -66,37 +66,44 @@ func CapMouseOrDoFullscrean():
 		else:
 			OS.window_fullscreen = true
 
-func calculateMovement():
-	if Input.is_action_pressed("ui_up"):
-		# accelerate and make thrustor work
-		velocity.y -= speed
-		$ExaustFumes.gravity = exaustPower
-		
-		# if we are not dead make our flame atack do damage
-		if isDead == false:
-			$FlameAttack.collision_mask = 1
-			$FlameAttack.show()
-			$FlameParticles.emitting = true
-		else:
-			$FlameAttack.collision_layer = 0
-			$FlameAttack.collision_mask = 0
-			$FlameAttack.hide()
-			
-		# set isThrusting to true
-		isThrusting = true
+func activateThrust():
+	# accelerate and make thrustor work
+	velocity.y -= speed
+	$ExaustFumes.gravity = exaustPower
+	
+	# if we are not dead make our flame atack do damage
+	if isDead == false:
+		$FlameAttack.collision_mask = 1
+		$FlameAttack.show()
+		$FlameParticles.emitting = true
 	else:
-		# otherwise stop accelerating
-		velocity = Vector2()
-		$ExaustFumes.gravity = 0
+		$FlameAttack.collision_layer = 0
 		$FlameAttack.collision_mask = 0
 		$FlameAttack.hide()
-		$FlameParticles.emitting = false
-		isThrusting = false
+		
+	# set isThrusting to true
+	isThrusting = true
+
+func deactivateThrust():
+	velocity = Vector2()
+	$ExaustFumes.gravity = 0
+	$FlameAttack.collision_mask = 0
+	$FlameAttack.hide()
+	$FlameParticles.emitting = false
+	isThrusting = false
+
+func calculateMovement():
+	if Input.is_action_pressed("ui_up"):
+		activateThrust()
+	else:
+		# otherwise stop accelerating
+		deactivateThrust()
+
+
 
 func calculateRotation():
 	if Input.is_action_pressed("ui_right"):
 		rotation_dir += spin_thrust
-	
 	if Input.is_action_pressed("ui_left"):
 		rotation_dir -= spin_thrust
 
@@ -127,6 +134,12 @@ func doPlayerTasks():
 	calculateRotation()
 	CapMouseOrDoFullscrean()
 	changeZoom()
+	
+	setPlayerShortcutIfNotNull()
+
+func setPlayerShortcutIfNotNull():
+	if Shortcuts.playerShortcut == null:
+		Shortcuts.playerShortcut = self
 
 func doNonPlayerTasks():
 	calculateExhaustEmmissionRemote()
@@ -150,7 +163,7 @@ func rotateSelf():
 func _integrate_forces(state):
 	if isMyPlayer == true and overNet == true:
 		if $"/root/Network".playersInMyLocation.size() > 0:
-			print("players in my location: ",  $"/root/Network".playersInMyLocation)
+#			print("players in my location: ",  $"/root/Network".playersInMyLocation)
 			for p in $"/root/Network".playersInMyLocation:
 				doRemoteUpdates(p)
 	rotateSelf()
@@ -194,25 +207,22 @@ func _process(delta):
 	updateGravityVec()
 	
 	testForDead()
-	
-	
-#		hide()
-#		print("I died")
-	
-	
-	
-#	rpc_id(1, "set_pos_and_motion", globalPosition)
-	
-#	print($ExaustFumes.gravity_vec)
 
+func takeDamage(body):
+	health -= body.damage
+	print("took ", body.damage, " damage")
+	print("my health is now at ", health)
 
-func _on_player_body_entered(body):
+func iHitBody(body):
 	# if the body we hit can do damage do it unless it is $FlameAtack
 	if isDead == false:
 		if "damage" in body and body != $FlameAttack:
 			health -= body.damage
 			print("took ", body.damage, " damage")
 			print("my health is now at ", health)
+
+func _on_player_body_entered(body):
+	iHitBody(body)
 
 
 
