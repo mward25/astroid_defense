@@ -255,8 +255,10 @@ remote func saveHomestead(owner : String, levelName : String, homesteadSaveDict 
 	
 	if Network.isServer == true:
 		updateSaveDict(saveDict)
+		saveSaveDict()
 	else:
 		rpc_id(1, "updateSaveDict", saveDict)
+		rpc_id(1, "saveSaveDict")
 		print("warning, updating savedict on server from client, BAD_IDEA")
 
 

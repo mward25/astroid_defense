@@ -78,6 +78,7 @@ func save():
 	var saveNodes = get_tree().get_nodes_in_group("persist")
 	saveDataBaseDict["node"] = name
 	saveDataBaseDict["owner"] = $"/root/Network".myInfo.name
+	
 	for i in saveNodes:
 		saveDataBaseDict[i.name] = i.save()
 	
@@ -115,7 +116,8 @@ func loadSave():
 	
 	
 	for i in saveNodes:
-		i.loadSave(saveDict[i.name].duplicate(true))
+		if i.name in saveDict:
+			i.loadSave(saveDict[i.name].duplicate(true))
 
 
 
