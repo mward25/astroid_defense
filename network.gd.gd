@@ -222,7 +222,11 @@ func changeMyScene(pathToMyPlayer, sceneToChangeTo, positionToSpawn: Vector2 = V
 	var playerName = get_node(pathToMyPlayer).name
 	var player = get_node(pathToMyPlayer)
 	player.name = playerName
-	var SceneToChangeTo = load(sceneToChangeTo).instance()
+	var SceneToChangeTo = null
+	if sceneToChangeTo is String:
+		SceneToChangeTo = load(sceneToChangeTo).instance()
+	else:
+		SceneToChangeTo = sceneToChangeTo
 	
 	
 #	if it is not on the machine playing on destroy our player
@@ -278,7 +282,6 @@ func changeMyScene(pathToMyPlayer, sceneToChangeTo, positionToSpawn: Vector2 = V
 					
 					# add my player on the other players game
 					rpc_id(p, "add_my_player")
-
 
 remote func update_player_info(info):
 	print("player ", info, " is being updated")

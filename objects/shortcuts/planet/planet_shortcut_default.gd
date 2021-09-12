@@ -3,6 +3,9 @@ extends Area2D
 export (String) var levelOwner
 var type = UsefullConstantsAndEnums.PLANET
 var placed = false
+var thePlanetResource = "res://levels/home_steads/default.tscn"
+var levelName = ""
+
 var isReady = false
 var firstTime = true
 var fromServer : bool
@@ -26,7 +29,10 @@ func _process(delta):
 
 func _on_PlanetShortcutDefault_body_entered(body):
 	if "isMyPlayer" in body and body.isMyPlayer == true and isReady == true:
-		body.change_my_scene("res://levels/home_steads/default.tscn")
+		var ThePlanet = load(thePlanetResource).instance()
+		ThePlanet.levelOwner = levelOwner
+		ThePlanet.levelName = levelName
+		body.change_my_scene(ThePlanet)
 
 #func save():
 #	var saveDict = {

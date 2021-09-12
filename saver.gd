@@ -30,7 +30,8 @@ const PLANET_RESOURCE = "resource"
 const PLANET_IF_PLACED = "ifPlaced"
 const PLANET_POSITION_X = "posX"
 const PLANET_POSITION_Y = "posY"
-
+const PLANET_THE_PLANET_RESOURCE = "thePlanetResource"
+const PLANET_THE_PLANET_SAVE = "thePlanetSave"
 
 # Declare member variables here. Examples:
 # var a = 2
@@ -238,7 +239,7 @@ remote func addNewPlanetToUnplacedPlanetSelect():
 		if tmpUserPlanetDict[thePlanet]["placed"] == false:
 			MenuBringerUpper.menu.UnplacedPlanetSelectNodeShortcut.add_item(tmpUserPlanetDict[thePlanet]["name"])
 
-func generatePlanetDict(name : String, owner : String, resource : String):
+func generatePlanetDict(name : String, owner : String, resource : String, planetResource : String = "res://levels/home_steads/default.tscn"):
 	
 	var theResource = ""
 	if resource == "":
@@ -246,7 +247,18 @@ func generatePlanetDict(name : String, owner : String, resource : String):
 	else:
 		theResource = resource
 	
-	return {name=name, owner = owner, placed = false, resource = theResource, ifPlaced = {posX = null, posY = null}}
+	return {name=name, owner = owner, placed = false, resource = theResource, thePlanetResource = planetResource , ifPlaced = {posX = null, posY = null}, thePlanetSave = {}}
+
+remote func saveHomestead(owner : String, levelName : String, homesteadSaveDict : Dictionary):
+	
+	saveDict[SAV_SPACE_CENTOR][owner][levelName] = homesteadSaveDict
+	
+	if Network.isServer == true:
+		updateSaveDict(saveDict)
+	else:
+		rpc_id(1, "updateSaveDict", saveDict)
+		print("warning, updating savedict on server from client, BAD_IDEA")
+
 
 remote func saveSaveDict():
 	SaveFile.open(saveFile, File.WRITE_READ)

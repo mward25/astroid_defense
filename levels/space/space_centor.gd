@@ -21,6 +21,9 @@ func _ready():
 					ThePlanet.levelOwner = thePlanetShortcut[Saver.PLANET_OWNER]
 					ThePlanet.position.x = thePlanetShortcut[Saver.PLANET_IF_PLACED][Saver.PLANET_POSITION_X]
 					ThePlanet.position.y = thePlanetShortcut[Saver.PLANET_IF_PLACED][Saver.PLANET_POSITION_Y]
+					ThePlanet.levelName = thePlanetShortcut[Saver.PLANET_NAME]
+					
+					ThePlanet.thePlanetResource = thePlanetShortcut[Saver.PLANET_THE_PLANET_RESOURCE]
 					add_child(ThePlanet)
 #			if tmpSpaceCentorSaveDict[thePlanet][Saver.PLANET_PLACED] == false:
 #				MenuBringerUpper.menu.UnplacedPlanetSelect.add_item(tmpSpaceCentorSaveDict[thePlanet][Saver.PLANET_NAME])

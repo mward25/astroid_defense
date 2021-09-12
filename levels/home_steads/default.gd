@@ -10,6 +10,7 @@ signal activateLevel
 
 var saveFile = "user://savegame_default_homestead.save"
 
+
 onready var upperTileMapBounds = $TileMap.tile_set.get_tiles_ids().max()
 onready var lowerTileMapBounds = $TileMap.tile_set.get_tiles_ids().min()
 
@@ -20,7 +21,9 @@ signal playerEntered
 var playerEntered = false
 var playerMain
 
-var levelOwner = "host"
+var levelOwner = null
+var levelName = null
+
 var isLevelOwner = false
 var flipXBlock = false
 var flipYBlock = false
@@ -58,6 +61,7 @@ func _ready():
 		isLevelOwner = true
 	else:
 		isLevelOwner = false
+	
 #	isLevelOwner = $"/root/Network".myInfo.name == levelOwner
 	print("LevelOwner is ", levelOwner)
 	print("name is ", $"/root/Network".myInfo.name)
@@ -79,27 +83,31 @@ func save():
 	
 #	SaveDataBase.create_table(name, saveDataBaseDict)
 	
+	Saver.rpc_id(1, "saveHomestead", levelOwner, levelName, saveDataBaseDict)
 	
-	var save_game = File.new()
-	save_game.open(saveFile, File.WRITE)
-	
-	save_game.store_string(to_json(saveDataBaseDict))
-	
-	save_game.close()
+#	var save_game = File.new()
+#	save_game.open(saveFile, File.WRITE)
+#
+#	save_game.store_string(to_json(saveDataBaseDict))
+#
+#	save_game.close()
 
 func loadSave():
 	var saveNodes = get_tree().get_nodes_in_group("persist")
 	
 	
 	
-	var save_game = File.new()
-	if save_game.file_exists(saveFile):
-		save_game.open(saveFile, File.READ)
-	else:
-		save()
-		save_game.open(saveFile, File.READ)
+#	var save_game = File.new()
+#	if save_game.file_exists(saveFile):
+#		save_game.open(saveFile, File.READ)
+#	else:
+#		save()
+#		save_game.open(saveFile, File.READ)
+	Saver.updateMySaveDict()
+	yield(Saver, "updateMySaveDictFinished")
 	
-	var saveDict = parse_json(save_game.get_as_text())
+	var saveDict = Saver.saveDict[Saver.SAV_SPACE_CENTOR][levelOwner][levelName][Saver.PLANET_THE_PLANET_SAVE]
+	
 	
 	name = saveDict["node"]
 	levelOwner =  saveDict["owner"]
