@@ -5,7 +5,7 @@ var type = UsefullConstantsAndEnums.PLANET
 var placed = false
 var thePlanetResource = "res://levels/home_steads/default.tscn"
 
-var levelName = ""
+var levelName
 var levelOwner
 
 var isReady = false
