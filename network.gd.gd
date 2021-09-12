@@ -229,7 +229,7 @@ func changeMyScene(pathToMyPlayer, sceneToChangeTo, positionToSpawn: Vector2 = V
 		SceneToChangeTo = sceneToChangeTo
 	
 	
-#	if it is not on the machine playing on destroy our player
+#	if it is not on the machine we are playing on, destroy our player
 	if player.isMyPlayer == false:
 		player.queue_free()
 	else:

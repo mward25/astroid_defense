@@ -1,10 +1,12 @@
 extends Area2D
 
-export (String) var levelOwner
+
 var type = UsefullConstantsAndEnums.PLANET
 var placed = false
 var thePlanetResource = "res://levels/home_steads/default.tscn"
+
 var levelName = ""
+var levelOwner
 
 var isReady = false
 var firstTime = true

@@ -16,12 +16,13 @@ func _ready():
 			for thePlanet in Saver.saveDict[Saver.SAV_SPACE_CENTOR][theName]:
 					var thePlanetShortcut = tmpSpaceCentorSaveDict[thePlanet]
 					
-					var ThePlanet = load(thePlanetShortcut["resource"]).instance()
+					var ThePlanet = load(thePlanetShortcut[Saver.PLANET_RESOURCE]).instance()
 					ThePlanet.placed = true
 					ThePlanet.levelOwner = thePlanetShortcut[Saver.PLANET_OWNER]
+					ThePlanet.levelName = thePlanetShortcut[Saver.PLANET_NAME]
 					ThePlanet.position.x = thePlanetShortcut[Saver.PLANET_IF_PLACED][Saver.PLANET_POSITION_X]
 					ThePlanet.position.y = thePlanetShortcut[Saver.PLANET_IF_PLACED][Saver.PLANET_POSITION_Y]
-					ThePlanet.levelName = thePlanetShortcut[Saver.PLANET_NAME]
+					
 					
 					ThePlanet.thePlanetResource = thePlanetShortcut[Saver.PLANET_THE_PLANET_RESOURCE]
 					add_child(ThePlanet)

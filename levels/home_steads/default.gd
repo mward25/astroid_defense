@@ -109,8 +109,9 @@ func loadSave():
 	var saveDict = Saver.saveDict[Saver.SAV_SPACE_CENTOR][levelOwner][levelName][Saver.PLANET_THE_PLANET_SAVE]
 	
 	
-	name = saveDict["node"]
-	levelOwner =  saveDict["owner"]
+	name = levelName
+	# name = saveDict["node"]
+	# levelOwner =  saveDict["owner"]
 	
 	
 	for i in saveNodes:
