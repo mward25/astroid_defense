@@ -32,8 +32,10 @@ func _process(delta):
 func _on_PlanetShortcutDefault_body_entered(body):
 	if "isMyPlayer" in body and body.isMyPlayer == true and isReady == true:
 		var ThePlanet = load(thePlanetResource).instance()
+		
 		ThePlanet.levelOwner = levelOwner
 		ThePlanet.levelName = levelName
+		ThePlanet.name = levelName
 		body.change_my_scene(ThePlanet)
 
 #func save():

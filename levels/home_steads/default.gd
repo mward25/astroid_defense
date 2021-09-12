@@ -6,6 +6,7 @@ const GENERIC_TURRET = 2
 var currentBlock = 0
 export (Array) var targets = []
 
+signal loadSaveFinished
 signal activateLevel
 
 var saveFile = "user://savegame_default_homestead.save"
@@ -52,10 +53,12 @@ func addMyPlayer():
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	yield(self, "playerEntered")
+	name = levelName
 #	yield(get_node(playerMain), "draw")
 	targets.append(get_node(playerMain).get_path())
 	
 	loadSave()
+	yield(self, "loadSaveFinished")
 	
 	if levelOwner == $"/root/Network".myInfo.name:
 		isLevelOwner = true
@@ -118,6 +121,7 @@ func loadSave():
 	for i in saveNodes:
 		if i.name in saveDict:
 			i.loadSave(saveDict[i.name].duplicate(true))
+	emit_signal("loadSaveFinished")
 
 
 
@@ -183,6 +187,7 @@ func _process(delta):
 
 
 func _on_BaseCamp_activateLevel():
+	print("activating level")
 	genericTurrets = $TileMap.get_used_cells_by_id(GENERIC_TURRET)
 	for i in genericTurrets:
 		var GenericTurret = genericTurret.instance()
@@ -207,3 +212,7 @@ func _on_BaseCamp_activateLevel():
 func _on_BaseCamp_playerEntered(player):
 	playerEntered = true
 	playerMain = player.name
+
+# Intentionely left blank
+func _on_BaseCamp_loadSaveFinished():
+	pass # Replace with function body.
