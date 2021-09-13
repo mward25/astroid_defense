@@ -16,7 +16,7 @@ __meta__ = {
 [node name="Ip" type="TextEdit" parent="EnterIp"]
 margin_right = 425.0
 margin_bottom = 66.0
-text = "192.168.86.49"
+text = "192.168.10.137"
 
 [node name="Start" type="HSplitContainer" parent="."]
 margin_left = 514.0
