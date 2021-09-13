@@ -71,6 +71,8 @@ remote func register_player(info):
 
 func _player_disconnected(id):
 	playerInfo.erase(id)
+	if Network.isServer:
+		pass
 	rpc("updatePlayersInMyLocation")
 
 func _connected_ok():

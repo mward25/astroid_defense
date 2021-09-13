@@ -154,7 +154,8 @@ func doRemoteUpdates(p):
 	movePlayerRemote(p)
 
 func movePlayerRemote(p):
-	rpc_unreliable_id(p, "set_pos_and_motion", position, velocity, rotation_dir, isThrusting)
+	#rpc_unreliable_id(p, "set_pos_and_motion", position, velocity, rotation_dir, isThrusting)
+	rpc_id(p, "set_pos_and_motion", position, velocity, rotation_dir, isThrusting)
 
 func rotateSelf():
 	rotation = deg2rad(rotation_dir)
