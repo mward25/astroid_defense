@@ -109,6 +109,7 @@ func calculateRotation():
 
 func calculateExhaustEmmissionRemote():
 	if isThrusting == true:
+		velocity.y -= speed
 		$ExaustFumes.gravity = exaustPower
 		$FlameAttack.collision_mask = 1
 		$FlameAttack.show()
@@ -143,6 +144,9 @@ func setPlayerShortcutIfNotNull():
 
 func doNonPlayerTasks():
 	calculateExhaustEmmissionRemote()
+	
+func calculateMovementLocal():
+	position += velocity.rotated(rotation)
 
 func get_input():
 	if isMyPlayer == true:
@@ -172,6 +176,7 @@ func _integrate_forces(state):
 func movePlayerLocal():
 	if isMyPlayer == false:
 		position = posTmp
+		
 	applied_force = velocity.rotated(rotation)
 	applied_torque = rotation
 
