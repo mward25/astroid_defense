@@ -160,7 +160,7 @@ func doNonPlayerTasks():
 
 
 func calculateMovementLocal():
-	position += velocity.rotated(rotation)
+#	position += velocity.rotated(rotation)
 	if the_rotation_direction == TURN_TYPE.LEFT_TURN:
 		rotation += spin_thrust
 	elif the_rotation_direction == TURN_TYPE.RIGHT_TURN:
@@ -176,7 +176,8 @@ func doRemoteUpdates(p):
 	movePlayerRemote(p)
 
 func movePlayerRemote(p):
-	rpc_unreliable_id(p, "set_pos_and_motion", position, velocity, rotation_dir, isThrusting, the_rotation_direction)
+	rpc_unreliable_id(p, "set_pos_and_motion", position.round(), rotation_dir)
+	rpc_unreliable_id(p, "set_vel", velocity.round(), isThrusting, the_rotation_direction)
 #	rpc_id(p, "set_pos_and_motion", position, velocity, rotation_dir, isThrusting, the_rotation_direction)
 
 func rotateSelf():
@@ -195,7 +196,7 @@ func _integrate_forces(state):
 func movePlayerLocal():
 	if isMyPlayer == false:
 		position = posTmp
-		posTmp += (velocity.rotated(rotation))
+#		posTmp += (velocity.rotated(rotaation))
 		if the_rotation_direction == TURN_TYPE.LEFT_TURN:
 			rotation_dir += spin_thrust
 		elif the_rotation_direction == TURN_TYPE.RIGHT_TURN:
@@ -260,12 +261,16 @@ func _on_player_body_entered(body):
 # warning-ignore:unused_argument
 # warning-ignore:unused_argument
 
-puppet func set_pos_and_motion(pos : Vector2, vel : Vector2, rot_dir, isThrust : bool, turnDirect):
+puppet func set_pos_and_motion(pos : Vector2, rot_dir):
 #	myPos = pos
 	posTmp = pos
-	velocity = vel
 	rotation_dir = rot_dir
+
+
+puppet func set_vel( vel : Vector2, isThrust : bool, turnDirect):
+	velocity = vel
 	isThrusting = isThrust
+	the_rotation_direction = turnDirect
 
 func change_my_scene(sceneToChangeTo):
 	rpc("update_scene_location", sceneToChangeTo)
