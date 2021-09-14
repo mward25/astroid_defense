@@ -161,6 +161,7 @@ local_coords = false
 process_material = SubResource( 7 )
 
 [node name="UpdatePositionTimer" type="Timer" parent="."]
+process_mode = 0
 wait_time = 0.8
 autostart = true
 

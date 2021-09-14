@@ -112,6 +112,7 @@ func calculateMovement():
 func calculateRotation():
 #	print("calculatingRotation")
 	mode = RigidBody2D.MODE_CHARACTER
+	the_rotation_direction = TURN_TYPE.NO_TURN
 	if Input.is_action_pressed("ui_left"):
 #		print("rotating left")
 		rotation_dir -= spin_thrust
@@ -119,10 +120,10 @@ func calculateRotation():
 	if Input.is_action_pressed("ui_right"):
 #		print("rotating right")
 		rotation_dir += spin_thrust
-		the_rotation_direction = TURN_TYPE.LEFT_TURN
+		the_rotation_direction = TURN_TYPE.RIGHT_TURN
 	
-	if !(Input.is_action_pressed("ui_right") && Input.is_action_pressed("ui_left")):
-		the_rotation_direction = TURN_TYPE.NO_TURN
+#	if !(Input.is_action_pressed("ui_right") && Input.is_action_pressed("ui_left")):
+#		the_rotation_direction = TURN_TYPE.NO_TURN
 
 func calculateExhaustEmmissionRemote():
 	if isThrusting == true:
@@ -213,9 +214,9 @@ func movePlayerLocal():
 		#position = posTmp
 		#posTmp += (velocity.rotated(rotaation))
 		if the_rotation_direction == TURN_TYPE.LEFT_TURN:
-			rotation_dir += spin_thrust
-		elif the_rotation_direction == TURN_TYPE.RIGHT_TURN:
 			rotation_dir -= spin_thrust
+		elif the_rotation_direction == TURN_TYPE.RIGHT_TURN:
+			rotation_dir += spin_thrust
 #		else:
 #			pass
 	
