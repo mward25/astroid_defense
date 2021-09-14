@@ -5,11 +5,14 @@ var type = UsefullConstantsAndEnums.SHIP
 export var isMyPlayer = false
 var myPos = Vector2()
 
+enum TURN_TYPE {NO_TURN, LEFT_TURN, RIGHT_TURN}
 
 var velocity = Vector2()
 var posTmp = position
 var overNet = false
 var isDead = false
+
+var the_rotation_direction = TURN_TYPE.NO_TURN
 
 var miniMapDisplay = {}
 
@@ -102,10 +105,18 @@ func calculateMovement():
 
 
 func calculateRotation():
-	if Input.is_action_pressed("ui_right"):
-		rotation_dir += spin_thrust
+#	print("calculatingRotation")
 	if Input.is_action_pressed("ui_left"):
+#		print("rotating left")
 		rotation_dir -= spin_thrust
+		the_rotation_direction = TURN_TYPE.LEFT_TURN
+	if Input.is_action_pressed("ui_right"):
+#		print("rotating right")
+		rotation_dir += spin_thrust
+		the_rotation_direction = TURN_TYPE.LEFT_TURN
+	
+	if !(Input.is_action_pressed("ui_right") && Input.is_action_pressed("ui_left")):
+		the_rotation_direction = TURN_TYPE.NO_TURN
 
 func calculateExhaustEmmissionRemote():
 	if isThrusting == true:
@@ -145,8 +156,15 @@ func setPlayerShortcutIfNotNull():
 func doNonPlayerTasks():
 	calculateExhaustEmmissionRemote()
 	
+
+
+
 func calculateMovementLocal():
 	position += velocity.rotated(rotation)
+	if the_rotation_direction == TURN_TYPE.LEFT_TURN:
+		rotation += spin_thrust
+	elif the_rotation_direction == TURN_TYPE.RIGHT_TURN:
+		rotation -= spin_thrust
 
 func get_input():
 	if isMyPlayer == true:
@@ -158,8 +176,8 @@ func doRemoteUpdates(p):
 	movePlayerRemote(p)
 
 func movePlayerRemote(p):
-	#rpc_unreliable_id(p, "set_pos_and_motion", position, velocity, rotation_dir, isThrusting)
-	rpc_id(p, "set_pos_and_motion", position, velocity, rotation_dir, isThrusting)
+	rpc_unreliable_id(p, "set_pos_and_motion", position, velocity, rotation_dir, isThrusting, the_rotation_direction)
+#	rpc_id(p, "set_pos_and_motion", position, velocity, rotation_dir, isThrusting, the_rotation_direction)
 
 func rotateSelf():
 	rotation = deg2rad(rotation_dir)
@@ -171,12 +189,19 @@ func _integrate_forces(state):
 #			print("players in my location: ",  $"/root/Network".playersInMyLocation)
 			for p in $"/root/Network".playersInMyLocation:
 				doRemoteUpdates(p)
+	
 	rotateSelf()
 
 func movePlayerLocal():
 	if isMyPlayer == false:
 		position = posTmp
-		
+		posTmp += (velocity.rotated(rotation))
+		if the_rotation_direction == TURN_TYPE.LEFT_TURN:
+			rotation_dir += spin_thrust
+		elif the_rotation_direction == TURN_TYPE.RIGHT_TURN:
+			rotation_dir -= spin_thrust
+	
+	
 	applied_force = velocity.rotated(rotation)
 	applied_torque = rotation
 
@@ -235,7 +260,7 @@ func _on_player_body_entered(body):
 # warning-ignore:unused_argument
 # warning-ignore:unused_argument
 
-puppet func set_pos_and_motion(pos, vel, rot_dir, isThrust):
+puppet func set_pos_and_motion(pos : Vector2, vel : Vector2, rot_dir, isThrust : bool, turnDirect):
 #	myPos = pos
 	posTmp = pos
 	velocity = vel
