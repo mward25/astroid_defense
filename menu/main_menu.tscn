@@ -20,9 +20,9 @@ margin_bottom = 66.0
 text = "192.168.10.137"
 
 [node name="Start" type="HSplitContainer" parent="."]
-margin_left = 514.0
+margin_left = 533.027
 margin_top = 12.0
-margin_right = 711.0
+margin_right = 730.027
 margin_bottom = 67.0
 __meta__ = {
 "_edit_use_anchors_": false
@@ -225,11 +225,11 @@ text = "this is a test"
 script = ExtResource( 3 )
 
 [node name="SaveIP" type="CheckBox" parent="."]
-margin_left = 429.956
-margin_top = 1.97228
-margin_right = 453.956
-margin_bottom = 25.9723
-text = "save IP"
+margin_left = 419.676
+margin_top = -0.378418
+margin_right = 531.676
+margin_bottom = 29.6216
+text = "save settings"
 __meta__ = {
 "_edit_use_anchors_": false
 }

@@ -8,6 +8,8 @@ const AUDIO_OFF_ON_ART ="      /\n    / )))\n---|  )))))\n--- \\ )))\n     \\ \n
 
 const MENU_IP = "ip"
 const MENU_PORT = "port"
+const MENU_VOLUME = "volume"
+const MENU_NAME = "name"
 var menuSaveDefaultFile = "user://menu_save.sav"
 
 # Declare member variables here. Examples:
@@ -16,7 +18,7 @@ var menuSaveDefaultFile = "user://menu_save.sav"
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	$AudioOnOf/Vcontain/VolumeSlider.value = 50
+#	$AudioOnOf/Vcontain/VolumeSlider.value = 50
 	$"/root/GlobalAudioPlayer"._play_menu_menu_music()
 	
 	var MenuSaveDefaultFile = File.new()
@@ -30,7 +32,12 @@ func _ready():
 		$EnterIp/Ip.text = menuJson[MENU_IP]
 	if MENU_PORT in menuJson:
 		$EnterServerPort/Port.text = menuJson[MENU_PORT]
-	
+	if MENU_VOLUME in menuJson:
+		$AudioOnOf/Vcontain/VolumeSlider.value = menuJson[MENU_VOLUME]
+	else:
+		$AudioOnOf/Vcontain/VolumeSlider.value = 50
+	if MENU_NAME in menuJson:
+		$NameEdit/TextEdit.text = menuJson[MENU_NAME]
 	
 	emit_signal("finishedOnReadySignal")
 	finishedOnReady = true
@@ -71,6 +78,8 @@ func _on_Button_pressed():
 					menuSaveDict = {}
 				menuSaveDict[MENU_IP] = $EnterIp/Ip.text
 				menuSaveDict[MENU_PORT] = $EnterServerPort/Port.text
+				menuSaveDict[MENU_VOLUME] = $AudioOnOf/Vcontain/VolumeSlider.value
+				menuSaveDict[MENU_NAME] = $NameEdit/TextEdit.text
 				print("menu stores this info:")
 				print(menuSaveDict)
 				MenuSaveDefaultFile.store_string(to_json(menuSaveDict))
