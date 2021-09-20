@@ -32,10 +32,16 @@ var playersInMyLocation = {}
 var myInfo = {}
 
 remotesync func updatePlayersInMyLocation():
+	print("checking for players that are in player info")
 	for p in $"/root/Network".playerInfo:
 		if "location" in playerInfo[p] && ($"/root/Network".playerInfo[p])["location"] == $"/root/Network".myInfo.location:
 			playersInMyLocation[p] = playerInfo[p].duplicate(true)
 		elif playersInMyLocation.has(p):
+			playersInMyLocation.erase(p)
+	
+	print("checking if players need to be delted from playersInMyLocation")
+	for p in Network.playersInMyLocation:
+		if !(p in playerInfo):
 			playersInMyLocation.erase(p)
 
 
@@ -71,6 +77,8 @@ remote func register_player(info):
 
 func _player_disconnected(id):
 	playerInfo.erase(id)
+	if Network.isServer:
+		pass
 	rpc("updatePlayersInMyLocation")
 
 func _connected_ok():

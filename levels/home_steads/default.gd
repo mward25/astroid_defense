@@ -32,6 +32,8 @@ var flipYBlock = false
 # var a = 2
 # var b = "text"
 
+
+
 func addMyPlayer():
 	var player = load($"/root/CurrentShip".currentShip).instance()
 #	syncronise vairiables from player instansed to the scene through editor
@@ -52,6 +54,7 @@ func addMyPlayer():
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	GlobalAudioPlayer._play_default_homestead_music()
 	yield(self, "playerEntered")
 	name = levelName
 #	yield(get_node(playerMain), "draw")

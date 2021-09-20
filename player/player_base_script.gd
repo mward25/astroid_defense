@@ -5,11 +5,17 @@ var type = UsefullConstantsAndEnums.SHIP
 export var isMyPlayer = false
 var myPos = Vector2()
 
+enum TURN_TYPE {NO_TURN, LEFT_TURN, RIGHT_TURN}
 
 var velocity = Vector2()
 var posTmp = position
 var overNet = false
 var isDead = false
+
+var updatePosition = false
+signal finishedUpdatingPosition
+
+var the_rotation_direction = TURN_TYPE.NO_TURN
 
 var miniMapDisplay = {}
 
@@ -41,12 +47,14 @@ var exaustPower = -120
 
 
 func setupScene():
+	get_node("UpdatePositionTimer").connect("timeout", self, "_on_UpdatePositionTimer_timeout")
 	if isMyPlayer == true:
 		$Camera2D.current = true
 		$ActualMessagingSystem/HealthBar.min_value = 0
 		$ActualMessagingSystem/HealthBar.max_value = health
 	else:
-		mode = RigidBody2D.MODE_KINEMATIC
+#		mode = RigidBody2D.MODE_KINEMATIC
+#		mode = RigidBody2D.MODE_CHARACTER
 		$ActualMessagingSystem/BigMessagingSystem.hide()
 		$ActualMessagingSystem/HealthBar.hide()
 
@@ -102,13 +110,24 @@ func calculateMovement():
 
 
 func calculateRotation():
-	if Input.is_action_pressed("ui_right"):
-		rotation_dir += spin_thrust
+#	print("calculatingRotation")
+	mode = RigidBody2D.MODE_CHARACTER
+	the_rotation_direction = TURN_TYPE.NO_TURN
 	if Input.is_action_pressed("ui_left"):
+#		print("rotating left")
 		rotation_dir -= spin_thrust
+		the_rotation_direction = TURN_TYPE.LEFT_TURN
+	if Input.is_action_pressed("ui_right"):
+#		print("rotating right")
+		rotation_dir += spin_thrust
+		the_rotation_direction = TURN_TYPE.RIGHT_TURN
+	
+#	if !(Input.is_action_pressed("ui_right") && Input.is_action_pressed("ui_left")):
+#		the_rotation_direction = TURN_TYPE.NO_TURN
 
 func calculateExhaustEmmissionRemote():
 	if isThrusting == true:
+		velocity.y -= speed
 		$ExaustFumes.gravity = exaustPower
 		$FlameAttack.collision_mask = 1
 		$FlameAttack.show()
@@ -143,6 +162,16 @@ func setPlayerShortcutIfNotNull():
 
 func doNonPlayerTasks():
 	calculateExhaustEmmissionRemote()
+	
+
+
+
+func calculateMovementLocal():
+#	position += velocity.rotated(rotation)
+	if the_rotation_direction == TURN_TYPE.LEFT_TURN:
+		rotation += spin_thrust
+	elif the_rotation_direction == TURN_TYPE.RIGHT_TURN:
+		rotation -= spin_thrust
 
 func get_input():
 	if isMyPlayer == true:
@@ -154,7 +183,14 @@ func doRemoteUpdates(p):
 	movePlayerRemote(p)
 
 func movePlayerRemote(p):
-	rpc_unreliable_id(p, "set_pos_and_motion", position, velocity, rotation_dir, isThrusting)
+	rpc_unreliable_id(p, "set_physics", linear_velocity, angular_velocity, isThrusting)
+	rpc_unreliable_id(p, "set_rot", rotation_dir, the_rotation_direction)
+	
+	if updatePosition:
+		rpc_unreliable_id(p, "set_pos_and_motion", position.round(), rotation_dir)
+		emit_signal("finishedUpdatingPosition")
+#	rpc_unreliable_id(p, "set_vel", velocity.round(), isThrusting, the_rotation_direction)
+#	rpc_id(p, "set_pos_and_motion", position, velocity, rotation_dir, isThrusting, the_rotation_direction)
 
 func rotateSelf():
 	rotation = deg2rad(rotation_dir)
@@ -166,11 +202,25 @@ func _integrate_forces(state):
 #			print("players in my location: ",  $"/root/Network".playersInMyLocation)
 			for p in $"/root/Network".playersInMyLocation:
 				doRemoteUpdates(p)
-	rotateSelf()
+	
+	
 
 func movePlayerLocal():
 	if isMyPlayer == false:
-		position = posTmp
+#		if velocity.y != 0:
+#			position = position.move_toward(posTmp, position.distance_to(posTmp)/(abs(velocity.y)/10.0 ))
+#		else:
+#			position = (position.move_toward(posTmp, position.distance_to(posTmp)/(1.0)))
+		#position = posTmp
+		#posTmp += (velocity.rotated(rotaation))
+		if the_rotation_direction == TURN_TYPE.LEFT_TURN:
+			rotation_dir -= spin_thrust
+		elif the_rotation_direction == TURN_TYPE.RIGHT_TURN:
+			rotation_dir += spin_thrust
+#		else:
+#			pass
+	
+	
 	applied_force = velocity.rotated(rotation)
 	applied_torque = rotation
 
@@ -178,6 +228,7 @@ func movePlayerLocal():
 func _physics_process(delta):
 	get_input()
 	movePlayerLocal()
+	rotateSelf()
 
 
 
@@ -229,12 +280,29 @@ func _on_player_body_entered(body):
 # warning-ignore:unused_argument
 # warning-ignore:unused_argument
 
-puppet func set_pos_and_motion(pos, vel, rot_dir, isThrust):
+puppet func set_pos_and_motion(pos : Vector2, rot_dir):
 #	myPos = pos
-	posTmp = pos
-	velocity = vel
+#	posTmp = pos
+	position = pos
 	rotation_dir = rot_dir
+
+
+
+puppet func set_physics(_linear_velocity, _angular_velocity, _isThrusting):
+	linear_velocity = _linear_velocity
+	angular_velocity = _angular_velocity
+	isThrusting = _isThrusting
+
+
+
+puppet func set_rot(_rotation_dir, _the_rotation_direction):
+	rotation_dir = _rotation_dir
+	the_rotation_direction = _the_rotation_direction
+
+puppet func set_vel( vel : Vector2, isThrust : bool, turnDirect):
+	velocity = vel
 	isThrusting = isThrust
+	the_rotation_direction = turnDirect
 
 func change_my_scene(sceneToChangeTo):
 	rpc("update_scene_location", sceneToChangeTo)
@@ -243,7 +311,10 @@ func change_my_scene(sceneToChangeTo):
 puppetsync func update_scene_location(sceneToChangeTo):
 	$"/root/Network".changeMyScene(get_path(), sceneToChangeTo)
 
-
+func _on_UpdatePositionTimer_timeout():
+	updatePosition = true
+	yield(self, "finishedUpdatingPosition")
+	updatePosition = false
 
 func _exit_tree():
 	pass
