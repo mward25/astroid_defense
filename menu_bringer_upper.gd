@@ -24,3 +24,13 @@ func _process(delta):
 				add_child(menu)
 			menu.get_parent().remove_child(menu)
 			isInView = false
+
+remote func printIngameConsole(theThing):
+	if theThing is String:
+		menu.get_node("Display/Display").text += theThing
+	else:
+		menu.get_node("Display/Display").text += String(theThing)
+
+remote func printInGameConsoleLn(theThing):
+	printIngameConsole(theThing)
+	printIngameConsole("\n")
