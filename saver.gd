@@ -40,6 +40,7 @@ const PLANET_THE_PLANET_SAVE = "thePlanetSave"
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	# wait for correct settings to be determined
 	yield(Network, "isServerDetermined")
 	print("isServer has been determined")
 	if Network.isServer:
@@ -250,9 +251,10 @@ func generatePlanetDict(name : String, owner : String, resource : String, planet
 	return {name=name, owner = owner, placed = false, resource = theResource, thePlanetResource = planetResource , ifPlaced = {posX = null, posY = null}, thePlanetSave = {}}
 
 remote func saveHomestead(owner : String, levelName : String, homesteadSaveDict : Dictionary):
-	
+	# save the homestead
 	saveDict[SAV_SPACE_CENTOR][owner][levelName][PLANET_THE_PLANET_SAVE] = homesteadSaveDict
 	
+	# if we are the server update everybody elses version of our homestead
 	if Network.isServer == true:
 		updateSaveDict(saveDict)
 		saveSaveDict()
@@ -261,7 +263,7 @@ remote func saveHomestead(owner : String, levelName : String, homesteadSaveDict 
 		rpc_id(1, "saveSaveDict")
 		print("warning, updating savedict on server from client, BAD_IDEA")
 
-
+# saves the saveDict to a files
 remote func saveSaveDict():
 	SaveFile.open(saveFile, File.WRITE_READ)
 	SaveFile.store_string(to_json(saveDict))
