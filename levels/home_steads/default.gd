@@ -3,6 +3,7 @@ extends Node2D
 
 var saveDataBaseDict : Dictionary
 const GENERIC_TURRET = 2
+const GENERIC_SHIELD_GENERATOR = 3
 var currentBlock = 0
 export (Array) var targets = []
 
