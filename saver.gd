@@ -35,17 +35,15 @@ const PLANET_THE_PLANET_SAVE = "thePlanetSave"
 
 const JSON_BEAUTIFIER_PATH = "res://addons/json_beautifier/json_beautifier.gd"
 
-onready var JsonBeautifier = Script.new()
+const JsonBeautifier = preload(JSON_BEAUTIFIER_PATH)
 
 
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
 
-func _init():
-	var JsonSourceCode = File.new()
-	JsonSourceCode.open(JSON_BEAUTIFIER_PATH, File.READ)
-	JsonBeautifier.source_code = JsonSourceCode.get_as_text()
+
+
 
 
 # Called when the node enters the scene tree for the first time.
