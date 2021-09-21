@@ -33,9 +33,19 @@ const PLANET_POSITION_Y = "posY"
 const PLANET_THE_PLANET_RESOURCE = "thePlanetResource"
 const PLANET_THE_PLANET_SAVE = "thePlanetSave"
 
+const JSON_BEAUTIFIER_PATH = "res://addons/json_beautifier/json_beautifier.gd"
+
+onready var JsonBeautifier = Script.new()
+
+
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
+
+func _init():
+	var JsonSourceCode = File.new()
+	JsonSourceCode.open(JSON_BEAUTIFIER_PATH, File.READ)
+	JsonBeautifier.source_code = JsonSourceCode.get_as_text()
 
 
 # Called when the node enters the scene tree for the first time.
@@ -266,7 +276,8 @@ remote func saveHomestead(owner : String, levelName : String, homesteadSaveDict 
 # saves the saveDict to a files
 remote func saveSaveDict():
 	SaveFile.open(saveFile, File.WRITE_READ)
-	SaveFile.store_string(to_json(saveDict))
+	
+	SaveFile.store_string(JSONBeautifier.beautify_json(to_json(saveDict)))
 	SaveFile.close()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
