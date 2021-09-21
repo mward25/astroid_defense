@@ -193,25 +193,32 @@ func _process(delta):
 func _on_BaseCamp_activateLevel():
 	print("activating level")
 	genericTurrets = $TileMap.get_used_cells_by_id(GENERIC_TURRET)
+	var genericShieldGenerator = $TileMap.get_used_cells_by_id(GENERIC_SHIELD_GENERATOR)
+	
 	for i in genericTurrets:
-		var GenericTurret = genericTurret.instance()
-		GenericTurret.position = Vector2(i.x*64.0, i.y*64)
-		if $TileMap.is_cell_x_flipped(i.x, i.y) == true:
-			GenericTurret.scale.x = -GenericTurret.scale.x
-			GenericTurret.position.x += 32
-		else:
-			GenericTurret.position.x += 32
-		if $TileMap.is_cell_y_flipped(i.x, i.y) == true:
-			GenericTurret.scale.y = -GenericTurret.scale.y
-			GenericTurret.position.y += 48
-		else:
-			GenericTurret.position.y += 13
-		
-		GenericTurret.target = NodePath(targets[rand_range(0, targets.size())])
-		print("turrets target is: ", GenericTurret.target)
-#		GenericTurret.position = Vector2(i.x*64.0+32, i.y*64+13)
-		add_child(GenericTurret)
+		setupGenericTurret(i)
+	
 
+
+
+func setupGenericTurret(theTurret):
+	var GenericTurret = genericTurret.instance()
+	GenericTurret.position = Vector2(theTurret.x*64.0, theTurret.y*64)
+	if $TileMap.is_cell_x_flipped(theTurret.x, theTurret.y) == true:
+		GenericTurret.scale.x = -GenericTurret.scale.x
+		GenericTurret.position.x += 32
+	else:
+		GenericTurret.position.x += 32
+	if $TileMap.is_cell_y_flipped(theTurret.x, theTurret.y) == true:
+		GenericTurret.scale.y = -GenericTurret.scale.y
+		GenericTurret.position.y += 48
+	else:
+		GenericTurret.position.y += 13
+	
+	GenericTurret.target = NodePath(targets[rand_range(0, targets.size())])
+	print("turrets target is: ", GenericTurret.target)
+#		GenericTurret.position = Vector2(i.x*64.0+32, i.y*64+13)
+	add_child(GenericTurret)
 
 func _on_BaseCamp_playerEntered(player):
 	playerEntered = true
