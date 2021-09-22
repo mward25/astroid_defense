@@ -208,6 +208,7 @@ func _process(delta):
 			if allgenericBaseCampBaseAreDead:
 				Saver.rpc_id(1, "giveUserMoney", Network.myInfo[Network.INFO_NAME], rewardMoney)
 				Shortcuts.playerShortcut.change_my_scene("res://levels/space/space_centor.tscn")
+				yield(self, "tree_exited")
 
 
 

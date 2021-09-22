@@ -102,6 +102,7 @@ scale = Vector2( 0.946278, -0.0767348 )
 shape = SubResource( 4 )
 
 [node name="AnnotativeRect" type="ColorRect" parent="FlameAttack"]
+visible = false
 margin_left = -26.0
 margin_top = 19.0
 margin_right = 23.0
