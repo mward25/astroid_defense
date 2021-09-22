@@ -11,13 +11,18 @@ animations = [ {
 "speed": 5.0
 } ]
 
-[node name="ShieldGenerator" type="Area2D"]
+[node name="ShieldGenerator" type="RigidBody2D"]
+mode = 3
+custom_integrator = true
+contacts_reported = 20
+contact_monitor = true
 script = ExtResource( 2 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 frames = SubResource( 1 )
 
 [node name="Collision" type="CollisionPolygon2D" parent="."]
+scale = Vector2( 1.12994, 1.12994 )
 polygon = PoolVector2Array( -5.37013, -13.2371, -20.2352, 1.33066, -22.9109, 10.8443, -22.9109, 17.8309, -20.0419, 23.4825, -11.212, 19.3156, 10.5355, 19.1688, 18.7113, 14.7092, 22.7249, 10.2497, 23.1708, 1.47931, 15.7383, -11.8993, 13.0626, -13.9804 )
 
 [connection signal="body_entered" from="." to="." method="_on_ShieldGenerator_body_entered"]

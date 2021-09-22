@@ -1,4 +1,4 @@
-extends Area2D
+extends RigidBody2D
 
 var health := 20
 
@@ -18,6 +18,13 @@ func _ready():
 
 
 func _on_ShieldGenerator_body_entered(body):
+	doDamageStuff(body)
+
+#func _on_ShieldGenerator_area_entered(area):
+#	doDamageStuff(area)
+
+func doDamageStuff(body):
+	print("I, shield generator hit, ", body.name)
 	if "damage" in body:
 		health -= body.damage
 		if health <= 0:

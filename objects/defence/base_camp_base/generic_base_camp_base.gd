@@ -1,4 +1,4 @@
-extends Area2D
+extends RigidBody2D
 var takingDamage := false
 var health := 100
 var isDead := false

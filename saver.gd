@@ -281,6 +281,8 @@ remote func saveSaveDict():
 	SaveFile.close()
 
 remote func giveUserMoney(theUser : String, theMoney : int):
+	if saveDict[SAV_USERS][theUser][SAV_USER_MONEY] == null:
+		saveDict[SAV_USERS][theUser][SAV_USER_MONEY] = theMoney
 	saveDict[SAV_USERS][theUser][SAV_USER_MONEY] += theMoney
 	print(theUser, "'s money is now ", saveDict[SAV_USERS][theUser][SAV_USER_MONEY])
 

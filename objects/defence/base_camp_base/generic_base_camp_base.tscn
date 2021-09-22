@@ -12,13 +12,17 @@ animations = [ {
 "speed": 5.0
 } ]
 
-[node name="BaseCampBase" type="Area2D"]
+[node name="BaseCampBase" type="RigidBody2D"]
+mode = 3
+contacts_reported = 20
+contact_monitor = true
 script = ExtResource( 2 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 frames = SubResource( 1 )
 
 [node name="Collision" type="CollisionPolygon2D" parent="."]
+scale = Vector2( 1.16773, 1.16773 )
 polygon = PoolVector2Array( 15.2704, -10.7091, 17.6192, -7.50521, 27.5203, -1.24329, 32.6429, 7.10888, 31.9381, 31.7392, -31.8783, 32.0928, -32.4086, 17.2435, -25.8679, 2.04073, -21.5479, -0.265165, -12.0342, -10.0761, -5.18503, -20.5867, -12.0793, -29.4255, -10.6651, -31.5469, 10.5481, -30.4862, 11.6088, -28.7184, 1.88604, -28.1881, 1.00216, -21.117, 7.36369, -17.1681, 11.0784, -17.7583, 12.4926, -16.6976, 11.6088, -13.5156 )
 
 [node name="Particles" type="Particles2D" parent="."]

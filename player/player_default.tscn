@@ -24,7 +24,7 @@ height = 159.106
 font_data = ExtResource( 4 )
 
 [sub_resource type="RectangleShape2D" id=4]
-extents = Vector2( 14.7468, 13.1241 )
+extents = Vector2( 25.4161, 228.859 )
 
 [sub_resource type="Gradient" id=5]
 offsets = PoolRealArray( 0, 0.356589, 0.627907, 1 )
@@ -94,19 +94,18 @@ polygon = PoolVector2Array( -1.20957, -5.69412, -0.70957, -16.4441, -1.45957, -2
 
 [node name="FlameAttack" type="StaticBody2D" parent="."]
 position = Vector2( -1.18921, 1.18921 )
-collision_layer = 0
 script = ExtResource( 5 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="FlameAttack"]
-position = Vector2( -2.37024, 32.5062 )
+position = Vector2( -1.54422, 36.4563 )
+scale = Vector2( 0.946278, -0.0767348 )
 shape = SubResource( 4 )
 
 [node name="AnnotativeRect" type="ColorRect" parent="FlameAttack"]
-visible = false
-margin_left = -17.0
-margin_top = 20.0
-margin_right = 13.0
-margin_bottom = 45.0
+margin_left = -26.0
+margin_top = 19.0
+margin_right = 23.0
+margin_bottom = 54.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
