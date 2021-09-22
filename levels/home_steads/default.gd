@@ -4,11 +4,16 @@ extends Node2D
 var saveDataBaseDict : Dictionary
 const GENERIC_TURRET = 2
 const GENERIC_SHIELD_GENERATOR = 3
+const GENERIC_BASECAMP_BASE = 4
 var currentBlock = 0
+var rewardMoney = 20
 export (Array) var targets = []
+
+
 
 signal loadSaveFinished
 signal activateLevel
+signal shieldDisabled
 
 var saveFile = "user://savegame_default_homestead.save"
 
@@ -18,6 +23,12 @@ onready var lowerTileMapBounds = $TileMap.tile_set.get_tiles_ids().min()
 
 onready var genericTurrets = $TileMap.get_used_cells_by_id(2)
 var genericTurret = preload("res://objects/defence/turrets/generic_turret.tscn")
+var genericShieldGenerator = preload("res://objects/defence/shield_generator/generic_shield_generator.tscn")
+var genericBaseCampBase = preload("res://objects/defence/base_camp_base/generic_base_camp_base.tscn")
+
+var genericBaseCampBaseArray := []
+var shieldGeneratorsActive := 0
+
 
 signal playerEntered
 var playerEntered = false
@@ -187,17 +198,31 @@ func _process(delta):
 				flipYBlock = true
 			elif flipYBlock == true:
 				flipYBlock = false
+		
+		if genericBaseCampBaseArray != []:
+			var allgenericBaseCampBaseAreDead = true
+			for i in genericBaseCampBaseArray:
+				if i != null && "isDead" in i && !i.isDead:
+					allgenericBaseCampBaseAreDead = false
+			
+			if allgenericBaseCampBaseAreDead:
+				Saver.rpc_id(1, "giveUserMoney", Network.myInfo[Network.INFO_NAME], rewardMoney)
+				Shortcuts.playerShortcut.change_my_scene("res://levels/space/space_centor.tscn")
 
 
 
 func _on_BaseCamp_activateLevel():
 	print("activating level")
 	genericTurrets = $TileMap.get_used_cells_by_id(GENERIC_TURRET)
-	var genericShieldGenerator = $TileMap.get_used_cells_by_id(GENERIC_SHIELD_GENERATOR)
-	
+	var genericShieldGenerators = $TileMap.get_used_cells_by_id(GENERIC_SHIELD_GENERATOR)
+	var genericBaseCampBases = $TileMap.get_used_cells_by_id(GENERIC_BASECAMP_BASE)
 	for i in genericTurrets:
 		setupGenericTurret(i)
-	
+	for i in genericShieldGenerators:
+		setupGenericShieldGenerater(i)
+		shieldGeneratorsActive += 1
+	for i in genericBaseCampBases:
+		setupGenericBaseCampBase(i)
 
 
 
@@ -220,6 +245,42 @@ func setupGenericTurret(theTurret):
 #		GenericTurret.position = Vector2(i.x*64.0+32, i.y*64+13)
 	add_child(GenericTurret)
 
+func setupGenericBaseCampBase(theBaseCampBase):
+	var BaseCampBase = genericBaseCampBase.instance()
+	BaseCampBase.position = Vector2(theBaseCampBase.x*64.0, theBaseCampBase.y*64)
+	if $TileMap.is_cell_x_flipped(theBaseCampBase.x, theBaseCampBase.y) == true:
+		BaseCampBase.scale.x = -BaseCampBase.scale.x
+		BaseCampBase.position.x += 32
+	else:
+		BaseCampBase.position.x += 32
+	if $TileMap.is_cell_y_flipped(theBaseCampBase.x, theBaseCampBase.y) == true:
+		BaseCampBase.scale.y = -BaseCampBase.scale.y
+		BaseCampBase.position.y += 958
+	else:
+		BaseCampBase.position.y += 31
+	
+#		BaseCampBase.position = Vector2(i.x*64.0+32, i.y*64+13)
+	genericBaseCampBaseArray.append(BaseCampBase)
+	add_child(BaseCampBase)
+
+func setupGenericShieldGenerater(theShieldGenerator):
+	var BaseCampBase = genericBaseCampBase.instance()
+	var ShieldGenerator = genericShieldGenerator.instance()
+	ShieldGenerator.position = Vector2(theShieldGenerator.x*64.0, theShieldGenerator.y*64)
+	if $TileMap.is_cell_x_flipped(theShieldGenerator.x, theShieldGenerator.y) == true:
+		ShieldGenerator.scale.x = -ShieldGenerator.scale.x
+		ShieldGenerator.position.x += 32
+	else:
+		ShieldGenerator.position.x += 32
+	if $TileMap.is_cell_y_flipped(theShieldGenerator.x, theShieldGenerator.y) == true:
+		ShieldGenerator.scale.y = -ShieldGenerator.scale.y
+		ShieldGenerator.position.y += 35
+	else:
+		ShieldGenerator.position.y += 31
+	
+#		ShieldGenerator.position = Vector2(i.x*64.0+32, i.y*64+13)
+	add_child(ShieldGenerator)
+
 func _on_BaseCamp_playerEntered(player):
 	playerEntered = true
 	playerMain = player.name
@@ -227,3 +288,13 @@ func _on_BaseCamp_playerEntered(player):
 # Intentionely left blank
 func _on_BaseCamp_loadSaveFinished():
 	pass # Replace with function body.
+
+
+func _on_BaseCamp_shieldDisabled():
+	shieldGeneratorsActive -= 1
+	if shieldGeneratorsActive == 0:
+		for i in genericBaseCampBaseArray:
+			if "takingDamage" in i:
+				i.takingDamage = true
+			else:
+				printerr("taking damage is not in this baseCampBase")

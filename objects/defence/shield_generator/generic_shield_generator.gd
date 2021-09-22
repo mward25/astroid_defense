@@ -1,7 +1,6 @@
 extends Area2D
-var takingDamage := false
-var health := 100
-var isDead := false
+
+var health := 20
 
 # Declare member variables here. Examples:
 # var a = 2
@@ -18,12 +17,9 @@ func _ready():
 #	pass
 
 
-
-
-
-func _on_BaseCampBase_body_entered(body):
-	if takingDamage && !isDead && "damage" in body:
+func _on_ShieldGenerator_body_entered(body):
+	if "damage" in body:
 		health -= body.damage
-		$Particles.emitting = true
 		if health <= 0:
-			isDead = true
+			get_parent().emit_signal("shieldDisabled")
+			queue_free()

@@ -18,6 +18,7 @@ var incorectPassword = IncorectPasswdStatus.BEING_DETERMINED
 signal loginStatusUpdated
 
 const SAV_USERS = "users"
+const SAV_USER_MONEY = "money"
 const SAV_SPACE_CENTOR = "space_centor"
 
 
@@ -118,6 +119,7 @@ remote func createUser(username: String, passwd):
 	if !saveDict.has(SAV_USERS):
 		saveDict[SAV_USERS] = {}
 	saveDict[SAV_USERS][username] = {}
+	saveDict[SAV_USERS][username][SAV_USER_MONEY] = 50
 	saveDict[SAV_SPACE_CENTOR][username] = {}
 	
 	
@@ -277,6 +279,13 @@ remote func saveSaveDict():
 	
 	SaveFile.store_string(JSONBeautifier.beautify_json(to_json(saveDict)))
 	SaveFile.close()
+
+remote func giveUserMoney(theUser : String, theMoney : int):
+	saveDict[SAV_USERS][theUser][SAV_USER_MONEY] += theMoney
+	print(theUser, "'s money is now ", saveDict[SAV_USERS][theUser][SAV_USER_MONEY])
+
+remote func takeUserMoney(theUser: String, theMoney : int):
+	saveDict[SAV_USERS][theUser][SAV_USER_MONEY] -= theMoney
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):

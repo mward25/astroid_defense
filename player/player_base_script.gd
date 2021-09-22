@@ -81,6 +81,7 @@ func activateThrust():
 	
 	# if we are not dead make our flame atack do damage
 	if isDead == false:
+		$FlameAttack.collision_layer = 1
 		$FlameAttack.collision_mask = 1
 		$FlameAttack.show()
 		$FlameParticles.emitting = true
