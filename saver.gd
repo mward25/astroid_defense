@@ -73,13 +73,13 @@ func _ready():
 			print("making git repo for saveDict")
 			if true:
 				var theOutput = []
-				var exit_code = OS.execute("bash", ["cd " + OS.get_user_data_dir() + "; git init"], true, theOutput)
+				var exit_code = OS.execute(".", ["cd " + OS.get_user_data_dir() + "; git init"], true, theOutput)
 				print("theOutput is ", theOutput, " the exit code is ", exit_code)
 			SaveFile.store_string(setupSaveDictAndFile())
 			print("made the save file")
 			print("user_data_dir is ", OS.get_user_data_dir())
 			var theOutput = []
-			var exit_code = OS.execute("bash", ["cd " +  OS.get_user_data_dir() + " ; echo bash may have worked; git add .; git commit -m \"added initial save files\";  ls ."], true, theOutput)
+			var exit_code = OS.execute(".", ["cd " +  OS.get_user_data_dir() + " ; echo bash may have worked; git add .; git commit -m \"added initial save files\";  ls ."], true, theOutput)
 #			var exit_code = OS.execute("cd", [OS.get_user_data_dir(), " && echo things_happened"], true, theOutput)
 			print("output is ", theOutput, " the exit code is ", exit_code)
 			saveDict = parse_json(SaveFile.get_as_text())
