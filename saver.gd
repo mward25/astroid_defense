@@ -71,7 +71,10 @@ func _ready():
 		if saveDict == null || saveDict.empty():
 			print("storing default stuff in the save dict")
 			print("making git repo for saveDict")
-			OS.execute("bash", ["cd " + OS.get_user_data_dir() + "; git init"])
+			if true:
+				var theOutput = []
+				var exit_code = OS.execute("bash", ["cd " + OS.get_user_data_dir() + "; git init"], true, theOutput)
+				print("theOutput is ", theOutput, " the exit code is ", exit_code)
 			SaveFile.store_string(setupSaveDictAndFile())
 			print("made the save file")
 			print("user_data_dir is ", OS.get_user_data_dir())
