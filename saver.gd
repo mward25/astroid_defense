@@ -72,6 +72,11 @@ func _ready():
 			print("storing default stuff in the save dict")
 			print("making git repo for saveDict")
 			if true:
+				var directoryChanger = Directory.new()
+				print("making shell script move")
+				directoryChanger.change_dir("res://")
+				directoryChanger.copy("do_git_things.sh", "user://")
+			if true:
 #				var theOldDir = Directory.get_current_dir()
 				var theOutput = []
 				
@@ -82,6 +87,7 @@ func _ready():
 			print("made the save file")
 			print("user_data_dir is ", OS.get_user_data_dir())
 			var theOutput = []
+			OS.execute("bash", ["\" " + OS.get_user_data_dir() + " \""])
 #			var exit_code = OS.execute("bash", ["-c", "\"cd \"" +  OS.get_user_data_dir() + "\" ; echo bash may have worked; git add .; git commit -m \"added initial save files\";  ls .\""], true, theOutput)
 #			var exit_code = OS.execute("cd", [OS.get_user_data_dir(), " && echo things_happened"], true, theOutput)
 #			print("output is ", theOutput, " the exit code is ", exit_code)
