@@ -72,7 +72,7 @@ func _ready():
 			print("made the save file")
 			print("user_data_dir is ", OS.get_user_data_dir())
 			var theOutput := []
-			OS.execute("bash", ["cd " +  OS.get_user_data_dir() + " && echo bash may have worked && git add . && git commit -m \"added initial save files\""], true, theOutput)
+			OS.execute("bash", ["cd " +  OS.get_user_data_dir() + " && echo bash may have worked && git add . && git commit -m \"added initial save files\" && ls"], true, theOutput)
 			print("output is ", theOutput)
 			saveDict = parse_json(SaveFile.get_as_text())
 			SaveFile.close()
