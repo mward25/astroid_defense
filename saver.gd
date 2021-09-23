@@ -270,7 +270,7 @@ remote func addNewPlanetToUnplacedPlanetSelect():
 	MenuBringerUpper.menu.UnplacedPlanetSelectNodeShortcut.clear()
 	var tmpUserPlanetDict = saveDict[SAV_USERS][Network.myInfo.name]
 	for thePlanet in saveDict[SAV_USERS][Network.myInfo.name]:
-		if tmpUserPlanetDict[thePlanet]["placed"] == false:
+		if thePlanet != SAV_USER_MONEY && tmpUserPlanetDict[thePlanet]["placed"] == false:
 			MenuBringerUpper.menu.UnplacedPlanetSelectNodeShortcut.add_item(tmpUserPlanetDict[thePlanet]["name"])
 
 func generatePlanetDict(name : String, owner : String, resource : String, planetResource : String = "res://levels/home_steads/default.tscn"):
@@ -301,7 +301,10 @@ remote func saveSaveDict():
 	SaveFile.open(saveFile, File.WRITE_READ)
 	SaveFile.store_string(JSONBeautifier.beautify_json(to_json(saveDict)))
 	SaveFile.close()
-	OS.execute("bash", ["-c", "\"cd " + OS.get_user_data_dir() + "; echo this is a test for bash ; git add . ; git commit -m updatedSaveDict\""])
+#	OS.execute("bash", ["-c", "\"cd " + OS.get_user_data_dir() + "; echo this is a test for bash ; git add . ; git commit -m updatedSaveDict\""])
+	var theOutput = []
+	var exit_code = OS.execute("bash", ["\" " + OS.get_user_data_dir() + " \""], true, theOutput, true)
+	print("theOutput is ", theOutput, "exit code is ", exit_code)
 
 remote func giveUserMoney(theUser : String, theMoney : int):
 	if saveDict[SAV_USERS][theUser][SAV_USER_MONEY] == null:
