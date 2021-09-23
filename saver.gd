@@ -73,7 +73,8 @@ func _ready():
 			print("making git repo for saveDict")
 			if true:
 				var theOutput = []
-				var exit_code = OS.execute("sh", ["-c",  "\" chdir \"" + OS.get_user_data_dir() + "\" ; pwd;  git init; \""], true, theOutput, true)
+#				var exit_code = OS.execute("sh", ["-c",  "\" chdir \"" + OS.get_user_data_dir() + "/\" ; pwd;  git init; \""], true, theOutput, true)
+				var exit_code = OS.execute("cd", ["\" "+ OS.get_user_data_dir() +"\"; pwd "])
 				print("theOutput is ", theOutput, " the exit code is ", exit_code)
 			SaveFile.store_string(setupSaveDictAndFile())
 			print("made the save file")
