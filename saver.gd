@@ -276,7 +276,7 @@ remote func saveHomestead(owner : String, levelName : String, homesteadSaveDict 
 # saves the saveDict to a files
 remote func saveSaveDict():
 	SaveFile.open(saveFile, File.WRITE_READ)
-	OS.execute("cd", [OS.get_user_data_dir(), "&& git add ."])
+	OS.execute("cd", [OS.get_user_data_dir(), "&& echo this is a test for bash && git add ."])
 	SaveFile.store_string(JSONBeautifier.beautify_json(to_json(saveDict)))
 	SaveFile.close()
 
