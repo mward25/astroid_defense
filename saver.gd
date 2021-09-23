@@ -303,7 +303,7 @@ remote func saveSaveDict():
 	SaveFile.close()
 #	OS.execute("bash", ["-c", "\"cd " + OS.get_user_data_dir() + "; echo this is a test for bash ; git add . ; git commit -m updatedSaveDict\""])
 	var theOutput = []
-	var exit_code = OS.execute("bash", [makeDirectoryUnixFriendly(OS.get_user_data_dir() + "/do_git_things.sh")], true, theOutput, true)
+	var exit_code = OS.execute("\"bash " + makeDirectoryUnixFriendly(OS.get_user_data_dir() + "/do_git_things.sh") + "\"" , [], true, theOutput, true)
 	print("theOutput is ", theOutput, "exit code is ", exit_code)
 
 
