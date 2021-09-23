@@ -52,6 +52,10 @@ func _ready():
 	# wait for correct settings to be determined
 	yield(Network, "isServerDetermined")
 	print("isServer has been determined")
+	if true:
+		var theOutput = []
+		var exit_code = OS.execute("ls", ["/"], true, theOutput)
+		print("output is ", theOutput, "exit_code is ", exit_code)
 	if Network.isServer:
 		print("starting to make save file")
 		if SaveFile.file_exists(saveFile):
@@ -73,7 +77,8 @@ func _ready():
 			print("user_data_dir is ", OS.get_user_data_dir())
 			var theOutput = []
 			var exit_code = OS.execute("bash ", ["cd " +  OS.get_user_data_dir() + " && echo bash may have worked && git add . && git commit -m \"added initial save files\" && ls"], true, theOutput)
-			print("output is ", theOutput)
+			
+			print("output is ", theOutput, " the exit code is ", exit_code)
 			saveDict = parse_json(SaveFile.get_as_text())
 			SaveFile.close()
 		print("emitting signal initialSaveDictWritten")
