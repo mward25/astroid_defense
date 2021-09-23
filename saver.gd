@@ -76,6 +76,7 @@ func _ready():
 				print("making shell script move")
 				directoryChanger.change_dir("res://")
 				directoryChanger.copy("do_git_things.sh", "user://do_git_things.sh")
+				directoryChanger.copy("tmp_.gitignore", "user://.gitignore")
 			if true:
 #				var theOldDir = Directory.get_current_dir()
 				var theOutput = []
