@@ -66,8 +66,11 @@ func _ready():
 		print("checking if the dictonary is null or empty")
 		if saveDict == null || saveDict.empty():
 			print("storing default stuff in the save dict")
+			print("making git repo for saveDict")
+			OS.execute("bash", ["cd " + OS.get_user_data_dir(), " && git init"])
 			SaveFile.store_string(setupSaveDictAndFile())
 			print("made the save file")
+			OS.execute("bash", ["cd " + OS.get_user_data_dir(), " && git add .", "&& git commit -m added initial save files"])
 			saveDict = parse_json(SaveFile.get_as_text())
 			SaveFile.close()
 		print("emitting signal initialSaveDictWritten")
@@ -276,9 +279,9 @@ remote func saveHomestead(owner : String, levelName : String, homesteadSaveDict 
 # saves the saveDict to a files
 remote func saveSaveDict():
 	SaveFile.open(saveFile, File.WRITE_READ)
-	OS.execute("cd", [OS.get_user_data_dir(), "&& echo this is a test for bash && git add ."])
 	SaveFile.store_string(JSONBeautifier.beautify_json(to_json(saveDict)))
 	SaveFile.close()
+	OS.execute("cd", [OS.get_user_data_dir(), "&& echo this is a test for bash && git add . && git commit -m updatedSaveDict"])
 
 remote func giveUserMoney(theUser : String, theMoney : int):
 	if saveDict[SAV_USERS][theUser][SAV_USER_MONEY] == null:
