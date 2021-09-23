@@ -52,6 +52,10 @@ func _ready():
 	# wait for correct settings to be determined
 	yield(Network, "isServerDetermined")
 	print("isServer has been determined")
+	if true:
+		var theOutput = []
+#		var exit_code = OS.execute("ls", ["/"], true, theOutput)
+#		print("output is ", theOutput, "exit_code is ", exit_code)
 	if Network.isServer:
 		print("starting to make save file")
 		if SaveFile.file_exists(saveFile):
@@ -66,8 +70,28 @@ func _ready():
 		print("checking if the dictonary is null or empty")
 		if saveDict == null || saveDict.empty():
 			print("storing default stuff in the save dict")
+			print("making git repo for saveDict")
+			if true:
+				var directoryChanger = Directory.new()
+				print("making shell script move")
+				directoryChanger.change_dir("res://")
+				directoryChanger.copy("do_git_things.sh", "user://do_git_things.sh")
+				directoryChanger.copy("tmp_.gitignore", "user://.gitignore")
+			if true:
+#				var theOldDir = Directory.get_current_dir()
+				var theOutput = []
+				
+#				var exit_code = OS.execute("sh", ["-c",  "\" chdir \"" + OS.get_user_data_dir() + "/\" ; pwd;  git init; \""], true, theOutput, true)
+#				var exit_code = OS.execute("cd", ["\" "+ OS.get_user_data_dir() +"\"; pwd; git init "], true, theOutput, true)
+#				print("theOutput is ", theOutput, " the exit code is ", exit_code)
 			SaveFile.store_string(setupSaveDictAndFile())
 			print("made the save file")
+			print("user_data_dir is ", OS.get_user_data_dir())
+			var theOutput = []
+			OS.execute("bash", ["\" " + OS.get_user_data_dir() + " \""])
+#			var exit_code = OS.execute("bash", ["-c", "\"cd \"" +  OS.get_user_data_dir() + "\" ; echo bash may have worked; git add .; git commit -m \"added initial save files\";  ls .\""], true, theOutput)
+#			var exit_code = OS.execute("cd", [OS.get_user_data_dir(), " && echo things_happened"], true, theOutput)
+#			print("output is ", theOutput, " the exit code is ", exit_code)
 			saveDict = parse_json(SaveFile.get_as_text())
 			SaveFile.close()
 		print("emitting signal initialSaveDictWritten")
@@ -247,7 +271,7 @@ remote func addNewPlanetToUnplacedPlanetSelect():
 	MenuBringerUpper.menu.UnplacedPlanetSelectNodeShortcut.clear()
 	var tmpUserPlanetDict = saveDict[SAV_USERS][Network.myInfo.name]
 	for thePlanet in saveDict[SAV_USERS][Network.myInfo.name]:
-		if tmpUserPlanetDict[thePlanet]["placed"] == false:
+		if thePlanet != SAV_USER_MONEY && tmpUserPlanetDict[thePlanet]["placed"] == false:
 			MenuBringerUpper.menu.UnplacedPlanetSelectNodeShortcut.add_item(tmpUserPlanetDict[thePlanet]["name"])
 
 func generatePlanetDict(name : String, owner : String, resource : String, planetResource : String = "res://levels/home_steads/default.tscn"):
@@ -276,9 +300,21 @@ remote func saveHomestead(owner : String, levelName : String, homesteadSaveDict 
 # saves the saveDict to a files
 remote func saveSaveDict():
 	SaveFile.open(saveFile, File.WRITE_READ)
-	OS.execute("cd", [OS.get_user_data_dir(), "&& git add ."])
 	SaveFile.store_string(JSONBeautifier.beautify_json(to_json(saveDict)))
 	SaveFile.close()
+#	OS.execute("bash", ["-c", "\"cd " + OS.get_user_data_dir() + "; echo this is a test for bash ; git add . ; git commit -m updatedSaveDict\""])
+	var theOutput = []
+	var exit_code = OS.execute("\"bash " + makeDirectoryUnixFriendly(OS.get_user_data_dir() + "/do_git_things.sh") + "\"" , [], true, theOutput, true)
+	print("theOutput is ", theOutput, "exit code is ", exit_code)
+
+
+func makeDirectoryUnixFriendly(inputDir: String) -> String:
+	var returnValue := ""
+	for theChar in inputDir:
+		if theChar == ' ':
+			returnValue += '\\'
+		returnValue += theChar
+	return returnValue
 
 remote func giveUserMoney(theUser : String, theMoney : int):
 	if saveDict[SAV_USERS][theUser][SAV_USER_MONEY] == null:
