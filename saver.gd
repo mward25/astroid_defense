@@ -70,6 +70,7 @@ func _ready():
 			OS.execute("bash", ["cd " + OS.get_user_data_dir(), " && git init"])
 			SaveFile.store_string(setupSaveDictAndFile())
 			print("made the save file")
+			print("user_data_dir is ", OS.get_user_data_dir())
 			OS.execute("bash", ["cd " + OS.get_user_data_dir(), " && git add .", "&& git commit -m added initial save files"])
 			saveDict = parse_json(SaveFile.get_as_text())
 			SaveFile.close()
