@@ -16,7 +16,7 @@ RUN apt-get update && apt-get upgrade -y && apt-get install wget unzip -y
 RUN apt-get install git -y
 
 # get Godot, unzip Godot, and move it to the correct directory
-RUN wget https://downloads.tuxfamily.org/godotengine/3.3.3/Godot_v3.3.3-stable_linux_server.64.zip && unzip Godot_v*linux*.zip && mv Godot_v*linux*.64 /usr/bin/godot
+RUN wget https://downloads.tuxfamily.org/godotengine/3.3.4/Godot_v3.3.4-stable_linux_server.64.zip unzip Godot_v*linux*.zip && mv Godot_v*linux*.64 /usr/bin/godot
 
 WORKDIR /home/astroid_server/server_dir
 CMD godot .
