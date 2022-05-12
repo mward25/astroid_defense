@@ -66,7 +66,7 @@ func save():
 	
 	
 	
-#	if true is used so that j will be removed when we are done with it
+	# if true is used so that j will be removed when we are done with it
 	if true:
 		var j = 0
 		for i in saveTiles:

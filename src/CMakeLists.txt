@@ -1,6 +1,0 @@
-add_subdirectory(tests)
-# add_library(MyLibrary SHARED gdlibrary.cpp)
-add_library(MyLibrary gdlibrary.cpp)
-# target_compile_options(MyLibrary PUBLIC -fpermissive)
-target_link_libraries(MyLibrary PUBLIC GodotTestCpp)
-target_link_libraries(MyLibrary PUBLIC godot-cpp)

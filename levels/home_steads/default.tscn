@@ -57,3 +57,4 @@ position = Vector2( -8, -1272 )
 [connection signal="activateLevel" from="." to="." method="_on_BaseCamp_activateLevel"]
 [connection signal="loadSaveFinished" from="." to="." method="_on_BaseCamp_loadSaveFinished"]
 [connection signal="playerEntered" from="." to="." method="_on_BaseCamp_playerEntered"]
+[connection signal="shieldDisabled" from="." to="." method="_on_BaseCamp_shieldDisabled"]

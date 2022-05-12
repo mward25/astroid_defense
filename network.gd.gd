@@ -10,6 +10,12 @@ var playing = false
 var isServer = false
 var isHeadless = false
 
+#{name = "the dude", ship = "playerDefault", location = ""}
+# bellow constants are based on comment above
+const INFO_NAME = "name"
+const INFO_SHIP = "ship"
+const INFO_LOCATION = "location"
+
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"

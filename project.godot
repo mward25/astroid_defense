@@ -8,6 +8,16 @@
 
 config_version=4
 
+_global_script_classes=[ {
+"base": "Reference",
+"class": "JSONBeautifier",
+"language": "GDScript",
+"path": "res://addons/json_beautifier/json_beautifier.gd"
+} ]
+_global_script_class_icons={
+"JSONBeautifier": ""
+}
+
 [Easy C++]
 
 "Python Path"="C:\\Python39\\python.exe"

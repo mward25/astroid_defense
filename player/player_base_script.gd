@@ -81,6 +81,7 @@ func activateThrust():
 	
 	# if we are not dead make our flame atack do damage
 	if isDead == false:
+		$FlameAttack.collision_layer = 1
 		$FlameAttack.collision_mask = 1
 		$FlameAttack.show()
 		$FlameParticles.emitting = true
@@ -129,12 +130,14 @@ func calculateExhaustEmmissionRemote():
 	if isThrusting == true:
 		velocity.y -= speed
 		$ExaustFumes.gravity = exaustPower
+		$FlameAttack.collision_layer = 1
 		$FlameAttack.collision_mask = 1
 		$FlameAttack.show()
 		$FlameParticles.emitting = true
 	elif isThrusting == false:
 		velocity = Vector2()
 		$ExaustFumes.gravity = 0
+		$FlameAttack.collision_layer = 0
 		$FlameAttack.collision_mask = 0
 		$FlameAttack.hide()
 		$FlameParticles.emitting = false
@@ -197,13 +200,7 @@ func rotateSelf():
 
 # warning-ignore:unused_argument
 func _integrate_forces(state):
-	if isMyPlayer == true and overNet == true:
-		if $"/root/Network".playersInMyLocation.size() > 0:
-#			print("players in my location: ",  $"/root/Network".playersInMyLocation)
-			for p in $"/root/Network".playersInMyLocation:
-				doRemoteUpdates(p)
-	
-	
+	pass
 
 func movePlayerLocal():
 	if isMyPlayer == false:
@@ -256,7 +253,11 @@ func testForDead():
 func _process(delta):
 	updateMessagingSystem()
 	updateGravityVec()
-	
+	if isMyPlayer == true and overNet == true:
+		if $"/root/Network".playersInMyLocation.size() > 0:
+#			print("players in my location: ",  $"/root/Network".playersInMyLocation)
+			for p in $"/root/Network".playersInMyLocation:
+				doRemoteUpdates(p)
 	testForDead()
 
 func takeDamage(body):
