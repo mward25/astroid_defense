@@ -1,13 +1,14 @@
 [remap]
 
-importer="ogg_vorbis"
+importer="oggvorbisstr"
 type="AudioStreamOGGVorbis"
-path="res://.import/astroid_battle.ogg-379d94a371f82ce563de6699be50baa2.oggstr"
+uid="uid://bvr6v7gpolc02"
+path="res://.godot/imported/astroid_battle.ogg-379d94a371f82ce563de6699be50baa2.oggvorbisstr"
 
 [deps]
 
 source_file="res://my_assets/songs/menu/astroid_battle.ogg"
-dest_files=[ "res://.import/astroid_battle.ogg-379d94a371f82ce563de6699be50baa2.oggstr" ]
+dest_files=["res://.godot/imported/astroid_battle.ogg-379d94a371f82ce563de6699be50baa2.oggvorbisstr"]
 
 [params]
 

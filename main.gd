@@ -14,13 +14,13 @@ func _ready():
 	if "--server" in OS.get_cmdline_args() || OS.has_feature("Server"):
 		print("running as server")
 		Network.isHeadless = true
-		var peer = NetworkedMultiplayerENet.new()
+		var peer = ENetMultiplayerPeer.new()
 		peer.create_server(9278, 10)
 		get_tree().network_peer = peer
 		Network.isServer = true
 		Network.emit_signal("isServerDetermined")
 	else:
-		var MainMenu = mainMenu.instance()
+		var MainMenu = mainMenu.instantiate()
 		MainMenu.name = "MainMenu"
 		get_node("/root/MenuBringerUpper").menu = MainMenu
 		get_node("/root/MenuBringerUpper").call_deferred("add_child", MainMenu)

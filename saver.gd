@@ -1,7 +1,7 @@
 extends Node
 var passwdFile = "user://passwds.sav"
 var saveFile = "user://astroid_defence_save.sav"
-onready var SaveFile = File.new()
+@onready var SaveFile = File.new()
 
 
 
@@ -50,7 +50,7 @@ const JsonBeautifier = preload(JSON_BEAUTIFIER_PATH)
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	# wait for correct settings to be determined
-	yield(Network, "isServerDetermined")
+	await Network.isServerDetermined
 	print("isServer has been determined")
 	if true:
 		var theOutput = []
@@ -66,9 +66,11 @@ func _ready():
 			print("saveFile does not exist exist, we are creating a new one")
 			SaveFile.open(saveFile, File.WRITE_READ)
 		print("getting the information from the file")
-		saveDict = parse_json(SaveFile.get_as_text())
+		var test_json_conv = JSON.new()
+		test_json_conv.parse(SaveFile.get_as_text())
+		saveDict = test_json_conv.get_data()
 		print("checking if the dictonary is null or empty")
-		if saveDict == null || saveDict.empty():
+		if saveDict == null || saveDict.is_empty():
 			print("storing default stuff in the save dict")
 			print("making git repo for saveDict")
 			if true:
@@ -92,7 +94,9 @@ func _ready():
 #			var exit_code = OS.execute("bash", ["-c", "\"cd \"" +  OS.get_user_data_dir() + "\" ; echo bash may have worked; git add .; git commit -m \"added initial save files\";  ls .\""], true, theOutput)
 #			var exit_code = OS.execute("cd", [OS.get_user_data_dir(), " && echo things_happened"], true, theOutput)
 #			print("output is ", theOutput, " the exit code is ", exit_code)
-			saveDict = parse_json(SaveFile.get_as_text())
+			var test_json_conv = JSON.new()
+			test_json_conv.parse(SaveFile.get_as_text())
+			saveDict = test_json_conv.get_data()
 			SaveFile.close()
 		print("emitting signal initialSaveDictWritten")
 		emit_signal("initialSaveDictWritten")
@@ -103,9 +107,9 @@ func _ready():
 	print("after _on_ready saveDict is ", saveDict)
 
 # Warning, passwd should always be a hashed string
-remote func createUser(username: String, passwd):
+@rpc(any) func createUser(username: String, passwd):
 	print("creating user ", username)
-	var senderID = get_tree().get_rpc_sender_id()
+	var senderID = get_tree().get_remote_sender_id()
 	var returnValue = false
 	
 	# if true is used so that all vairiables storing passwords will be deleted afterwords
@@ -117,9 +121,11 @@ remote func createUser(username: String, passwd):
 			tmpPasswdFile.open(passwdFile, File.WRITE_READ)
 		else:
 			tmpPasswdFile.open(passwdFile, File.READ_WRITE)
-		 
 		
-		var passwdDict = parse_json(tmpPasswdFile.get_as_text())
+		
+		var test_json_conv = JSON.new()
+		test_json_conv.parse(tmpPasswdFile.get_as_text())
+		var passwdDict = test_json_conv.get_data()
 		
 		# if the passwdDict is not a dictonary, make it one
 		if passwdDict == null:
@@ -130,7 +136,7 @@ remote func createUser(username: String, passwd):
 			pass
 		else:
 			passwdDict[username] = passwd
-			tmpPasswdFile.store_string(to_json(passwdDict))
+			tmpPasswdFile.store_string(JSON.new().stringify(passwdDict))
 			#returnValue = true
 		
 		
@@ -158,13 +164,15 @@ remote func createUser(username: String, passwd):
 	
 
 
-remote func login(username: String, passwd: int):
+@rpc(any) func login(username: String, passwd: int):
 	print("setting senderID")
-	var senderId = get_tree().get_rpc_sender_id()
+	var senderId = get_tree().get_remote_sender_id()
 	print("opening tmpPasswd file")
 	var tmpPasswdFile = File.new()
 	tmpPasswdFile.open(passwdFile, File.READ)
-	var passwdDict = parse_json(tmpPasswdFile.get_as_text())
+	var test_json_conv = JSON.new()
+	test_json_conv.parse(tmpPasswdFile.get_as_text())
+	var passwdDict = test_json_conv.get_data()
 	if !(passwdDict == null):
 		print("determining if password is valid")
 		if passwdDict.has(username) && (passwdDict[username]) == passwd:
@@ -182,7 +190,7 @@ remote func login(username: String, passwd: int):
 
 
 
-remote func setLoginStatus(status : bool, _incorectPassword):
+@rpc(any) func setLoginStatus(status : bool, _incorectPassword):
 	loginStatus = status
 	incorectPassword = _incorectPassword
 	emit_signal("loginStatusUpdated")
@@ -193,12 +201,12 @@ func setupSaveDictAndFile():
 		users = {},
 		space_centor = {},
 	}
-	return to_json(saveDictTemplate)
+	return JSON.new().stringify(saveDictTemplate)
 
 
 var tmpSpacecentor = null
 
-remote func addMyPlanetToSpacecentor(user, planet):
+@rpc(any) func addMyPlanetToSpacecentor(user, planet):
 	if saveDict == null:
 		print("saveDict is null")
 	else:
@@ -217,57 +225,57 @@ remote func addMyPlanetToSpacecentor(user, planet):
 		
 		
 #		rpc_id(1, "getSpaceCenterSave")
-#		yield(self, "getSpaceCentorSaveFinish")
+#		await self.getSpaceCentorSaveFinish
 #		var _spaceSaveDict = tmpSpacecentor
 #		_spaceSaveDict[user][planet] = planet.save()
 #		rpc_id(1, "updateSaveDict", _spaceSaveDict)
 
 
-remote func getSpaceCenterSave():
+@rpc(any) func getSpaceCenterSave():
 	print("gettingSpacecentor")
-	rpc_id(get_tree().get_rpc_sender_id(),"getSpaceCentorSave" , saveDict[SAV_SPACE_CENTOR])
+	rpc_id(get_tree().get_remote_sender_id(),"getSpaceCentorSave" , saveDict[SAV_SPACE_CENTOR])
 
-remote func getSpaceCentorSave(theDict):
+@rpc(any) func getSpaceCentorSave(theDict):
 	tmpSpacecentor = theDict
 	emit_signal("getSpaceCentorSaveFinish")
 
-remote func updateSpaceScentorSave():
+@rpc(any) func updateSpaceScentorSave():
 	# if we have not updated our save dict yet, we want to do that first
-	if saveDict == null || saveDict.empty():
+	if saveDict == null || saveDict.is_empty():
 		print("saveDict not yet written, updating saveDict first")
 		rpc_id(1, "updateMySaveDict")
-		yield(self, "updateMySaveDictFinished")
+		await self.updateMySaveDictFinished
 	rpc_id(1, "getSpaceCenterSave")
-	yield(self, "getSpaceCentorSaveFinish")
+	await self.getSpaceCentorSaveFinish
 	saveDict["space_center"] = tmpSpacecentor
 
 #remote func updateSpaceCentor(spaceCenterDict : Dictionary):
 #	saveDict["space_centor"] = spaceCenterDict
 
-remote func updateSaveDict(_saveDict):
+@rpc(any) func updateSaveDict(_saveDict):
 	saveDict = _saveDict
 	if Network.isServer:
 		rpc("updateSaveDict", saveDict)
 	emit_signal("updateMySaveDictFinished")
 	print("saveDict is now ", saveDict)
 
-remote func updateMySaveDict():
+@rpc(any) func updateMySaveDict():
 	print("saveDict is ", saveDict)
 	if saveDict == null:
 		print("saveDict is null, waiting for saveDict to be written")
-		yield(self, "initialSaveDictWritten")
+		await self.initialSaveDictWritten
 		print("saveDict has been written")
-	rpc_id(get_tree().get_rpc_sender_id(), "updateSaveDict", saveDict.duplicate())
+	rpc_id(get_tree().get_remote_sender_id(), "updateSaveDict", saveDict.duplicate())
 
 
-remote func giveUserPlanet(theUserID, theUser : String, thePlanetDict : Dictionary):
+@rpc(any) func giveUserPlanet(theUserID, theUser : String, thePlanetDict : Dictionary):
 	saveDict[SAV_USERS][theUser][thePlanetDict["name"]] = thePlanetDict
 	rpc_id(theUserID, "addNewPlanetToUnplacedPlanetSelect")
 	print("the saveDict is ", saveDict)
 	updateSaveDict(saveDict)
 
-remote func addNewPlanetToUnplacedPlanetSelect():
-	yield(self, "updateMySaveDictFinished")
+@rpc(any) func addNewPlanetToUnplacedPlanetSelect():
+	await self.updateMySaveDictFinished
 	MenuBringerUpper.menu.UnplacedPlanetSelectNodeShortcut.clear()
 	var tmpUserPlanetDict = saveDict[SAV_USERS][Network.myInfo.name]
 	for thePlanet in saveDict[SAV_USERS][Network.myInfo.name]:
@@ -284,7 +292,7 @@ func generatePlanetDict(name : String, owner : String, resource : String, planet
 	
 	return {name=name, owner = owner, placed = false, resource = theResource, thePlanetResource = planetResource , ifPlaced = {posX = null, posY = null}, thePlanetSave = {}}
 
-remote func saveHomestead(owner : String, levelName : String, homesteadSaveDict : Dictionary):
+@rpc(any) func saveHomestead(owner : String, levelName : String, homesteadSaveDict : Dictionary):
 	# save the homestead
 	saveDict[SAV_SPACE_CENTOR][owner][levelName][PLANET_THE_PLANET_SAVE] = homesteadSaveDict
 	
@@ -298,9 +306,9 @@ remote func saveHomestead(owner : String, levelName : String, homesteadSaveDict 
 		print("warning, updating savedict on server from client, BAD_IDEA")
 
 # saves the saveDict to a files
-remote func saveSaveDict():
+@rpc(any) func saveSaveDict():
 	SaveFile.open(saveFile, File.WRITE_READ)
-	SaveFile.store_string(JSONBeautifier.beautify_json(to_json(saveDict)))
+	SaveFile.store_string(JSONBeautifier.beautify_json(JSON.new().stringify(saveDict)))
 	SaveFile.close()
 #	OS.execute("bash", ["-c", "\"cd " + OS.get_user_data_dir() + "; echo this is a test for bash ; git add . ; git commit -m updatedSaveDict\""])
 	var theOutput = []
@@ -316,13 +324,13 @@ func makeDirectoryUnixFriendly(inputDir: String) -> String:
 		returnValue += theChar
 	return returnValue
 
-remote func giveUserMoney(theUser : String, theMoney : int):
+@rpc(any) func giveUserMoney(theUser : String, theMoney : int):
 	if saveDict[SAV_USERS][theUser][SAV_USER_MONEY] == null:
 		saveDict[SAV_USERS][theUser][SAV_USER_MONEY] = theMoney
 	saveDict[SAV_USERS][theUser][SAV_USER_MONEY] += theMoney
 	print(theUser, "'s money is now ", saveDict[SAV_USERS][theUser][SAV_USER_MONEY])
 
-remote func takeUserMoney(theUser: String, theMoney : int):
+@rpc(any) func takeUserMoney(theUser: String, theMoney : int):
 	saveDict[SAV_USERS][theUser][SAV_USER_MONEY] -= theMoney
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
